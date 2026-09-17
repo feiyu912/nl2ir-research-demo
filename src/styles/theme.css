@@ -1,0 +1,151 @@
+/* =========================================================================
+   主题 - 面向领导的企业研究报告
+   浅灰背景 / 白色内容区 / 深蓝主色 / 统一字体与圆角
+   参考 Ant Design 视觉规范
+   ========================================================================= */
+
+:root {
+  /* 背景与表面 */
+  --bg:            #F5F7FA;   /* 页面浅灰背景 */
+  --surface:       #FFFFFF;   /* 卡片/内容区 */
+  --surface-2:     #F8FAFC;   /* 二级表面（悬浮/分组头） */
+  --surface-3:     #EEF2F7;   /* 三级表面（更深悬浮/选中） */
+
+  /* 文本 */
+  --fg:            #1F2328;   /* 主文本 */
+  --fg-2:          #475569;   /* 次要文本 */
+  --muted:         #94A3B8;   /* 三级文本/占位 */
+
+  /* 边框与分隔 */
+  --border:        #E2E8F0;   /* 一级边框 */
+  --border-strong: #CBD5E1;   /* 强调边框 */
+  --divider:       #F1F5F9;   /* 极淡分隔 */
+
+  /* 主色 - 深蓝（Ant Design 蓝调） */
+  --primary:       #1E40AF;   /* 主色 - 标题、关键 CTA */
+  --primary-2:     #1D4ED8;   /* 主色 hover/active */
+  --primary-50:    #EFF6FF;   /* 主色浅底 */
+
+  /* 模型色（固定） */
+  --c-4b:          #2563EB;   /* 4B 蓝（保留中性蓝调） */
+  --c-9b:          #EA580C;   /* 9B 橙（更中性） */
+  --c-api:         #047857;   /* API 绿（深绿） */
+
+  /* 状态色 */
+  --ok:            #047857;   /* 已证实/通过 */
+  --warn:          #B45309;   /* 警告/待验证 */
+  --error:         #B91C1C;   /* 错误/不通过 */
+  --info:          #475569;   /* 信息 */
+
+  /* 排版 */
+  --font-sans:     -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                   "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC",
+                   system-ui, sans-serif;
+  --font-mono:     ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono",
+                   "Cascadia Code", Cons Men, monospace;
+  --font-num:      "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang SC", system-ui, sans-serif;
+
+  /* 间距 */
+  --gap-1: 4px;
+  --gap-2: 8px;
+  --gap-3: 12px;
+  --gap-4: 16px;
+  --gap-5: 20px;
+  --gap-6: 24px;
+  --gap-7: 32px;
+  --gap-8: 48px;
+
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius:    6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow:    0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#root { min-height: 100vh; }
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover { color: var(--primary-2); text-decoration: underline; text-underline-offset: 3px; }
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.num { font-variant-numeric: tabular-nums; font-family: var(--font-num); }
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--fg);
+  letter-spacing: -0.005em;
+}
+
+h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: 22px; }
+h3 { font-size: 17px; }
+h4 { font-size: 15px; font-weight: 600; }
+
+p { margin: 0; }
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--divider);
+  vertical-align: top;
+}
+
+th {
+  color: var(--fg-2);
+  font-weight: 500;
+  font-size: 13px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--divider);
+  margin: var(--gap-6) 0;
+}

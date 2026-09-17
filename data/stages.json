@@ -1,0 +1,41 @@
+{
+  "scope": "研究主线 6 阶段（按因果顺序，不是时间线）",
+  "stages": [
+    {
+      "stage": "1-handoff-resource",
+      "order": 1,
+      "title": "接手与资源适配",
+      "summary": "前序 Qwen3 8B 方案 → RTX 5070 Ti 16GB 资源约束 → 选择 Qwen3.5 4B/9B。"
+    },
+    {
+      "stage": "2-long-prompt-compression",
+      "order": 2,
+      "title": "长 prompt 与首次压缩",
+      "summary": "原 system prompt 含大量示例，长度/截断超 3072；compact 系列只替换 system，query/label 不变；数据不变性 SHA-256 锁定。"
+    },
+    {
+      "stage": "3-shared-prompt-iteration",
+      "order": 3,
+      "title": "共享 prompt 迭代与旧集提升",
+      "summary": "v12→v19 非单调；v19 API 旧集主链等价 355/370；v19 4B 旧集主链等价 323/370；4B/9B 配对评测 2.16 pp 净差且不显著。"
+    },
+    {
+      "stage": "4-blind-exposes-gap",
+      "order": 4,
+      "title": "未见 blind 暴露差距",
+      "summary": "首次 blind-v2 (248)：v19 API 213/248, v19 4B 162/248；诊断性 symbolic hard-filter equivalence 228/248 vs 173/248；复杂 query 上问题不仅是模型大小。"
+    },
+    {
+      "stage": "5-c-hard-strict-audit",
+      "order": 5,
+      "title": "C-hard 与严格审计",
+      "summary": "C-hard240 早期 API 约 40%、学生十几 %；Gold / contract / scope / routing 严格审计揭示规范缺口；v20 API invariant 50.00%。"
+    },
+    {
+      "stage": "6-v21-and-current",
+      "order": 6,
+      "title": "v21 与当前成果",
+      "summary": "冻结盲测 blind-v6：API 单次 229/240、门控 234/240；4B 211/240、9B 初次 197/240；checkpoint-200 vs 最终持平；门控 API 与裸学生是不同流程。"
+    }
+  ]
+}

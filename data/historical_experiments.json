@@ -1,0 +1,370 @@
+{
+  "note": "历史实验与证据（按研究问题分组，不按时间线）。每条记录：模型、prompt、数据/Gold版本、指标（含分子分母）、条件、来源、状态（事实 / 推导 / 假设 / 待补）。",
+  "groups": [
+    {
+      "id": "handoff-baseline",
+      "title": "接手的 8B 基线（前人交接）",
+      "purpose": "明确标为前人交接；不在本机复跑，仅引用原始记录",
+      "experiments": [
+        {
+          "label": "Qwen3 8B 原始训练与评测（前人）",
+          "model": "Qwen3 8B",
+          "prompt": "前人实验原始 prompt",
+          "dataset": "前人评测集（细节需查原始记录）",
+          "metric": "未在本机复跑；具体分子分母待补",
+          "status": "待补",
+          "source": "主版「前序系统与本地迁移」章节",
+          "note": "接手背景：原方案资源受 16GB 约束 → 选择更小模型；不是已证明 Qwen3.5 全面更优"
+        },
+        {
+          "label": "Qwen3.7-max on compact-v3 over 370 (qwen_api_compact370)",
+          "model": "qwen3.7-max（API 参考）",
+          "prompt": "compact-v3",
+          "dataset": "370 (Simple100 + Complex100 + Hidden170)",
+          "metric": "Where 259/370 (69.95%)；FullIR 105/370 (28.38%)；StrictJSON 370/370；Schema 370/370",
+          "status": "事实",
+          "source": "qwen_api_compact370 summary.json",
+          "note": "[内部来源路径未公开]"
+        }
+      ]
+    },
+    {
+      "id": "resource-adaptation",
+      "title": "本地 4B/9B、未微调底座与 LoRA 对照",
+      "experiments": [
+        {
+          "label": "Qwen3.5 4B 首次实验（含 Original prompt）",
+          "model": "Qwen3.5 4B（未微调）",
+          "prompt": "Original（336 行 / 24193 B）",
+          "dataset": "370 条 eval",
+          "metric": "全部超 3072 token 门禁；训练不可行",
+          "status": "事实",
+          "source": "主版；compact-prompt-v3-audit"
+        },
+        {
+          "label": "Qwen3.5 9B vs 4B 配对评测（v19 final Prompt）",
+          "model": "Qwen3.5 4B + 9B（推理，非 LoRA 训练）",
+          "prompt": "v19 final frozen（compact-v3 评测包装）",
+          "dataset": "370 (Simple100 + Complex100 + Hidden170)",
+          "metric": "Where 4B 294/370 (79.5%) / 9B 302/370 (81.6%)；FullIR 4B 176/370 (47.6%) / 9B 178/370 (48.1%)；McNemar p=0.3123",
+          "status": "事实",
+          "source": "4B/9B 配对评测与错误分析（9月7日）"
+        },
+        {
+          "label": "4B/9B 配对 Simple100 / Complex100 / Hidden170 拆分",
+          "model": "Qwen3.5 4B / 9B（v19 final）",
+          "prompt": "v19 final",
+          "dataset": "370 拆分三段",
+          "metric": "Simple100: Where 4B 92/100 vs 9B 96/100；Complex100: 4B 73/100 vs 9B 72/100；Hidden170: 4B 129/170 vs 9B 134/170；FullIR: Simple100 4B 61 vs 9B 57, Complex100 4B 49 vs 9B 52, Hidden170 4B 66 vs 9B 69",
+          "status": "事实",
+          "source": "nl2ir_4b_9b_analysis_2026-09-07 results/summary.json"
+        },
+        {
+          "label": "4B/9B runtime_after_repair 与 compact_protocol",
+          "model": "Qwen3.5 4B / 9B",
+          "prompt": "v19 final + repair v1",
+          "dataset": "370 拆分三段",
+          "metric": "compact_protocol: Simple100 4B 100/100 vs 9B 100/100；runtime_after_repair: Simple100 4B 67 vs 9B 67, Complex100 4B 40 vs 9B 40, Hidden170 4B 123 vs 9B ?",
+          "status": "事实",
+          "source": "nl2ir_4b_9b_analysis_2026-09-07 results/summary.json",
+          "note": "[内部来源路径未公开]"
+        },
+        {
+          "label": "未微调底座对照（与原 Qwen3.5-4B/9B）",
+          "model": "未微调底座",
+          "prompt": "v21 candidate-v4",
+          "dataset": "sealed blind-v6 (240)",
+          "metric": "本机无原始逐题预测；server 端不可访问",
+          "status": "待补",
+          "source": "DOCX 提到「微调有效」需有底座对照；当前未做",
+          "note": "「微调有效」结论引用有底座对照的历史实验；v21 未完成未微调底座对照"
+        },
+        {
+          "label": "compact-v3 训练（4B LoRA）",
+          "model": "Qwen3.5 4B + LoRA r16 α32",
+          "prompt": "compact-v3（81 行 / 10493 B）",
+          "dataset": "1303 训练 + 370 eval",
+          "metric": "训练 max 3060 tokens、0 超 3072；显存 15874/16303 MiB、GPU 99%；早期吞吐 1046→1498 tokens/s",
+          "status": "事实",
+          "source": "compact-prompt-v3-audit；DOCX v18/v19 训练记录"
+        }
+      ]
+    },
+    {
+      "id": "prompt-compression",
+      "title": "Original 与压缩 prompt 对照（含截断限制）",
+      "experiments": [
+        {
+          "label": "Original 在 Qwen3.5 包装下的截断",
+          "model": "—",
+          "prompt": "Original 336 行 / 24193 B",
+          "dataset": "370 条",
+          "metric": "6470-6499 tokens；370/370 超 3072",
+          "status": "事实",
+          "source": "compact-prompt-v3-audit；主版"
+        },
+        {
+          "label": "compact-v1 / v2 / v3 token 与规则保留",
+          "model": "—",
+          "prompt": "compact-v1 86 行 / 8883 B；compact-v2 72 行 / 9316 B；compact-v3 81 行 / 10493 B",
+          "dataset": "1303 + 370",
+          "metric": "compact-v3 max 3060 tokens；32 condition.field + 5 semantic.fields 全部覆盖；operator 全部保留",
+          "status": "事实",
+          "source": "compact-prompt-v3-audit"
+        },
+        {
+          "label": "compact-v3 数据不变性",
+          "model": "—",
+          "prompt": "compact-v3（仅替换 system）",
+          "dataset": "1303 + 370 eval",
+          "metric": "替换前后 1303 训练数据 human/gpt/样本顺序 SHA-256 一致：35ac78dc6b036d4e8a3b899951453611123c205cdf9f0dcdc63738cb52ca8a07",
+          "status": "事实",
+          "source": "compact-prompt-v3-audit"
+        }
+      ]
+    },
+    {
+      "id": "rule-optimization",
+      "title": "后续 prompt 与契约优化（含无提升或退化）",
+      "experiments": [
+        {
+          "label": "v12-v16 规则优化（实验性，非单调）",
+          "model": "Qwen3.5-4B",
+          "prompt": "v12-v16（多次迭代）",
+          "dataset": "370 eval",
+          "metric": "规则增补会让 prompt 重新变长，分数有回落",
+          "status": "事实",
+          "source": "DOCX v18/v19 训练记录"
+        },
+        {
+          "label": "v17 数据契约对齐",
+          "model": "Qwen3.5-4B",
+          "prompt": "v17",
+          "dataset": "1303 训练",
+          "metric": "对 106 条唯一训练样本（约 8.1%）进行了有依据的修正；针对一元 AND、单值 any/all/eq、严格边界、空窗、latest 字段、company semantic",
+          "status": "事实",
+          "source": "DOCX 第 12 节"
+        },
+        {
+          "label": "v18 3072-token 训练门禁",
+          "model": "Qwen3.5-4B",
+          "prompt": "v18 System Prompt 2595 tokens",
+          "dataset": "1303 训练 + 370 eval",
+          "metric": "1303 max 2971 tokens，0 超 3072，最小余量 101；Strict Where 306/370 (82.7%) → contract-v1 Strict Where 315/370 (85.1%)",
+          "status": "事实",
+          "source": "DOCX v18 训练记录"
+        },
+        {
+          "label": "v19 final 与 v18 复用排除",
+          "model": "Qwen3.5-4B",
+          "prompt": "v18 vs v19 final frozen",
+          "dataset": "370 eval",
+          "metric": "104 条原始预测不同，排除复用同一预测文件",
+          "status": "事实",
+          "source": "DOCX 复用检查"
+        },
+        {
+          "label": "v19 final 旧集 370 主链等价（API）",
+          "model": "Qwen3.5 API（v19 final）",
+          "prompt": "v19 final",
+          "dataset": "old370 (370)",
+          "metric": "API 主链等价 355/370 (95.95%)；这是 v19 final 在 compact-v3 评测包装下的口径，不是 v21 的 356/366/97.27%",
+          "status": "事实",
+          "source": "主版 v19 final 描述",
+          "note": "「约97%」指 v19 旧集 370 上的放宽口径 355/370 (95.95%)，不是后来 v21 的 356/366 (97.27%)。两者口径不同"
+        },
+        {
+          "label": "v19 final 旧集 370 主链等价（4B）",
+          "model": "Qwen3.5 4B（v19 final 推理）",
+          "prompt": "v19 final",
+          "dataset": "old370 (370)",
+          "metric": "主链等价 323/370 (87.30%)；排除既有能力边界 321/366 (87.70%)",
+          "status": "事实",
+          "source": "主版 v19 final 描述"
+        },
+        {
+          "label": "v20 末尾检查重排",
+          "model": "Qwen3.5 API",
+          "prompt": "v19 → v20（仅末尾检查块重排）",
+          "dataset": "C-hard240",
+          "metric": "v19 2639 tokens → v20 2714 tokens；C-hard invariant 94/240 (39.17%) → 120/240 (50.00%)；paired fixed 29、broken 3；旧 370 维持 342/370（内部 fixed 2、broken 2）",
+          "status": "事实",
+          "source": "DOCX v20 描述"
+        }
+      ]
+    },
+    {
+      "id": "generalization-gap",
+      "title": "旧集与首次 blind-v2 的泛化差距",
+      "experiments": [
+        {
+          "label": "首次 blind-v2 (248) canonical 与 hard-filter",
+          "model": "Qwen3.5 API / 4B（v19 final）",
+          "prompt": "v19 final",
+          "dataset": "blind-v2 (248)",
+          "metric": "API canonical 213/248 (85.89%)；4B canonical 162/248 (65.32%)；API 诊断性 symbolic hard-filter equivalence 228/248 (91.94%)；4B 173/248 (69.76%)",
+          "status": "事实",
+          "source": "主版首次 blind-v2；两种口径不混用"
+        },
+        {
+          "label": "v18 vs v19 final 复用排除",
+          "model": "Qwen3.5-4B",
+          "prompt": "v18 vs v19 final",
+          "dataset": "370 eval",
+          "metric": "104 条原始预测不同，排除复用",
+          "status": "事实",
+          "source": "DOCX 复用检查"
+        }
+      ]
+    },
+    {
+      "id": "harddiagn",
+      "title": "C300 / C-hard 难题诊断",
+      "experiments": [
+        {
+          "label": "C-hard240 早期（v19）",
+          "model": "Qwen3.5 API / 4B（v19）",
+          "prompt": "v19",
+          "dataset": "C-hard240",
+          "metric": "API order/value-invariant 94/240 (39.17%)；4B 27/240 (11.25%)；学生 compiler hard equivalence 38/240 (15.83%)（与前面口径不同）",
+          "status": "事实",
+          "source": "DOCX C-hard 早期"
+        },
+        {
+          "label": "C-hard240 v20 API",
+          "model": "Qwen3.5 API（v20）",
+          "prompt": "v20（仅末尾检查块重排）",
+          "dataset": "C-hard240",
+          "metric": "120/240 (50.00%)；paired fixed 29、broken 3",
+          "status": "事实",
+          "source": "DOCX v20 描述"
+        },
+        {
+          "label": "C300 vs C-hard 数据用途",
+          "model": "—",
+          "prompt": "—",
+          "dataset": "C300 vs C-hard240",
+          "metric": "C300 与 C-hard 不是同一集；C300 是开发回归/诊断集，未进入最终训练；C-hard240 进入 1303+240 联合训练",
+          "status": "事实",
+          "source": "DOCX 数据用途表"
+        },
+        {
+          "label": "C-hard final 开发 cascade",
+          "model": "Qwen3.5 API",
+          "prompt": "—",
+          "dataset": "C-hard240",
+          "metric": "final cascade 204/240 (85.00%) → repair-v1 218/240 (90.83%) → assertion-v5 240/240 (100%, development closure)",
+          "status": "事实",
+          "source": "DOCX C-hard cascade",
+          "note": "100% 是 development closure；不证明最终裸模型能力满分。断言只能用 query/输出，不读 Gold"
+        }
+      ]
+    },
+    {
+      "id": "audit-repair",
+      "title": "数据审计、规则优化与 repair/gate 实验",
+      "experiments": [
+        {
+          "label": "Gold / contract / scope / routing 严格审计",
+          "model": "—",
+          "prompt": "—",
+          "dataset": "1303 + 各 eval",
+          "metric": "发现一元 AND、单值 any/all/eq、严格边界、空窗、latest 字段、company semantic 等不一致；v17 修正 106 条；后续规则优化",
+          "status": "事实",
+          "source": "DOCX v17 数据契约对齐"
+        },
+        {
+          "label": "v21 candidate_v4 断言门控 v7",
+          "model": "Qwen3.5 API（qwen3.7-max）",
+          "prompt": "v21 candidate_v4",
+          "dataset": "sealed blind-v6 (240)",
+          "metric": "单次 Where 229/240；门控后 234/240；额外 API 8/240，修复 5、破坏 0",
+          "status": "事实",
+          "source": "candidate_v4 JSON"
+        },
+        {
+          "label": "blind-v4 单次 / repair-v1 / post-hoc 改进",
+          "model": "Qwen3.5 API",
+          "prompt": "—",
+          "dataset": "blind-v4 (240)",
+          "metric": "单次 217/240 (90.42%)；冻结 repair-v1 后 231/240 (96.25%)；后验改进 237/240 (98.75%)",
+          "status": "事实",
+          "source": "candidate_v4 邻近 README",
+          "note": "post-hoc 237/240 不能标为正式 untouched blind"
+        },
+        {
+          "label": "blind-v5 post-hoc",
+          "model": "Qwen3.5 API",
+          "prompt": "—",
+          "dataset": "blind-v5 (160)",
+          "metric": "frozen_v3 133/160；v21 assertion_v7 equivalence 160/160（post-hoc development 不是 untouched）",
+          "status": "事实",
+          "source": "candidate_v4 blind_v5_diagnostic",
+          "note": "v21/v7 在 blind-v5 reveal 后开发，post-hoc 不是 untouched"
+        }
+      ]
+    },
+    {
+      "id": "current-final",
+      "title": "最终 v21 与当前学生评测",
+      "experiments": [
+        {
+          "label": "API 单次 sealed blind-v6 (240)",
+          "model": "qwen3.7-max（candidate_v4）",
+          "prompt": "v21 candidate-v4",
+          "dataset": "sealed blind-v6 (240)",
+          "metric": "Canonical Where 229/240 (95.42%)；Schema 238/240 (99.17%)；compiler-hard 228/240",
+          "status": "事实",
+          "source": "paper_ir_v1 one_pass"
+        },
+        {
+          "label": "API 门控后 sealed blind-v6",
+          "model": "qwen3.7-max（candidate_v4）",
+          "prompt": "v21 candidate-v4",
+          "dataset": "sealed blind-v6 (240)",
+          "metric": "Canonical Where 234/240 (97.50%)；Schema 238/240；compiler-hard 232/240；额外 API 8/240，修复 5、破坏 0",
+          "status": "事实",
+          "source": "paper_ir_v1 assertion_v7"
+        },
+        {
+          "label": "4B 裸输出 blind-v6",
+          "model": "Qwen3.5 4B + LoRA（v21 训练）",
+          "prompt": "v21 candidate-v4",
+          "dataset": "sealed blind-v6 (240)",
+          "metric": "Canonical Where 211/240 (87.92%)；Schema 240/240 (100%)",
+          "status": "事实",
+          "source": "audit-inputs/4B × blind-v6"
+        },
+        {
+          "label": "9B 裸输出 blind-v6（初次 + 重复）",
+          "model": "Qwen3.5 9B + LoRA（v21 训练）",
+          "prompt": "v21 candidate-v4",
+          "dataset": "sealed blind-v6 (240)",
+          "metric": "初次 197/240 (82.08%)；重复 198/240 (82.50%)；Schema 239/240",
+          "status": "事实",
+          "source": "audit-inputs/9B × blind-v6"
+        },
+        {
+          "label": "4B / 9B 开发回归 / 诊断集",
+          "model": "4B / 9B LoRA",
+          "prompt": "v21 candidate-v4",
+          "dataset": "old366 (366) / C300 (300)",
+          "metric": "4B old366 332/366 (90.71%)；4B C300 257/300 (85.67%)；9B old366 331/366 (90.44%)；9B C300 262/300 (87.33%)",
+          "status": "事实",
+          "source": "audit-inputs/4B × {old366, C300}",
+          "note": "old366/C300 是开发回归/诊断集，未进入训练"
+        },
+        {
+          "label": "9B checkpoint-200 vs 最终盲测",
+          "model": "Qwen3.5 9B + LoRA",
+          "prompt": "v21 candidate-v4",
+          "dataset": "sealed blind-v6 (240)",
+          "metric": "checkpoint-200 与最终 Where 198/240，compiler-hard 209/240（持平）",
+          "status": "事实（原始数据在 server，本机无）",
+          "source": "DOCX 9B 训练检查",
+          "note": "不支持最后 91 步整体退化；不能排除 200 步前过拟合"
+        }
+      ]
+    }
+  ]
+}

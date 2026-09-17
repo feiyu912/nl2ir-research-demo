@@ -1,0 +1,14 @@
+{
+  "totalFailedRows": 600,
+  "whereFailures": 222,
+  "semanticFailures": 440,
+  "intersection": 62,
+  "note": "600 = 全部失败行（跨 6 运行）；222 = Canonical Where 失败；440 = Semantic 失败。 是重叠集合，不可相加。 实际计算：where_only=222, sem_only=440, intersection=62, union=where_only+sem_only-intersection=600（应等于 total=600）。",
+  "categoryCounts": {
+    "G": 366,
+    "M": 192,
+    "P": 21,
+    "R": 12,
+    "F": 9
+  }
+}

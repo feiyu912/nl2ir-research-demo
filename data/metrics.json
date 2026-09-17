@@ -1,0 +1,882 @@
+[
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "strict_json",
+    "correct": 240,
+    "total": 240,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "recoverable_json",
+    "correct": 240,
+    "total": 240,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "schema",
+    "correct": 238,
+    "total": 240,
+    "accuracy": 0.9917,
+    "ci95": [
+      0.975,
+      1.0
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "strict_where",
+    "correct": 221,
+    "total": 240,
+    "accuracy": 0.9208,
+    "ci95": [
+      0.825,
+      0.9958333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "main_chain_where",
+    "correct": 228,
+    "total": 240,
+    "accuracy": 0.95,
+    "ci95": [
+      0.8791666666666667,
+      0.9958333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "order_value_invariant_where",
+    "correct": 229,
+    "total": 240,
+    "accuracy": 0.9542,
+    "ci95": [
+      0.8916666666666667,
+      0.9958333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "semantic_exact",
+    "correct": 119,
+    "total": 240,
+    "accuracy": 0.4958,
+    "ci95": [
+      0.3333333333333333,
+      0.6583333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "main_chain_ir",
+    "correct": 114,
+    "total": 240,
+    "accuracy": 0.475,
+    "ci95": [
+      0.3125,
+      0.6375
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "compiler_hard_exact",
+    "correct": 228,
+    "total": 240,
+    "accuracy": 0.95,
+    "ci95": [
+      0.8791666666666667,
+      0.9958333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "metric": "executable_main_chain",
+    "correct": 114,
+    "total": 240,
+    "accuracy": 0.475,
+    "ci95": [
+      0.3125,
+      0.6375
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "strict_json",
+    "correct": 240,
+    "total": 240,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "recoverable_json",
+    "correct": 240,
+    "total": 240,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "schema",
+    "correct": 238,
+    "total": 240,
+    "accuracy": 0.9917,
+    "ci95": [
+      0.975,
+      1.0
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "strict_where",
+    "correct": 221,
+    "total": 240,
+    "accuracy": 0.9208,
+    "ci95": [
+      0.825,
+      0.9958333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "main_chain_where",
+    "correct": 232,
+    "total": 240,
+    "accuracy": 0.9667,
+    "ci95": [
+      0.9291666666666667,
+      0.9958333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "order_value_invariant_where",
+    "correct": 234,
+    "total": 240,
+    "accuracy": 0.975,
+    "ci95": [
+      0.9458333333333333,
+      0.9958333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "semantic_exact",
+    "correct": 118,
+    "total": 240,
+    "accuracy": 0.4917,
+    "ci95": [
+      0.32916666666666666,
+      0.6541666666666667
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "main_chain_ir",
+    "correct": 116,
+    "total": 240,
+    "accuracy": 0.4833,
+    "ci95": [
+      0.32083333333333336,
+      0.6458333333333334
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "compiler_hard_exact",
+    "correct": 232,
+    "total": 240,
+    "accuracy": 0.9667,
+    "ci95": [
+      0.9291666666666667,
+      0.9958333333333333
+    ]
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "metric": "executable_main_chain",
+    "correct": 116,
+    "total": 240,
+    "accuracy": 0.4833,
+    "ci95": [
+      0.32083333333333336,
+      0.6458333333333334
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "strict_json",
+    "correct": 366,
+    "total": 366,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "recoverable_json",
+    "correct": 366,
+    "total": 366,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "schema",
+    "correct": 366,
+    "total": 366,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "strict_where",
+    "correct": 328,
+    "total": 366,
+    "accuracy": 0.8962,
+    "ci95": [
+      0.8961748633879781,
+      0.8961748633879781
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "main_chain_where",
+    "correct": 332,
+    "total": 366,
+    "accuracy": 0.9071,
+    "ci95": [
+      0.907103825136612,
+      0.907103825136612
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "order_value_invariant_where",
+    "correct": 334,
+    "total": 366,
+    "accuracy": 0.9126,
+    "ci95": [
+      0.912568306010929,
+      0.912568306010929
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "semantic_exact",
+    "correct": 300,
+    "total": 366,
+    "accuracy": 0.8197,
+    "ci95": [
+      0.819672131147541,
+      0.819672131147541
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "main_chain_ir",
+    "correct": 266,
+    "total": 366,
+    "accuracy": 0.7268,
+    "ci95": [
+      0.726775956284153,
+      0.726775956284153
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "compiler_hard_exact",
+    "correct": 334,
+    "total": 366,
+    "accuracy": 0.9126,
+    "ci95": [
+      0.912568306010929,
+      0.912568306010929
+    ]
+  },
+  {
+    "runId": "4b-old366",
+    "metric": "executable_main_chain",
+    "correct": 277,
+    "total": 366,
+    "accuracy": 0.7568,
+    "ci95": [
+      0.7568306010928961,
+      0.7568306010928961
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "strict_json",
+    "correct": 297,
+    "total": 300,
+    "accuracy": 0.99,
+    "ci95": [
+      0.99,
+      0.99
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "recoverable_json",
+    "correct": 297,
+    "total": 300,
+    "accuracy": 0.99,
+    "ci95": [
+      0.99,
+      0.99
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "schema",
+    "correct": 297,
+    "total": 300,
+    "accuracy": 0.99,
+    "ci95": [
+      0.99,
+      0.99
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "strict_where",
+    "correct": 252,
+    "total": 300,
+    "accuracy": 0.84,
+    "ci95": [
+      0.84,
+      0.84
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "main_chain_where",
+    "correct": 257,
+    "total": 300,
+    "accuracy": 0.8567,
+    "ci95": [
+      0.8566666666666667,
+      0.8566666666666667
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "order_value_invariant_where",
+    "correct": 267,
+    "total": 300,
+    "accuracy": 0.89,
+    "ci95": [
+      0.89,
+      0.89
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "semantic_exact",
+    "correct": 244,
+    "total": 300,
+    "accuracy": 0.8133,
+    "ci95": [
+      0.8133333333333334,
+      0.8133333333333334
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "main_chain_ir",
+    "correct": 221,
+    "total": 300,
+    "accuracy": 0.7367,
+    "ci95": [
+      0.7366666666666667,
+      0.7366666666666667
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "compiler_hard_exact",
+    "correct": 260,
+    "total": 300,
+    "accuracy": 0.8667,
+    "ci95": [
+      0.8666666666666667,
+      0.8666666666666667
+    ]
+  },
+  {
+    "runId": "4b-c300",
+    "metric": "executable_main_chain",
+    "correct": 221,
+    "total": 300,
+    "accuracy": 0.7367,
+    "ci95": [
+      0.7366666666666667,
+      0.7366666666666667
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "strict_json",
+    "correct": 240,
+    "total": 240,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "recoverable_json",
+    "correct": 240,
+    "total": 240,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "schema",
+    "correct": 240,
+    "total": 240,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "strict_where",
+    "correct": 187,
+    "total": 240,
+    "accuracy": 0.7792,
+    "ci95": [
+      0.6416666666666667,
+      0.9
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "main_chain_where",
+    "correct": 211,
+    "total": 240,
+    "accuracy": 0.8792,
+    "ci95": [
+      0.7875,
+      0.9541666666666667
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "order_value_invariant_where",
+    "correct": 211,
+    "total": 240,
+    "accuracy": 0.8792,
+    "ci95": [
+      0.7875,
+      0.9541666666666667
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "semantic_exact",
+    "correct": 139,
+    "total": 240,
+    "accuracy": 0.5792,
+    "ci95": [
+      0.4083333333333333,
+      0.7416666666666667
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "main_chain_ir",
+    "correct": 120,
+    "total": 240,
+    "accuracy": 0.5,
+    "ci95": [
+      0.3375,
+      0.6625
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "compiler_hard_exact",
+    "correct": 217,
+    "total": 240,
+    "accuracy": 0.9042,
+    "ci95": [
+      0.8208333333333333,
+      0.9666666666666667
+    ]
+  },
+  {
+    "runId": "4b-blindv6",
+    "metric": "executable_main_chain",
+    "correct": 122,
+    "total": 240,
+    "accuracy": 0.5083,
+    "ci95": [
+      0.3458333333333333,
+      0.6708333333333333
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "strict_json",
+    "correct": 366,
+    "total": 366,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "recoverable_json",
+    "correct": 366,
+    "total": 366,
+    "accuracy": 1.0,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "schema",
+    "correct": 365,
+    "total": 366,
+    "accuracy": 0.9973,
+    "ci95": [
+      0.9972677595628415,
+      0.9972677595628415
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "strict_where",
+    "correct": 328,
+    "total": 366,
+    "accuracy": 0.8962,
+    "ci95": [
+      0.8961748633879781,
+      0.8961748633879781
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "main_chain_where",
+    "correct": 331,
+    "total": 366,
+    "accuracy": 0.9044,
+    "ci95": [
+      0.9043715846994536,
+      0.9043715846994536
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "order_value_invariant_where",
+    "correct": 334,
+    "total": 366,
+    "accuracy": 0.9126,
+    "ci95": [
+      0.912568306010929,
+      0.912568306010929
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "semantic_exact",
+    "correct": 296,
+    "total": 366,
+    "accuracy": 0.8087,
+    "ci95": [
+      0.8087431693989071,
+      0.8087431693989071
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "main_chain_ir",
+    "correct": 264,
+    "total": 366,
+    "accuracy": 0.7213,
+    "ci95": [
+      0.7213114754098361,
+      0.7213114754098361
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "compiler_hard_exact",
+    "correct": 333,
+    "total": 366,
+    "accuracy": 0.9098,
+    "ci95": [
+      0.9098360655737705,
+      0.9098360655737705
+    ]
+  },
+  {
+    "runId": "9b-old366",
+    "metric": "executable_main_chain",
+    "correct": 274,
+    "total": 366,
+    "accuracy": 0.7486,
+    "ci95": [
+      0.7486338797814208,
+      0.7486338797814208
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "strict_json",
+    "correct": 298,
+    "total": 300,
+    "accuracy": 0.9933,
+    "ci95": [
+      0.9933333333333333,
+      0.9933333333333333
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "recoverable_json",
+    "correct": 298,
+    "total": 300,
+    "accuracy": 0.9933,
+    "ci95": [
+      0.9933333333333333,
+      0.9933333333333333
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "schema",
+    "correct": 296,
+    "total": 300,
+    "accuracy": 0.9867,
+    "ci95": [
+      0.9866666666666667,
+      0.9866666666666667
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "strict_where",
+    "correct": 262,
+    "total": 300,
+    "accuracy": 0.8733,
+    "ci95": [
+      0.8733333333333333,
+      0.8733333333333333
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "main_chain_where",
+    "correct": 262,
+    "total": 300,
+    "accuracy": 0.8733,
+    "ci95": [
+      0.8733333333333333,
+      0.8733333333333333
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "order_value_invariant_where",
+    "correct": 272,
+    "total": 300,
+    "accuracy": 0.9067,
+    "ci95": [
+      0.9066666666666666,
+      0.9066666666666666
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "semantic_exact",
+    "correct": 250,
+    "total": 300,
+    "accuracy": 0.8333,
+    "ci95": [
+      0.8333333333333334,
+      0.8333333333333334
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "main_chain_ir",
+    "correct": 229,
+    "total": 300,
+    "accuracy": 0.7633,
+    "ci95": [
+      0.7633333333333333,
+      0.7633333333333333
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "compiler_hard_exact",
+    "correct": 262,
+    "total": 300,
+    "accuracy": 0.8733,
+    "ci95": [
+      0.8733333333333333,
+      0.8733333333333333
+    ]
+  },
+  {
+    "runId": "9b-c300",
+    "metric": "executable_main_chain",
+    "correct": 229,
+    "total": 300,
+    "accuracy": 0.7633,
+    "ci95": [
+      0.7633333333333333,
+      0.7633333333333333
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "strict_json",
+    "correct": 239,
+    "total": 240,
+    "accuracy": 0.9958,
+    "ci95": [
+      0.9875,
+      1.0
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "recoverable_json",
+    "correct": 239,
+    "total": 240,
+    "accuracy": 0.9958,
+    "ci95": [
+      0.9875,
+      1.0
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "schema",
+    "correct": 239,
+    "total": 240,
+    "accuracy": 0.9958,
+    "ci95": [
+      0.9875,
+      1.0
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "strict_where",
+    "correct": 178,
+    "total": 240,
+    "accuracy": 0.7417,
+    "ci95": [
+      0.5875,
+      0.8916666666666667
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "main_chain_where",
+    "correct": 197,
+    "total": 240,
+    "accuracy": 0.8208,
+    "ci95": [
+      0.6875,
+      0.9375
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "order_value_invariant_where",
+    "correct": 197,
+    "total": 240,
+    "accuracy": 0.8208,
+    "ci95": [
+      0.6875,
+      0.9375
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "semantic_exact",
+    "correct": 143,
+    "total": 240,
+    "accuracy": 0.5958,
+    "ci95": [
+      0.425,
+      0.7625
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "main_chain_ir",
+    "correct": 112,
+    "total": 240,
+    "accuracy": 0.4667,
+    "ci95": [
+      0.3,
+      0.6375
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "compiler_hard_exact",
+    "correct": 207,
+    "total": 240,
+    "accuracy": 0.8625,
+    "ci95": [
+      0.7333333333333333,
+      0.9625
+    ]
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "metric": "executable_main_chain",
+    "correct": 112,
+    "total": 240,
+    "accuracy": 0.4667,
+    "ci95": [
+      0.3,
+      0.6375
+    ]
+  }
+]

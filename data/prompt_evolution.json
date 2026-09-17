@@ -1,0 +1,280 @@
+{
+  "note": "Prompt 版本完整序列：Original（前序完整）→ compact-v1/v2/v3（压缩系列）→ v12–v21（研究主线迭代）。v4–v11、v13 在本机 DOCX 中无详细原文记录，标'无本机原文'。每条 token 统计注明 tokenizer/模板/统计范围；字节数 ≠ 字符数 ≠ token 数。",
+  "series": [
+    {
+      "label": "compression",
+      "title": "压缩系列（解决 3072 token 门禁与显存效率）",
+      "versions": [
+        {
+          "label": "Original",
+          "stage": "predecessor",
+          "file": "[内部来源路径未公开]",
+          "lines": 336,
+          "bytes": 24193,
+          "linesMeasured": 337,
+          "sha256": "8a149d472882e70541051e292691d5945cf912742136ba7890f2183f78af4922",
+          "notes": [
+            "336 行 / 24193 B（字节数，非字符/token）",
+            "第 112 行起有较长 query→JSON 示例区",
+            "Qwen3.5 评测包装下输入约 6470–6499 tokens（仅 system）",
+            "370 条全部超过 3072 token 门禁"
+          ],
+          "rulesFocus": "完整原版规则；大量示例",
+          "examplesTradeoff": "大量 query→JSON 示例",
+          "outputContract": "v2 where AST-only；schema 在 compact 系列中收紧",
+          "queryLabelChanged": false,
+          "experiments": [
+            "Qwen3 8B 早期训练",
+            "Qwen3.5 4B 首次实验：370 条超 3072"
+          ]
+        },
+        {
+          "label": "compact-v1",
+          "stage": "compression",
+          "file": "[内部来源路径未公开]",
+          "lines": 86,
+          "bytes": 8883,
+          "linesMeasured": 86,
+          "sha256": "450d77070d90c82ea9db08d8af084ef8bdd418c78a8cda3ea6078fef75c7ff74",
+          "notes": [
+            "86 行 / 8883 B",
+            "只替换 system message；query/label 不变",
+            "训练 1303 与 370 验证视图另建 compact-v1 版本"
+          ],
+          "rulesFocus": "v1 起的精简版规则",
+          "examplesTradeoff": "示例减少",
+          "outputContract": "压缩后的输出契约",
+          "queryLabelChanged": false,
+          "experiments": []
+        },
+        {
+          "label": "compact-v2",
+          "stage": "compression",
+          "file": "[内部来源路径未公开]",
+          "lines": 72,
+          "bytes": 9316,
+          "linesMeasured": 72,
+          "sha256": "2009e922f42ea5c8e73678b8960c68a07c7fe213602ea5b354ab8b3838e2fa6b",
+          "notes": [
+            "72 行 / 9316 B",
+            "行数少于 v1 但字节略增：可能含更多表格/紧凑字符",
+            "字节数不是字符数或 token 数；不要做粗略除法"
+          ],
+          "rulesFocus": "v2 规则",
+          "examplesTradeoff": "进一步压缩示例",
+          "outputContract": "v2 输出契约",
+          "queryLabelChanged": false,
+          "experiments": []
+        },
+        {
+          "label": "compact-v3",
+          "stage": "compression",
+          "file": "[内部来源路径未公开]",
+          "lines": 81,
+          "bytes": 10493,
+          "linesMeasured": 81,
+          "sha256_user_file": "88cc8e4bd3125b835fa06d99ae241811322e54516df3090716663b0ff8d4a16a",
+          "sha256_runtime_stripped": "d2807461593d1402e7bcf2a0bdd7c9905e8cb5447fa1ed5d9b729ce33fdc32d3",
+          "notes": [
+            "81 行 / 10493 B",
+            "替换 system 前后训练数据 1303 SHA-256 不变：35ac78dc6b036d4e8a3b899951453611123c205cdf9f0dcdc63738cb52ca8a07"
+          ],
+          "rulesFocus": "v3 相对 v2 补充：姓名与其他条件同时保留；work_state 与 compiler 映射；work_segment_count 不得误映射为 work_years；尾部空窗 / 最近任职时间 / 段间空窗；结构化字段与向量字段互斥；宽公司/职位直接进 semantic；轻量纠错边界；tenureIntent='generic' 等",
+          "examplesTradeoff": "继续压缩示例；规则覆盖完整",
+          "outputContract": "v3 输出契约（紧凑 schema）",
+          "queryLabelChanged": false,
+          "experiments": [
+            "结构覆盖检查：1303 条标签中实际出现的 32 个 condition.field 全部在 v3 中出现；5 个 semantic.fields 全部出现；operator eq/any/all/not/gte/lte/range 全部保留",
+            "Token 门禁（Qwen3-8B tokenizer + qwen3_nothink）：train 1303 max 3060；independent 100 max 2831；complex 100 max 2903；hidden 170 max 2941；超过 3072 = 0",
+            "此 token 统计不证明目标 Qwen3.5 tokenizer/chat template 可通过；正式训练前必须用目标模型 tokenizer.json 复验"
+          ],
+          "singleFactorCaveat": "compact-v3 收益不能默认是 prompt 单因素；同时可能有：v17 修正 106 条训练样本、Gold 调整、repair 引入等"
+        }
+      ]
+    },
+    {
+      "label": "research-series",
+      "title": "研究主线版本系列（v12–v21，规则/契约/训练优化迭代）",
+      "notes": "v12–v16 是 Prompt 规则优化实验，规则增补会让 prompt 重新变长，分数有回落（非单调）。v17 是训练答案与运行时契约对齐阶段。v18 是严格受 3072-token 门禁约束的系统提示词与训练/验证视图。v19 是在 v18 基础上的最小一般化增补实验。",
+      "earlyVersions": {
+        "label": "v4–v11 / v13",
+        "status": "本机 DOCX 母版中无详细原文记录；可能在历史 tar.gz 包中或仅口头迭代",
+        "note": "未发现可定位的 prompt 文本或 SHA-256；不标无依据信息"
+      },
+      "versions": [
+        {
+          "label": "v12",
+          "stage": "rule-optimization",
+          "status": "有描述，无本机原文",
+          "source": "母版缩写表",
+          "notes": [
+            "v12–v16 是 Prompt 规则优化实验阶段起点",
+            "非单调：规则增补会让 prompt 重新变长，分数有回落"
+          ]
+        },
+        {
+          "label": "v13",
+          "stage": "rule-optimization",
+          "status": "无本机原文",
+          "notes": [
+            "v12–v16 之间的迭代节点之一"
+          ]
+        },
+        {
+          "label": "v14",
+          "stage": "rule-optimization",
+          "status": "有描述，无本机原文",
+          "source": "母版引用",
+          "notes": [
+            "v18 解决了 v14–v16「规则更全但训练放不下」的矛盾",
+            "v14 在 4096 token 附近约 7%/step 训练吞吐"
+          ]
+        },
+        {
+          "label": "v15",
+          "stage": "rule-optimization",
+          "status": "无本机原文",
+          "notes": [
+            "v12–v16 之间的迭代节点"
+          ]
+        },
+        {
+          "label": "v16",
+          "stage": "rule-optimization",
+          "status": "有描述，无本机原文",
+          "source": "母版缩写表",
+          "notes": [
+            "v12–v16 终点",
+            "v17 的意义不是「让答案和 v16 一样」，而是消除训练标签与实际 semantic-search 主链之间的自相矛盾"
+          ]
+        },
+        {
+          "label": "v17",
+          "stage": "data-contract-alignment",
+          "status": "有描述，无本机原文",
+          "source": "母版第 12 节",
+          "notes": [
+            "训练答案与运行时契约对齐阶段",
+            "对 1303 条训练答案审计后，发现部分数据存在一元 AND、单值 any/all/eq、任职意图、严格边界、空窗、latest 字段、company semantic 等表达不一致",
+            "v17 对 106 条唯一训练样本（约 8.1%）进行了有依据的修正，而不是简单删除中英文补充或迎合验证集"
+          ],
+          "experiments": [
+            "Gold 与运行时契约对齐审计（1303 条）"
+          ]
+        },
+        {
+          "label": "v18",
+          "stage": "3072-token-gate",
+          "status": "有描述，无本机原文",
+          "source": "母版第 13 节",
+          "notes": [
+            "严格受 3072-token 门禁约束的系统提示词与训练/验证视图",
+            "System Prompt 为 2595 tokens；1303 条完整训练样本最大 2971 tokens，0 条超过 3072，最小余量 101 tokens",
+            "解决 v14–v16「规则更全但训练放不下」的矛盾",
+            "训练配置：Qwen3.5-4B、cutoff=3072、RTX 5070 Ti 16GB；显存约 15874/16303 MiB、GPU 利用率 99%、功耗约 230W、温度约 66℃；早期吞吐从约 1046 上升到 1498 tokens/s"
+          ],
+          "experiments": [
+            "v18 训练：370 条预测完整生成，368 条可直接解析为 JSON，367 条通过既有 Schema，旧 Gold Strict Where 306/370 (82.7%)，contract-v1 Strict Where 315/370 (85.1%)"
+          ]
+        },
+        {
+          "label": "v19",
+          "stage": "minimal-generalization",
+          "status": "最终冻结前版本（最终训练包用 v19 评估）",
+          "source": "母版 v19 final 描述",
+          "notes": [
+            "在 v18 基础上的最小一般化增补实验",
+            "v19 System Prompt 已逐字核对为冻结的 v19 final Prompt；contract-v1 Gold 也全部一致",
+            "v18 与 v19 有 104 条原始预测不同，排除复用同一预测文件的可能"
+          ],
+          "experiments": [
+            "v19 API old370 主链等价 355/370 (95.95%)",
+            "v19 4B old370 主链等价 323/370 (87.30%)；排除既有能力边界 321/366 (87.70%)",
+            "v19 9B vs 4B 配对评测：Where 302/370 (81.6%) vs 294/370 (79.5%)；McNemar p=0.3123",
+            "v19 API blind-v2 canonical 213/248 (85.89%)；v19 4B 162/248 (65.32%)",
+            "v19 API C-hard order/value-invariant 94/240 (39.17%)；v19 4B 27/240 (11.25%)"
+          ],
+          "singleFactorCaveat": "v19 相对 v18 收益同时来自 prompt 规则增补、v17 数据修正、与 4B/9B 训练；不是 prompt 单因素"
+        },
+        {
+          "label": "v20",
+          "stage": "tail-check-reorder",
+          "status": "有描述，无本机原文",
+          "source": "母版 v20 描述",
+          "notes": [
+            "把已有末尾检查重排成紧凑 generation invariant block，不增加新任务规则",
+            "历史 token 记录：v19 2639、v20 2714",
+            "C-hard order/value-invariant 从 94/240 (39.17%) 提升至 120/240 (50.00%)；paired fixed 29、broken 3",
+            "旧 370 维持 342/370 不变；内部 fixed 2、broken 2",
+            "「39 到 50」是 prompt organization 的对齐收益，不是规则增多"
+          ],
+          "experiments": [
+            "v20 API C-hard 50.00%"
+          ]
+        },
+        {
+          "label": "v21 candidate-v4",
+          "stage": "current-candidate",
+          "status": "当前冻结版本",
+          "source": "母版 v21 / candidate_v4 JSON",
+          "notes": [
+            "v21 + candidate-v4：prompt + impl SHA-256 已冻结",
+            "本机无完整 prompt 文本（属于工作机密 / 后续部署约束）",
+            "联合训练 1543 = 1303 + 240 C-hard"
+          ],
+          "experiments": [
+            "sealed blind-v6 (240) 单次 229/240 (95.42%)；门控后 234/240 (97.50%)",
+            "门控后额外 API 调用 8/240；修复 5 条、破坏 0 条",
+            "4B 裸输出 blind-v6 211/240 (87.92%)；9B 初次 197/240 (82.08%)；9B 重复 198/240 (82.50%)",
+            "六组评测 4B/9B × old366/C300/blind-v6"
+          ],
+          "singleFactorCaveat": "v21 相对 v19 提升同时来自 prompt/契约/repair/canonicalizer/assertion gate 多项变化，不能归因为单因素"
+        }
+      ]
+    }
+  ],
+  "blindEvolution": {
+    "note": "盲测/诊断集版本演进（与 prompt 版本号不重叠，独立编号）",
+    "items": [
+      {
+        "label": "blind-v2",
+        "samples": 248,
+        "firstSeen": "首次未见盲测；v19 API 213/248, v19 4B 162/248",
+        "fate": "后续版本已查看并用于 prompt/训练改进；不再是 untouched"
+      },
+      {
+        "label": "blind-v3",
+        "samples": null,
+        "firstSeen": "审计 README-only 目录",
+        "fate": "审计未发布原始 metrics/responses"
+      },
+      {
+        "label": "blind-v4",
+        "samples": 240,
+        "firstSeen": "单次 217/240；冻结 repair-v1 后 231/240；post-hoc 237/240",
+        "fate": "post-hoc 237/240 不能标为 untouched blind"
+      },
+      {
+        "label": "blind-v5",
+        "samples": 160,
+        "firstSeen": "frozen_v3 133/160；v21 assertion_v7 equivalence 160/160",
+        "fate": "v21/v7 在 blind-v5 reveal 后开发，post-hoc development 不是 untouched"
+      },
+      {
+        "label": "blind-v6",
+        "samples": 240,
+        "firstSeen": "sealed 240；API 单次 229/240；门控 234/240",
+        "fate": "当前最终冻结盲测；所有参数与 checkpoint 确定后一次性使用"
+      }
+    ]
+  },
+  "dataInvariance": {
+    "compact_v3_train_data_sha256": "35ac78dc6b036d4e8a3b899951453611123c205cdf9f0dcdc63738cb52ca8a07",
+    "note": "compact-v3 仅替换 system；human/gpt/样本顺序在替换前后一致"
+  },
+  "tokenCaveats": [
+    "Qwen3-8B tokenizer + qwen3_nothink 的 token 统计不证明 Qwen3.5 tokenizer/chat template 可通过",
+    "字节数 ≠ 字符数 ≠ token 数；不要做粗略除法（除法只对已知 tokenizer 有效）",
+    "若超线：只做不改变规则的微型压缩，并重新生成所有哈希与数据文件"
+  ]
+}

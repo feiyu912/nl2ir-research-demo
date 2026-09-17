@@ -1,0 +1,20 @@
+{
+  "source": "[内部来源路径未公开]",
+  "scope": "600 unique failed prediction rows across six runs, 222 Where failures; every nonmatching row reviewed against prompt and gold",
+  "interpretation": "attribution is a reviewed operational classification, not proof of internal causal mechanism or ES/vector denotation equivalence",
+  "executionBoundaries": {
+    "noApiCalls": true,
+    "noGpuInference": true,
+    "noGoldChanges": true,
+    "noScoreChanges": true,
+    "promptSha256": "7ca4dea91a7371cd6214469f26439b3084475b23c7dc31d61c0f509af0e29fd0"
+  },
+  "categories": {
+    "M": "prompt已有明确规则：实质内容未执行",
+    "R": "prompt已有明确表示规则：表达不合规，但意图未发现实质改变",
+    "P": "prompt/输入契约不充分或表达存在歧义",
+    "G": "Gold/严格评分差异：不能据此认定模型未执行prompt",
+    "F": "非法JSON或Schema：输出契约未执行"
+  },
+  "warning": "归因是审计员复核后的操作分类，不证明内部因果机制或 ES/向量语义等价。"
+}

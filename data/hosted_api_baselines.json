@@ -1,0 +1,466 @@
+{
+  "schema": "hosted-api-baselines/v1",
+  "generatedAt": "2026-09-17",
+  "experimentDate": "2026-09-17",
+  "experiment": "NL2IR API three-model comparison: qwen3.7-max vs deepseek-v4.1-flash vs qwen3.8-flash",
+  "track": "A (frozen v21 prompt, json_object for all three models, frozen scorer)",
+  "primaryMetric": "main_chain_where",
+  "n": 906,
+  "sourceLabel": "公开聚合结果；逐题测评集未发布",
+  "sourceFiles": {
+    "THREE_MODEL_RESULTS.md": {
+      "sha256": "2664b6a1605afd3267a826fd9e3d46648af441492840c3d2122134734707bfca",
+      "bytes": 10849
+    },
+    "three_model_table.json": {
+      "sha256": "776a511d7db3658279335d7495c7bea6c96a27d4b084a2bf419e5366003721cd",
+      "bytes": 44322
+    },
+    "three_model_pairwise.json": {
+      "sha256": "72c98747e12adda25aec15827400b880c34be91e8fbeffa9bbe3ab81e4bda971",
+      "bytes": 20312
+    },
+    "cost_model.json": {
+      "sha256": "71ae024341ad709f824442a376e82ef7354b7ba1bfa1cfa15f04190412310d70",
+      "bytes": 5627
+    },
+    "manifest.json": {
+      "sha256": "6e86e7fa5f23b78f4961e2ec8b7547f3e07ebb64d4410711dabff764fc0146e8",
+      "bytes": 19649
+    },
+    "PUBLICATION_SUMMARY.md": {
+      "sha256": "3e720c453b1b4971b373d4ba4342da22dc32a77f2704a7fe007c000a2ae331a9",
+      "bytes": 12745
+    }
+  },
+  "frozenAssets": {
+    "prompt": {
+      "path": "training_prompt_v21.txt",
+      "sha256": "7ca4dea91a7371cd6214469f26439b3084475b23c7dc31d61c0f509af0e29fd0"
+    },
+    "scorer": {
+      "path": "score_paper_ir_v1_blind.py",
+      "sha256": "3f4b75f9127fcc073285985d3d44fcd776ce35bc6972012de7c9a2b344fba70f"
+    },
+    "contract": {
+      "path": "ir_contract.py",
+      "sha256": "45e909d94f1f04165a82dc37fc7b951209613bad68d71bc08bcadb33055805a9",
+      "nFields": 33
+    },
+    "datasets": {
+      "old366": {
+        "rows": 366,
+        "sha256": "92a0fed6cd784c5fcdc560b0487d4b744537dfabaa655d31490f2f1d9f84bf79"
+      },
+      "c300": {
+        "rows": 300,
+        "sha256": "c242ef8b3474330f30bdf4f62b33aa5e1052de7374e35e50b3381d687a80f7d5"
+      },
+      "blind_v6_240": {
+        "rows": 240,
+        "sha256": "3e10a04c47677e6800aab0147f43badfc84e8a668db6cbc5b750e9590634cc79"
+      },
+      "blind_v6_gold": {
+        "rows": 240,
+        "sha256": "2c7240c8dcd60b189263c5e4ee0086cb355e52a7e45dca27bd763cd8300bc0b2"
+      }
+    }
+  },
+  "datasets": {
+    "old366": {
+      "n": 366,
+      "purpose": "development / regression"
+    },
+    "c300": {
+      "n": 300,
+      "purpose": "30 transformation families"
+    },
+    "blindV6": {
+      "n": 240,
+      "purpose": "sealed blind",
+      "split": {
+        "stress96": 96,
+        "realistic144": 144
+      }
+    },
+    "combined": {
+      "n": 906,
+      "note": "old366 + c300 + blind-v6；stress96 不重复计入"
+    }
+  },
+  "models": [
+    {
+      "alias": "qwen",
+      "modelId": "qwen3.7-max",
+      "role": "质量基线",
+      "conclusion": "当前保留为生产默认（质量基线）",
+      "tone": "baseline",
+      "n": 906,
+      "combinedWhere": 94.26,
+      "combinedWhereCorrect": 854,
+      "slices": {
+        "old366": {
+          "n": 366,
+          "where": 95.63
+        },
+        "c300": {
+          "n": 300,
+          "where": 91.67
+        },
+        "blindV6": {
+          "n": 240,
+          "where": 95.42
+        },
+        "stress96": {
+          "n": 96,
+          "where": 88.54,
+          "note": "blind-v6 子集，不重复计入 combined"
+        }
+      },
+      "hardF1": 95.44,
+      "hardCondition": {
+        "goldTotal": 1927,
+        "tp": 1840,
+        "precision": 95.39,
+        "recall": 95.49
+      },
+      "redlines": {
+        "trueDroppedRequired": 19,
+        "allRequiredMissingItems": 0,
+        "allRequiredMissingIds": [],
+        "fieldSubstitution": 3,
+        "notFlippedPositive": 1,
+        "numericDirectionFlip": 10,
+        "hallucinatedConditions": 24,
+        "invalidWhereNodeItems": 35
+      },
+      "latency": {
+        "p50": 5.11,
+        "p95": 7.93,
+        "transportFailureRequests": 270
+      },
+      "cost": {
+        "standardized": {
+          "caliber": "identical token workload (3000 in / 2400 cached / 200 out) at real list price",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 201.6
+            }
+          ]
+        },
+        "observedRun": {
+          "caliber": "this run's real prompt/cached/completion totals at real list price (NOT a price index)",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 242.83,
+              "cacheHitRate": 76.3,
+              "completionTokensPerRequest": 285.0
+            }
+          ]
+        }
+      },
+      "frozenFlags": {
+        "main_chain_ir": 0.48233995584988965,
+        "executable_main_chain": 0.4900662251655629,
+        "compiler_hard_exact": 0.9448123620309051,
+        "schema": 0.9988962472406181,
+        "main_chain_where": 0.9426048565121413,
+        "strict_where": 0.8885209713024282,
+        "semantic_exact": 0.5099337748344371,
+        "recoverable_json": 1.0,
+        "strict_json": 1.0
+      }
+    },
+    {
+      "alias": "qwen38",
+      "modelId": "qwen3.8-flash",
+      "role": "低成本候选",
+      "conclusion": "Tier B：低成本优化候选，尚未替换生产",
+      "tone": "candidate",
+      "n": 906,
+      "combinedWhere": 89.62,
+      "combinedWhereCorrect": 812,
+      "slices": {
+        "old366": {
+          "n": 366,
+          "where": 90.98
+        },
+        "c300": {
+          "n": 300,
+          "where": 89.0
+        },
+        "blindV6": {
+          "n": 240,
+          "where": 88.33
+        },
+        "stress96": {
+          "n": 96,
+          "where": 79.17,
+          "note": "blind-v6 子集，不重复计入 combined"
+        }
+      },
+      "hardF1": 94.93,
+      "hardCondition": {
+        "goldTotal": 1927,
+        "tp": 1824,
+        "precision": 95.2,
+        "recall": 94.65
+      },
+      "redlines": {
+        "trueDroppedRequired": 30,
+        "allRequiredMissingItems": 1,
+        "allRequiredMissingIds": [
+          "old366-0042"
+        ],
+        "fieldSubstitution": 3,
+        "notFlippedPositive": 9,
+        "numericDirectionFlip": 10,
+        "hallucinatedConditions": 22,
+        "invalidWhereNodeItems": 36
+      },
+      "latency": {
+        "p50": 3.43,
+        "p95": 6.67,
+        "transportFailureRequests": 0
+      },
+      "cost": {
+        "standardized": {
+          "caliber": "identical token workload (3000 in / 2400 cached / 200 out) at real list price",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 12.6
+            }
+          ]
+        },
+        "observedRun": {
+          "caliber": "this run's real prompt/cached/completion totals at real list price (NOT a price index)",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 16.51,
+              "cacheHitRate": 68.2,
+              "completionTokensPerRequest": 253.0
+            }
+          ]
+        }
+      },
+      "frozenFlags": {
+        "main_chain_ir": 0.5717439293598234,
+        "executable_main_chain": 0.5827814569536424,
+        "compiler_hard_exact": 0.9017660044150111,
+        "schema": 0.9812362030905077,
+        "main_chain_where": 0.8962472406181016,
+        "strict_where": 0.8278145695364238,
+        "semantic_exact": 0.6412803532008831,
+        "recoverable_json": 1.0,
+        "strict_json": 1.0
+      }
+    },
+    {
+      "alias": "deepseek",
+      "modelId": "deepseek-v4.1-flash",
+      "role": "当前不建议替换",
+      "conclusion": "Tier C：当前版本不替换",
+      "tone": "hold",
+      "n": 906,
+      "combinedWhere": 86.2,
+      "combinedWhereCorrect": 781,
+      "slices": {
+        "old366": {
+          "n": 366,
+          "where": 87.43
+        },
+        "c300": {
+          "n": 300,
+          "where": 80.0
+        },
+        "blindV6": {
+          "n": 240,
+          "where": 92.08
+        },
+        "stress96": {
+          "n": 96,
+          "where": 82.29,
+          "note": "blind-v6 子集，不重复计入 combined"
+        }
+      },
+      "hardF1": 94.29,
+      "hardCondition": {
+        "goldTotal": 1927,
+        "tp": 1800,
+        "precision": 95.19,
+        "recall": 93.41
+      },
+      "redlines": {
+        "trueDroppedRequired": 66,
+        "allRequiredMissingItems": 2,
+        "allRequiredMissingIds": [
+          "old366-0071",
+          "old366-0169"
+        ],
+        "fieldSubstitution": 3,
+        "notFlippedPositive": 4,
+        "numericDirectionFlip": 6,
+        "hallucinatedConditions": 33,
+        "invalidWhereNodeItems": 27
+      },
+      "latency": {
+        "p50": 1.93,
+        "p95": 4.16,
+        "transportFailureRequests": 0
+      },
+      "cost": {
+        "standardized": {
+          "caliber": "identical token workload (3000 in / 2400 cached / 200 out) at real list price",
+          "tiers": [
+            {
+              "tier": "idle",
+              "cnyPer10k": 16.4
+            },
+            {
+              "tier": "busy",
+              "cnyPer10k": 32.8
+            }
+          ]
+        },
+        "observedRun": {
+          "caliber": "this run's real prompt/cached/completion totals at real list price (NOT a price index)",
+          "tiers": [
+            {
+              "tier": "idle",
+              "cnyPer10k": 9.67,
+              "cacheHitRate": 96.1,
+              "completionTokensPerRequest": 138.6
+            },
+            {
+              "tier": "busy",
+              "cnyPer10k": 19.34,
+              "cacheHitRate": 96.1,
+              "completionTokensPerRequest": 138.6
+            }
+          ]
+        }
+      },
+      "frozenFlags": {
+        "main_chain_ir": 0.5253863134657837,
+        "executable_main_chain": 0.5408388520971302,
+        "compiler_hard_exact": 0.8708609271523179,
+        "schema": 0.9933774834437086,
+        "main_chain_where": 0.8620309050772627,
+        "strict_where": 0.8200883002207505,
+        "semantic_exact": 0.6125827814569537,
+        "recoverable_json": 1.0,
+        "strict_json": 1.0
+      }
+    }
+  ],
+  "pairwise": [
+    {
+      "key": "qwen_vs_deepseek",
+      "a": "qwen3.7-max",
+      "b": "deepseek-v4.1-flash",
+      "aPass": 94.26,
+      "bPass": 86.2,
+      "netFixesBMinusA": -73,
+      "aOnlyCorrect": 86,
+      "bOnlyCorrect": 13,
+      "bothCorrect": 768,
+      "bothWrong": 39,
+      "qualityChangePp": -8.06,
+      "mcnemarExactP": 2.288987396986294e-14,
+      "ciPlain": [
+        -10.15,
+        -5.96
+      ],
+      "ciCluster": [
+        -11.88,
+        -4.63
+      ],
+      "clusterCrossesZero": false
+    },
+    {
+      "key": "qwen_vs_qwen38",
+      "a": "qwen3.7-max",
+      "b": "qwen3.8-flash",
+      "aPass": 94.26,
+      "bPass": 89.62,
+      "netFixesBMinusA": -42,
+      "aOnlyCorrect": 60,
+      "bOnlyCorrect": 18,
+      "bothCorrect": 794,
+      "bothWrong": 34,
+      "qualityChangePp": -4.64,
+      "mcnemarExactP": 1.9730209111390334e-06,
+      "ciPlain": [
+        -6.51,
+        -2.76
+      ],
+      "ciCluster": [
+        -7.79,
+        -1.65
+      ],
+      "clusterCrossesZero": false
+    },
+    {
+      "key": "deepseek_vs_qwen38",
+      "a": "deepseek-v4.1-flash",
+      "b": "qwen3.8-flash",
+      "aPass": 86.2,
+      "bPass": 89.62,
+      "netFixesBMinusA": 31,
+      "aOnlyCorrect": 42,
+      "bOnlyCorrect": 73,
+      "bothCorrect": 739,
+      "bothWrong": 52,
+      "qualityChangePp": 3.42,
+      "mcnemarExactP": 0.0049281538522553126,
+      "ciPlain": [
+        1.1,
+        5.74
+      ],
+      "ciCluster": [
+        -0.34,
+        7.37
+      ],
+      "clusterCrossesZero": true
+    }
+  ],
+  "threeWay": {
+    "all_correct": 729,
+    "all_wrong": 31,
+    "only_deepseek": 3,
+    "only_qwen": 21,
+    "only_qwen38": 8,
+    "pair_deepseek_qwen": 39,
+    "pair_deepseek_qwen38": 10,
+    "pair_qwen_qwen38": 65
+  },
+  "conclusions": {
+    "qwen37DropVsQwen38Pp": 4.64,
+    "qwen37DropVsDeepseekPp": 8.06,
+    "qwen38StandardizedShareOfQwen37Pct": 6.25,
+    "qwen38StandardizedReductionPct": 93.75,
+    "qwen38CheaperThanDeepseekIdlePct": 23.2,
+    "cheapestStandardized": "qwen3.8-flash"
+  },
+  "limitations": [
+    "scorer 的指标定义偏差与实现/标注层面的系统误差不因 gold-as-prediction 对照而排除。",
+    "三模型运行时段不同、并非交错并发；总墙钟时间与重试率不适合严格横向比较。",
+    "qwen3.7-max 运行期间有 104 分钟主机休眠与 endpoint 抖动（270/906 传输重试）。",
+    "qwen3.8-flash 曾有 445 条连接失败，端点恢复后仅重跑失败 id。",
+    "三模型缓存命中率显著不同，实测账单不可直接跨模型比较。",
+    "DeepSeek 的短输出与较高漏条件率同时出现，二者不可分离解释。",
+    "semantic_exact 为精确字符串比较，受 gold 文案差异影响，会低估质量。",
+    "结果只适用于当前 v21 prompt、当前数据与 2026-09-17 的 API 状态。",
+    "未进行生产流量 A/B；未完成稳定性与并发压力测试。",
+    "岗位累计任职字段的匹配策略仍在验证（role_tenure）；该字段审计尚未冻结，本材料不对其匹配策略或最终实现作任何结论。"
+  ],
+  "costNotes": [
+    "两套口径必须并列：standardized_cost 是相同 token 工作量下的纯价格比较。",
+    "observed_run_cost 是本次真实 token 账单，不是价格指数，会随缓存命中率与输出长度浮动。",
+    "DeepSeek 本次账单低来自更高缓存命中与更短输出，不代表单位价格低。"
+  ]
+}

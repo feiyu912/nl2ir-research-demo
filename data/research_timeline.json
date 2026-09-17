@@ -1,0 +1,417 @@
+{
+  "scope": "研究主线（6 阶段，因果顺序，不是日历时间线）",
+  "note": "阶段按研究因果顺序排列；每阶段含问题、假设、实验与条件、真实结果、发现、下一步决策、来源；不画单调提升曲线。",
+  "stages": [
+    {
+      "stage": "1-handoff-resource",
+      "order": 1,
+      "title": "接手与资源适配",
+      "question": "前一位研究者的 Qwen3 8B 方案在我本机 RTX 5070 Ti 16GB 上能否直接复现？是否需要换更小的模型？",
+      "assumption": "8B 复现受到 16GB 资源约束（显存/吞吐/上下文），需选择更小模型；选择 Qwen3.5 是尝试，不是已证明全面更优。",
+      "experiments": [
+        {
+          "name": "本地迁移与环境排障",
+          "note": "Qwen3 8B → RTX 5070 Ti 16GB 上的本地推理与训练迁移",
+          "result": "8B 在 16GB 直接复现效率低；改用更小模型以保留训练/迭代预算"
+        },
+        {
+          "name": "Qwen3.5 4B 实验",
+          "note": "compact-v3 评测包装下首次 4B 实验",
+          "result": "4B 可在 16GB 训练/推理；旧集表现未自然解决"
+        }
+      ],
+      "results": [
+        "Qwen3 8B 直接在 RTX 5070 Ti 16GB 上跑训练和推理受资源约束。",
+        "改用 Qwen3.5 4B 是研究者尝试；不宣称 Qwen3.5 全面优于 Qwen3。"
+      ],
+      "findings": [
+        "原方案硬件约束存在，迁移需要适配。",
+        "换更小模型后问题未自然解决；旧集表现仍不能反映泛化。"
+      ],
+      "nextDecision": "进入第 2 阶段：检查 4B 仍失败的原因是否在 prompt 与数据，而非模型能力。",
+      "sources": [
+        {
+          "kind": "docx",
+          "label": "主版 / 前序系统与本地迁移章节",
+          "path": "[内部来源路径未公开]",
+          "note": "9/3 迁移、9/4 compact-v3 与 4B 实验"
+        },
+        {
+          "kind": "docx",
+          "label": "NL2IR_RTX5070Ti_小模型微调上手指南",
+          "path": "[内部来源路径未公开]"
+        }
+      ],
+      "chart": null,
+      "caseIds": []
+    },
+    {
+      "stage": "2-long-prompt-compression",
+      "order": 2,
+      "title": "长 prompt 与首次压缩",
+      "question": "为什么 4B 在旧集上仍有大量失败？是模型能力不够，还是 prompt 过长/示例过多/上下文超限？",
+      "assumption": "（待验证）原 system prompt 含大量示例区，可能让模型过度依赖具体案例；长度、截断与显存效率需处理。",
+      "experiments": [
+        {
+          "name": "Original prompt 长度与示例区测量",
+          "note": "原始文件 336 行 / 24193 B；第 112 行起为较长 query→JSON 示例区",
+          "result": "Qwen3.5 评测包装下输入约 6470–6499 tokens；370 条全部超过 3072"
+        },
+        {
+          "name": "compact-v3 副本构造",
+          "note": "compact-v3 81 行 / 10493 B；只替换 system，query 与 label 不变",
+          "result": "训练 1303 max 3060 tokens、P95 2898；370 条全部通过 3072 门禁"
+        },
+        {
+          "name": "内容不变性校验",
+          "note": "1303 条训练数据 human/gpt/样本顺序在替换前后 SHA-256 一致：35ac78dc6b036d4e8a3b899951453611123c205cdf9f0dcdc63738cb52ca8a07",
+          "result": "替换 system 后数据不变；效果差异仅由 prompt 改动引起"
+        }
+      ],
+      "results": [
+        "Original 在 Qwen3.5 包装下输入 6470–6499 tokens；370 条全部超 3072 门禁。",
+        "compact-v3 通过 3072 门禁；训练 1303 max 3060 tokens。",
+        "v12→v16 不是单调压缩：规则增补会让 prompt 重新变长，分数有回落。"
+      ],
+      "findings": [
+        "长度、截断、显存效率是真实约束。",
+        "（待验证）'示例过多导致案例过拟合'是当时判断，不是已证实因果。示例数量、长度、内容、规则变化可能同时发生。",
+        "数据治理不是最后阶段才做：v17 已修正 106 条训练样本。"
+      ],
+      "nextDecision": "进入第 3 阶段：把压缩与规则组织分开继续迭代；用强 API 诊断旧集表现是否稳定。",
+      "sources": [
+        {
+          "kind": "file",
+          "label": "Original prompt",
+          "path": "[内部来源路径未公开]",
+          "note": "336 行 / 24193 B"
+        },
+        {
+          "kind": "file",
+          "label": "compact-v3",
+          "path": "[内部来源路径未公开]",
+          "note": "81 行 / 10493 B"
+        },
+        {
+          "kind": "docx",
+          "label": "NL2IR_compact_prompt_v3_audit",
+          "path": "[内部来源路径未公开]",
+          "note": "token 门禁与 SHA-256"
+        },
+        {
+          "kind": "docx",
+          "label": "主版 / 长 prompt 与示例区",
+          "path": "[内部来源路径未公开]"
+        }
+      ],
+      "chart": {
+        "type": "prompt_length",
+        "title": "Prompt 长度变化（行 / 字节 / token）",
+        "subtitle": "Original → compact-v1/v2/v3；token 为 Qwen3-8B tokenizer + qwen3_nothink 包装，训练 1303 max；不同 tokenizer 结果不可直接互换"
+      },
+      "caseIds": []
+    },
+    {
+      "stage": "3-shared-prompt-iteration",
+      "order": 3,
+      "title": "共享 prompt 迭代与旧集提升",
+      "question": "压缩 prompt 后旧集表现改善；这种改善是否反映泛化？需要构造多少版本与对照才能判断？",
+      "assumption": "共享 system prompt 改进对 API 与学生都有益；但旧集表现好可能只是过拟合旧分布。",
+      "experiments": [
+        {
+          "name": "v12 → v19 迭代（含回落）",
+          "note": "规则增补会让 prompt 重新变长，分数有回落；v17 已修正 106 条训练样本",
+          "result": "非单调提升"
+        },
+        {
+          "name": "v19 API 旧集主链等价",
+          "note": "compact-v3 评测包装，355/370 主链等价 = 95.95%",
+          "result": "95.95%"
+        },
+        {
+          "name": "v19 4B 旧集主链等价",
+          "note": "323/370 主链等价 = 87.30%；排除既有能力边界 321/366 = 87.70%",
+          "result": "87.30%（含边界）/ 87.70%（排除边界）"
+        },
+        {
+          "name": "4B/9B 配对评测与错误分析",
+          "note": "Where 4B 294/370 (79.5%) / 9B 302/370 (81.6%)；FullIR 4B 176/370 (47.6%) / 9B 178/370 (48.1%)；McNemar p=0.3123",
+          "result": "9B 净增 8 条 (2.16 pp)；不能证明 9B 显著优于 4B；模型规模单因素实验不受控"
+        }
+      ],
+      "results": [
+        "v19 API 旧集主链等价 355/370 = 95.95%。",
+        "v19 4B 旧集主链等价 323/370 = 87.30%；排除既有能力边界 321/366 = 87.70%。",
+        "4B vs 9B 配对：净差 2.16 pp，p=0.3123；不显著，且未受控。",
+        "FullIR Exact 显著低于 Where Exact，但部分语义差异是合理同义改写（如 Excel / Microsoft Excel）。"
+      ],
+      "findings": [
+        "旧集提升主要来自 prompt 与规则组织；模型规模单因素不可证。",
+        "Shared system prompt 改善对 API 与学生都有用，但旧集高表现不一定泛化。",
+        "FullIR 不匹配不能全部解释为不可用；分类判断需要 embedding + 索引快照 + 实际检索。"
+      ],
+      "nextDecision": "进入第 4 阶段：构造未见 blind 验证泛化。",
+      "sources": [
+        {
+          "kind": "md",
+          "label": "4B/9B 配对评测与错误分析",
+          "path": "[内部来源路径未公开]"
+        },
+        {
+          "kind": "docx",
+          "label": "主版 / v12–v19 迭代",
+          "path": "[内部来源路径未公开]"
+        }
+      ],
+      "chart": {
+        "type": "old_set_score",
+        "title": "旧集上 v19 的 API 与学生表现（主链等价）",
+        "subtitle": "355/370 与 323/370 是 v19 + compact-v3 评测包装下的口径，不是最终 blind"
+      },
+      "caseIds": []
+    },
+    {
+      "stage": "4-blind-exposes-gap",
+      "order": 4,
+      "title": "未见 blind 暴露差距",
+      "question": "旧集提升后，在真正未见的复杂查询上表现如何？",
+      "assumption": "API 与 4B 在未见的复杂分布上均会下降；尤其复杂组合（NOT 作用域、路由、多字段）。",
+      "experiments": [
+        {
+          "name": "首次 blind-v2 (248 条)",
+          "note": "历史 v19 API canonical 213/248 = 85.89%；v19 4B canonical 162/248 = 65.32%；诊断性 symbolic hard-filter equivalence API 228/248 = 91.94%, 4B 173/248 = 69.76%",
+          "result": "API 降约 10 pp、4B 降约 20 pp（记忆大体吻合；不是严格同题配对）"
+        },
+        {
+          "name": "复杂组合与作用域分析",
+          "note": "复杂 query 上模型错误增加",
+          "result": "提示问题不仅是模型大小，还涉及数据/规则/评分契约"
+        }
+      ],
+      "results": [
+        "首次 blind-v2 (248 条)：v19 API canonical 213/248 = 85.89%；v19 4B canonical 162/248 = 65.32%。",
+        "诊断性 symbolic hard-filter equivalence（与 canonical 不同）：API 228/248 = 91.94%；4B 173/248 = 69.76%。",
+        "API 降约 10 pp、4B 降约 20 pp；研究者记忆大体吻合，但数据分布和评分口径不同，不是严格同题对照。"
+      ],
+      "findings": [
+        "旧集开发期间已查看数据集；首次未见的复杂分布暴露了真实差距。",
+        "问题不仅是模型大小，还有数据/规则/评分契约。",
+        "需要专门构造困难诊断集与严格审计。"
+      ],
+      "nextDecision": "进入第 5 阶段：构造 C-hard 难题集并严格审查 Gold、contract、scope、路由。",
+      "sources": [
+        {
+          "kind": "docx",
+          "label": "主版 / 首次 blind-v2",
+          "path": "[内部来源路径未公开]",
+          "note": "213/248, 162/248, 228/248, 173/248"
+        },
+        {
+          "kind": "docx",
+          "label": "主版 / 旧集 vs 新分布",
+          "path": "[内部来源路径未公开]"
+        }
+      ],
+      "chart": {
+        "type": "blind_v2_drop",
+        "title": "首次 blind-v2 上 v19 API/4B 与旧集对比",
+        "subtitle": "canonical vs 诊断性 symbolic hard-filter equivalence 两种口径必须分开"
+      },
+      "caseIds": []
+    },
+    {
+      "stage": "5-c-hard-strict-audit",
+      "order": 5,
+      "title": "C-hard 与严格审计",
+      "question": "复杂查询低分到底是因为模型大小，还是数据/规则/契约问题？能否从症状定位到根因？",
+      "assumption": "构造复杂 query 子集可隔离模型错误与规范缺口；严格审计 Gold/contract/scope/路由可揭示契约侧问题。",
+      "experiments": [
+        {
+          "name": "C-hard240 构造与早期低分",
+          "note": "v19 API order/value-invariant 94/240 = 39.17%；v19 4B 27/240 = 11.25%；学生 compiler hard equivalence 38/240 = 15.83%（非同一指标）",
+          "result": "API 约 40% / 学生十几 %"
+        },
+        {
+          "name": "v20 API invariant 复测",
+          "note": "v20 API invariant 120/240 = 50.00%",
+          "result": "50.00%"
+        },
+        {
+          "name": "Gold / contract / scope / routing 审计",
+          "note": "严格审查数据矛盾、Gold、可表达性、主链与 prompt 一致性",
+          "result": "识别规范缺口与契约问题；prompt 修复与 repair 试验"
+        }
+      ],
+      "results": [
+        "C-hard240 早期：v19 API order/value-invariant 94/240 = 39.17%；v19 4B 27/240 = 11.25%。",
+        "学生 compiler hard equivalence 38/240 = 15.83%（与上面不是同一指标）。",
+        "v20 API invariant 120/240 = 50.00%。",
+        "严格审计揭示 Gold / contract / scope / routing 侧的契约问题；prompt 修复与 repair 试验改变了研究判断。"
+      ],
+      "findings": [
+        "C300 与 C-hard 不是同一集；C300/old366 是开发回归/诊断集，C-hard240 进入 1303+240 联合训练。",
+        "复杂低分同时反映模型错误与规范缺口。",
+        "需要冻结强 API 参考管线才能分离模型与契约问题。"
+      ],
+      "nextDecision": "进入第 6 阶段：形成 v21 + 冻结强 API 参考管线 + 当前 4B/9B 训练与六组评测。",
+      "sources": [
+        {
+          "kind": "docx",
+          "label": "主版 / C-hard 与审计",
+          "path": "[内部来源路径未公开]"
+        },
+        {
+          "kind": "docx",
+          "label": "主版 / 数据用途表",
+          "path": "[内部来源路径未公开]",
+          "note": "C300/old366 未进入训练；C-hard240 进入；blind-v6 未进入训练"
+        }
+      ],
+      "chart": {
+        "type": "c_hard_low_scores",
+        "title": "C-hard240 早期低分（API ~40% / 学生十几 %）",
+        "subtitle": "v19 与 v20 不同口径；与 final compiler hard equivalence 不是同一指标"
+      },
+      "caseIds": []
+    },
+    {
+      "stage": "6-v21-local-validation",
+      "order": 6,
+      "title": "v21 与本地模型验证",
+      "question": "v21 + candidate_v4 冻结后，4B/9B 在独立 blind 与训练内诊断集上表现如何？哪些提升经过独立验证，哪些只是开发或后验结果？",
+      "assumption": "v21 + candidate_v4 冻结后，API 单次与门控后的真实表现可以作为强参考；学生在同分布 blind-v6 上的差距反映模型容量与训练。",
+      "experiments": [
+        {
+          "name": "冻结盲测 blind-v6 (240 条)",
+          "note": "API 单次 order/value-invariant Where 229/240；门控后 234/240；门控后 Schema 238/240；门控后 compiler-hard 232/240；额外 API 调用 8/240，修复 5 条、破坏 0 条",
+          "result": "API 盲测冻结基线"
+        },
+        {
+          "name": "4B/9B LoRA 训练",
+          "note": "1543 = 1303 + 240 C-hard；3 轮 291 步；4-bit BNB QLoRA + LoRA r16 α32",
+          "result": "训练详情见下方折叠"
+        },
+        {
+          "name": "六组评测",
+          "note": "4B/9B × {old366, C300, blind-v6}；old366/C300 标 in-train-diagnostic；C-hard240 才进入联合训练",
+          "result": "见下方主展示表"
+        },
+        {
+          "name": "9B 训练检查",
+          "note": "291 步完整连续；日志 loss 与梯度无 NaN/Inf；checkpoint-200 vs 最终盲测 Where 持平",
+          "result": "未发现工程问题；不能仅凭训练 loss 低推断泛化好"
+        }
+      ],
+      "results": [
+        "API 冻结盲测：单次 229/240；门控后 234/240；额外 API 调用 8/240（修复 5、破坏 0）。",
+        "4B 裸输出 blind-v6 211/240；9B 初次 197/240；9B 重复 198/240。",
+        "旧集 366/300 上 4B/9B 都 > 85%，但都是 in-train-diagnostic。",
+        "9B 训练 291 步完整无 NaN/Inf；checkpoint-200 vs 最终盲测持平。",
+        "门控 API 与裸学生是不同流程，不可直接混用。",
+        "训练 loss 仅 3 轮平均真实点；其余都是聚合声明，无原始逐 step。"
+      ],
+      "findings": [
+        "独立 blind 暴露真实差距；旧集高表现不能外推。",
+        "强 API 门控机制显著优于裸输出，但需额外 8 次 API。",
+        "checkpoint-200 vs 最终盲测持平：不支持最后 91 步整体退化；不能排除 200 步前过拟合。",
+        "学生模型仍存在复杂规则执行差距；9B 在当前实验中没有稳定优于 4B；不能推断更大模型必然更好。",
+        "训练内 C-hard 诊断、独立 dev、未微调底座对照是待补证据。"
+      ],
+      "nextDecision": [
+        "训练内 C-hard 诊断；独立 dev；未微调底座对照（待补）",
+        "下一步：评估 API 门控在部署期新数据的稳定性",
+        "若泛化差距仍存在：考虑更大模型、数据治理、schema retry 等"
+      ],
+      "mainDisplay": {
+        "metric": "main_chain_where (canonical where, 各模型对应口径)",
+        "rows": [
+          {
+            "model": "API",
+            "subtype": "单次 (裸输出)",
+            "old366": null,
+            "C300": null,
+            "blind_v6": "229/240",
+            "kind": "single-pass",
+            "note": "口径：order/value-invariant Where；canonical 后的等价"
+          },
+          {
+            "model": "API",
+            "subtype": "门控后 (额外修复)",
+            "old366": null,
+            "C300": null,
+            "blind_v6": "234/240",
+            "kind": "post-assertion",
+            "note": "门控是额外检查与条件修复，不是裸模型能力；额外 API 8/240，修复 5、破坏 0"
+          },
+          {
+            "model": "4B",
+            "subtype": "裸输出",
+            "old366": "332/366",
+            "C300": "257/300",
+            "blind_v6": "211/240",
+            "kind": "single-pass / in-train-diagnostic",
+            "note": "old366/C300 是开发回归/诊断集；C-hard240 才进入训练"
+          },
+          {
+            "model": "9B",
+            "subtype": "裸输出（初次）",
+            "old366": "331/366",
+            "C300": "262/300",
+            "blind_v6": "197/240",
+            "kind": "single-pass / in-train-diagnostic",
+            "note": "重复 198/240；与 4B 净差 2.16 pp 且 p=0.3123，不能证明更大模型必然更好"
+          }
+        ]
+      },
+      "conclusionsAccurate": {
+        "headline": "9B 检查与训练结论（准确表述）",
+        "items": [
+          "未发现误开 thinking、混用模型、训练中断或权重非有限值。",
+          "checkpoint-200 与最终模型盲测 Where 均为 198/240，不支持最后 91 步造成整体退化。",
+          "不能排除更早过拟合；checkpoint-200 与最终持平只说明「最后 91 步未退化」，不证明「200 步前未过拟合」。",
+          "未做训练期间验证：eval_strategy=NO、load_best_model_at_end=false；没有 eval_loss 或 eval_accuracy。",
+          "不能仅凭训练 loss 低判断泛化良好或确定差距来源。",
+          "「微调有效」的结论引用有底座对照的历史实验（v18 / v19 实验中）；当前 v21 未完成未微调底座对照，待补。"
+        ]
+      },
+      "sources": [
+        {
+          "kind": "paper-ir",
+          "label": "candidate_v4",
+          "path": "[内部来源路径未公开]"
+        },
+        {
+          "kind": "paper-ir",
+          "label": "paper_ir_v1 one_pass",
+          "path": "[内部来源路径未公开]"
+        },
+        {
+          "kind": "paper-ir",
+          "label": "paper_ir_v1 assertion_v7",
+          "path": "[内部来源路径未公开]"
+        },
+        {
+          "kind": "student-eval",
+          "label": "audit-inputs",
+          "path": "[内部来源路径未公开]"
+        },
+        {
+          "kind": "student-audit",
+          "label": "学生六评估审计",
+          "path": "[内部来源路径未公开]"
+        },
+        {
+          "kind": "docx",
+          "label": "9B 训练检查母版",
+          "path": "[内部来源路径未公开]"
+        }
+      ],
+      "chart": {
+        "type": "blind_v6_current",
+        "title": "最终冻结盲测 blind-v6 (240 条)：API 单次 / 门控 / 4B / 9B",
+        "subtitle": "门控是额外检查与条件修复，不是裸学生；不同口径必须分开"
+      },
+      "caseIds": []
+    }
+  ]
+}

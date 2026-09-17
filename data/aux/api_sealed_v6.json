@@ -1,0 +1,61 @@
+{
+  "sealedBlindV6Untouched": {
+    "inputs_sha256": "eeee134f916afde1163a2a6929df75efce70261cd6474b438b7256913791fad3",
+    "audit_sha256": "10fcd8c038989a176426cddc332c01f5c34e0321e761486a75185eed953018f2",
+    "one_pass_where": "229/240",
+    "one_pass_schema": "238/240",
+    "one_pass_compiler_hard": "228/240",
+    "assertion_api_calls": 8,
+    "assertion_v7_where": "234/240",
+    "assertion_v7_schema": "238/240",
+    "assertion_v7_compiler_hard": "232/240",
+    "assertion_v7_fixed": 5,
+    "assertion_v7_broken": 0,
+    "one_pass_responses_sha256": "79da6e72265204b7fcdaff404b45d6edaaaff5b8126b98321b73b6aa4bb78036",
+    "final_responses_sha256": "74fcc6867fdcbc21b4f35a3d17531e85e6651150fc66b1de065f75da5c6c8b2b"
+  },
+  "blindV5DiagnosticWarning": "v21 and v7 were developed after blind-v5 reveal; these are post-hoc development results, not untouched evidence.",
+  "blindV5Diagnostic": {
+    "warning": "v21 and v7 were developed after blind-v5 reveal; these are post-hoc development results, not untouched evidence.",
+    "frozen_v3_one_pass_where": "133/160",
+    "frozen_v3_full_repair_where": "129/160",
+    "full_repair_fixed": 1,
+    "full_repair_broken": 5,
+    "v21_one_pass_raw_where": "141/160",
+    "v21_assertion_v7_raw_where": "144/160",
+    "v21_assertion_v7_equivalence_where": "160/160",
+    "v21_assertion_v7_equivalence_compiler_hard": "160/160"
+  },
+  "old370Regression": {
+    "v21_one_pass_where": "341/370",
+    "v21_one_pass_schema": "369/370",
+    "v21_one_pass_compiler_hard": "339/370",
+    "assertion_v7_where": "341/370",
+    "assertion_v7_fixed": 0,
+    "assertion_v7_broken": 0,
+    "responses_sha256": "5bffd63293164dcae0fcfa91d1dd1910fe337e098173d04f5e6380e638083b41",
+    "note": "Legacy gold contains audited strict-boundary and routing inconsistencies; 341/370 is retained as the unmodified legacy-gold score."
+  },
+  "nextRequiredExperiment": "No further prompt tuning on blind-v6. Add a mandatory schema-validation retry at the production boundary, then distill the validated strong pipeline into the 4B student.",
+  "deploymentNotes": {
+    "canonicalizer": "Evaluation normalization is implemented and tested, but wholesale compiler-entry normalization was rejected because it changed legacy runtime behavior. Integrate only through a compatibility-tested service boundary.",
+    "certificate_graph": "Reimport data/certs/certs.json into cert_exam_graph before production use."
+  },
+  "explicitlyRemoved": [
+    "full_repair_v1"
+  ],
+  "pipeline": [
+    "one_pass_generation_with_v21_prompt",
+    "gold_free_high_precision_query_output_assertions",
+    "assertion_gated_reason_specific_repair_v7",
+    "deterministic_where_canonicalization"
+  ],
+  "decoding": {
+    "temperature": 0.01,
+    "top_p": 1,
+    "seed": 42,
+    "enable_thinking": false
+  },
+  "model": "qwen3.7-max",
+  "status": "VALIDATED_ON_SEALED_BLIND_V6"
+}

@@ -1,0 +1,822 @@
+{
+  "runs": [
+    {
+      "model": "4B",
+      "dataset": "old366",
+      "source": "[内部来源路径未公开]",
+      "n": 366,
+      "where": 332,
+      "schema": 366,
+      "semantic": 300,
+      "compiler": 334
+    },
+    {
+      "model": "4B",
+      "dataset": "C300",
+      "source": "[内部来源路径未公开]",
+      "n": 300,
+      "where": 257,
+      "schema": 297,
+      "semantic": 244,
+      "compiler": 260
+    },
+    {
+      "model": "4B",
+      "dataset": "blind-v6",
+      "source": "[内部来源路径未公开]",
+      "n": 240,
+      "where": 211,
+      "schema": 240,
+      "semantic": 139,
+      "compiler": 217
+    },
+    {
+      "model": "9B",
+      "dataset": "old366",
+      "source": "[内部来源路径未公开]",
+      "n": 366,
+      "where": 331,
+      "schema": 365,
+      "semantic": 296,
+      "compiler": 333
+    },
+    {
+      "model": "9B",
+      "dataset": "C300",
+      "source": "[内部来源路径未公开]",
+      "n": 300,
+      "where": 262,
+      "schema": 296,
+      "semantic": 250,
+      "compiler": 262
+    },
+    {
+      "model": "9B",
+      "dataset": "blind-v6",
+      "source": "[内部来源路径未公开]",
+      "n": 240,
+      "where": 197,
+      "schema": 239,
+      "semantic": 143,
+      "compiler": 207
+    },
+    {
+      "model": "API 单次",
+      "dataset": "blind-v6",
+      "source": "[内部来源路径未公开]",
+      "n": 240,
+      "where": 229,
+      "schema": 238,
+      "semantic": 119,
+      "compiler": 228
+    },
+    {
+      "model": "API 门控",
+      "dataset": "blind-v6",
+      "source": "[内部来源路径未公开]",
+      "n": 240,
+      "where": 234,
+      "schema": 238,
+      "semantic": 118,
+      "compiler": 232
+    }
+  ],
+  "baseRuns": [
+    {
+      "model": "9B 底座",
+      "dataset": "old366",
+      "n": 366,
+      "json": 288,
+      "schema": 192,
+      "where": 129,
+      "semantic": 0,
+      "compiler": 0,
+      "fullIr": 61,
+      "limit": 2,
+      "runtime": 718.67,
+      "color": "#9d8bff"
+    },
+    {
+      "model": "9B 底座",
+      "dataset": "C300",
+      "n": 300,
+      "json": 252,
+      "schema": 174,
+      "where": 107,
+      "semantic": 0,
+      "compiler": 0,
+      "fullIr": 32,
+      "limit": 0,
+      "runtime": 429.32,
+      "color": "#9d8bff"
+    },
+    {
+      "model": "9B 底座",
+      "dataset": "blind-v6",
+      "n": 240,
+      "json": 169,
+      "schema": 101,
+      "where": 46,
+      "semantic": 0,
+      "compiler": 0,
+      "fullIr": 29,
+      "limit": 2,
+      "runtime": 540.09,
+      "color": "#9d8bff"
+    },
+    {
+      "model": "4B 底座",
+      "dataset": "old366",
+      "n": 366,
+      "json": 158,
+      "schema": 64,
+      "where": 36,
+      "semantic": 0,
+      "compiler": 0,
+      "fullIr": 18,
+      "limit": 26,
+      "runtime": 1188.18,
+      "color": "#aab5cf"
+    },
+    {
+      "model": "4B 底座",
+      "dataset": "C300",
+      "n": 300,
+      "json": 173,
+      "schema": 78,
+      "where": 11,
+      "semantic": 0,
+      "compiler": 0,
+      "fullIr": 2,
+      "limit": 12,
+      "runtime": 688.79,
+      "color": "#aab5cf"
+    },
+    {
+      "model": "4B 底座",
+      "dataset": "blind-v6",
+      "n": 240,
+      "json": 105,
+      "schema": 24,
+      "where": 7,
+      "semantic": 0,
+      "compiler": 0,
+      "fullIr": 4,
+      "limit": 10,
+      "runtime": 597.57,
+      "color": "#aab5cf"
+    }
+  ],
+  "hardOffDiagnostic": {
+    "source": "[内部来源路径未公开]",
+    "n": 12,
+    "ended": 12,
+    "hitLimit": 0,
+    "thinkTags": 0,
+    "json": 7,
+    "meanTokens": 173.7,
+    "medianTokens": 134,
+    "maxTokens": 537,
+    "totalSeconds": 110.63,
+    "predictRuntime": 111.3586
+  },
+  "prompts": [
+    {
+      "name": "nl2ir_where_ast_original_1303.txt",
+      "source": "内部原文未公开",
+      "bytes": 24193,
+      "lines": 337
+    },
+    {
+      "name": "nl2ir_where_ast_compact_v3.txt",
+      "source": "内部原文未公开",
+      "bytes": 10493,
+      "lines": 81
+    }
+  ],
+  "overlap": {
+    "where": 222,
+    "semantic": 440,
+    "intersection": 82,
+    "union": 580
+  },
+  "master": "[内部来源路径未公开]",
+  "comparisonSource": "[内部来源路径未公开]",
+  "comparisonEvidence": {
+    "files": {
+      "predictions_4b": {
+        "path": "[内部来源路径未公开]",
+        "sha256": "3d74262757434162c3617e1a9971555b9abaaa702ba460cd9368b1bffc093510",
+        "rows": 370
+      },
+      "predictions_9b": {
+        "path": "[内部来源路径未公开]",
+        "sha256": "69705040bfad6d7fba0355526dab289a269d4b2022880f4e057a98c6cfdea9e9",
+        "rows": 370
+      }
+    },
+    "correspondence": {
+      "matched_by": "exact extracted query plus exact label, not row number",
+      "gold_pairs": 370,
+      "4b_pairs": 370,
+      "9b_pairs": 370,
+      "same_source_order_4b": true,
+      "same_source_order_9b": true,
+      "same_4b_9b_source_order": true,
+      "raw_label_exact_4b": 0,
+      "raw_label_exact_9b": 0,
+      "stripped_label_exact_4b": 370,
+      "stripped_label_exact_9b": 370
+    },
+    "metrics": {
+      "Simple100": {
+        "4b": {
+          "n": 100,
+          "strict_json": 100,
+          "recoverable_json": 100,
+          "legacy_schema": 100,
+          "where": 92,
+          "full_ir": 61,
+          "compact_protocol": 100,
+          "runtime_strict": 57,
+          "runtime_after_repair": 67
+        },
+        "9b": {
+          "n": 100,
+          "strict_json": 100,
+          "recoverable_json": 100,
+          "legacy_schema": 100,
+          "where": 96,
+          "full_ir": 57,
+          "compact_protocol": 100,
+          "runtime_strict": 57,
+          "runtime_after_repair": 67
+        }
+      },
+      "Complex100": {
+        "4b": {
+          "n": 100,
+          "strict_json": 100,
+          "recoverable_json": 100,
+          "legacy_schema": 100,
+          "where": 73,
+          "full_ir": 49,
+          "compact_protocol": 99,
+          "runtime_strict": 40,
+          "runtime_after_repair": 40
+        },
+        "9b": {
+          "n": 100,
+          "strict_json": 100,
+          "recoverable_json": 100,
+          "legacy_schema": 100,
+          "where": 72,
+          "full_ir": 52,
+          "compact_protocol": 100,
+          "runtime_strict": 36,
+          "runtime_after_repair": 36
+        }
+      },
+      "Hidden170": {
+        "4b": {
+          "n": 170,
+          "strict_json": 170,
+          "recoverable_json": 170,
+          "legacy_schema": 169,
+          "where": 129,
+          "full_ir": 66,
+          "compact_protocol": 169,
+          "runtime_strict": 99,
+          "runtime_after_repair": 123
+        },
+        "9b": {
+          "n": 170,
+          "strict_json": 170,
+          "recoverable_json": 170,
+          "legacy_schema": 169,
+          "where": 134,
+          "full_ir": 69,
+          "compact_protocol": 168,
+          "runtime_strict": 94,
+          "runtime_after_repair": 121
+        }
+      },
+      "Total370": {
+        "4b": {
+          "n": 370,
+          "strict_json": 370,
+          "recoverable_json": 370,
+          "legacy_schema": 369,
+          "where": 294,
+          "full_ir": 176,
+          "compact_protocol": 368,
+          "runtime_strict": 196,
+          "runtime_after_repair": 230
+        },
+        "9b": {
+          "n": 370,
+          "strict_json": 370,
+          "recoverable_json": 370,
+          "legacy_schema": 369,
+          "where": 302,
+          "full_ir": 178,
+          "compact_protocol": 368,
+          "runtime_strict": 187,
+          "runtime_after_repair": 224
+        }
+      }
+    },
+    "pairing": {
+      "Simple100": {
+        "where": {
+          "both_correct": 92,
+          "both_wrong": 4,
+          "only_4b_correct": 0,
+          "only_9b_correct": 4,
+          "accuracy_4b": 0.92,
+          "accuracy_9b": 0.96,
+          "difference_9b_minus_4b": 0.039999999999999925,
+          "mcnemar_exact_two_sided_p": 0.125,
+          "paired_bootstrap": {
+            "difference": 0.04,
+            "ci95_low": 0.01,
+            "ci95_high": 0.08,
+            "reps": 100000,
+            "seed": 20260907
+          }
+        },
+        "full": {
+          "both_correct": 54,
+          "both_wrong": 36,
+          "only_4b_correct": 7,
+          "only_9b_correct": 3,
+          "accuracy_4b": 0.61,
+          "accuracy_9b": 0.57,
+          "difference_9b_minus_4b": -0.040000000000000036,
+          "mcnemar_exact_two_sided_p": 0.34375,
+          "paired_bootstrap": {
+            "difference": -0.04,
+            "ci95_low": -0.1,
+            "ci95_high": 0.02,
+            "reps": 100000,
+            "seed": 20260907
+          }
+        }
+      },
+      "Complex100": {
+        "where": {
+          "both_correct": 63,
+          "both_wrong": 18,
+          "only_4b_correct": 10,
+          "only_9b_correct": 9,
+          "accuracy_4b": 0.73,
+          "accuracy_9b": 0.72,
+          "difference_9b_minus_4b": -0.010000000000000009,
+          "mcnemar_exact_two_sided_p": 1,
+          "paired_bootstrap": {
+            "difference": -0.01,
+            "ci95_low": -0.1,
+            "ci95_high": 0.07,
+            "reps": 100000,
+            "seed": 20260907
+          }
+        },
+        "full": {
+          "both_correct": 43,
+          "both_wrong": 42,
+          "only_4b_correct": 6,
+          "only_9b_correct": 9,
+          "accuracy_4b": 0.49,
+          "accuracy_9b": 0.52,
+          "difference_9b_minus_4b": 0.030000000000000027,
+          "mcnemar_exact_two_sided_p": 0.60723876953125,
+          "paired_bootstrap": {
+            "difference": 0.03,
+            "ci95_low": -0.05,
+            "ci95_high": 0.11,
+            "reps": 100000,
+            "seed": 20260907
+          }
+        }
+      },
+      "Hidden170": {
+        "where": {
+          "both_correct": 119,
+          "both_wrong": 26,
+          "only_4b_correct": 10,
+          "only_9b_correct": 15,
+          "accuracy_4b": 0.7588235294117647,
+          "accuracy_9b": 0.788235294117647,
+          "difference_9b_minus_4b": 0.02941176470588236,
+          "mcnemar_exact_two_sided_p": 0.42435622215270996,
+          "paired_bootstrap": {
+            "difference": 0.029411764705882353,
+            "ci95_low": -0.029411764705882353,
+            "ci95_high": 0.08823529411764706,
+            "reps": 100000,
+            "seed": 20260907
+          }
+        },
+        "full": {
+          "both_correct": 58,
+          "both_wrong": 93,
+          "only_4b_correct": 8,
+          "only_9b_correct": 11,
+          "accuracy_4b": 0.38823529411764707,
+          "accuracy_9b": 0.40588235294117647,
+          "difference_9b_minus_4b": 0.017647058823529405,
+          "mcnemar_exact_two_sided_p": 0.6476058959960938,
+          "paired_bootstrap": {
+            "difference": 0.01764705882352941,
+            "ci95_low": -0.029411764705882353,
+            "ci95_high": 0.07058823529411765,
+            "reps": 100000,
+            "seed": 20260907
+          }
+        }
+      },
+      "Total370": {
+        "where": {
+          "both_correct": 274,
+          "both_wrong": 48,
+          "only_4b_correct": 20,
+          "only_9b_correct": 28,
+          "accuracy_4b": 0.7945945945945946,
+          "accuracy_9b": 0.8162162162162162,
+          "difference_9b_minus_4b": 0.021621621621621623,
+          "mcnemar_exact_two_sided_p": 0.31232680747326924,
+          "paired_bootstrap": {
+            "difference": 0.021621621621621623,
+            "ci95_low": -0.016216216216216217,
+            "ci95_high": 0.05945945945945946,
+            "reps": 100000,
+            "seed": 20260907
+          }
+        },
+        "full": {
+          "both_correct": 155,
+          "both_wrong": 171,
+          "only_4b_correct": 21,
+          "only_9b_correct": 23,
+          "accuracy_4b": 0.4756756756756757,
+          "accuracy_9b": 0.4810810810810811,
+          "difference_9b_minus_4b": 0.005405405405405406,
+          "mcnemar_exact_two_sided_p": 0.880395821280672,
+          "paired_bootstrap": {
+            "difference": 0.005405405405405406,
+            "ci95_low": -0.02972972972972973,
+            "ci95_high": 0.04054054054054054,
+            "reps": 100000,
+            "seed": 20260907
+          }
+        }
+      }
+    },
+    "error_types_public": {
+      "where": {
+        "4b": {
+          "条件遗漏或条件内容错误": 31,
+          "额外条件或条件内容错误": 29,
+          "布尔结构或 minimumShouldMatch 错误": 13,
+          "取值错误": 9,
+          "字段选择错误": 8,
+          "操作符错误": 4,
+          "required weight 或 softText 错误": 1
+        },
+        "9b": {
+          "条件遗漏或条件内容错误": 28,
+          "额外条件或条件内容错误": 26,
+          "布尔结构或 minimumShouldMatch 错误": 13,
+          "字段选择错误": 10,
+          "取值错误": 6,
+          "操作符错误": 5,
+          "required weight 或 softText 错误": 1
+        }
+      },
+      "full": {
+        "4b": {
+          "semantic 差异": 54,
+          "条件遗漏或条件内容错误": 31,
+          "额外条件或条件内容错误": 29,
+          "布尔结构或 minimumShouldMatch 错误": 13,
+          "取值错误": 9,
+          "字段选择错误": 8,
+          "操作符错误": 4,
+          "required weight 或 softText 错误": 1,
+          "meta 差异": 1
+        },
+        "9b": {
+          "semantic 差异": 54,
+          "条件遗漏或条件内容错误": 28,
+          "额外条件或条件内容错误": 26,
+          "布尔结构或 minimumShouldMatch 错误": 13,
+          "字段选择错误": 10,
+          "取值错误": 6,
+          "meta 差异": 5,
+          "操作符错误": 5,
+          "required weight 或 softText 错误": 1
+        }
+      }
+    },
+    "runtime_contract": {
+      "gold": {
+        "strict_valid": 190,
+        "valid_after_live_repair": 226
+      },
+      "4b": {
+        "strict_valid": 196,
+        "valid_after_live_repair": 230
+      },
+      "9b": {
+        "strict_valid": 187,
+        "valid_after_live_repair": 224
+      },
+      "unsupported_gold_field_counts": {
+        "employment_gap": 39,
+        "recent_tenure_1": 28,
+        "latest_company": 25,
+        "latest_work_job": 25,
+        "work_segment_count": 15,
+        "graduation_year": 15,
+        "internship_company": 14,
+        "inter_segment_gap": 14,
+        "role_tenure": 12,
+        "max_inter_segment_gap": 11,
+        "internship_job": 11,
+        "career_discontinuity": 6,
+        "job_stability": 3
+      }
+    },
+    "business_equivalence_candidates_public": {
+      "4b": {
+        "compiler_hard_exact": 90,
+        "full_wrong_but_compiler_hard_exact": 45,
+        "semantic_text_only_difference": 23
+      },
+      "9b": {
+        "compiler_hard_exact": 88,
+        "full_wrong_but_compiler_hard_exact": 46,
+        "semantic_text_only_difference": 29
+      }
+    }
+  },
+  "attribution": [
+    {
+      "name": "明确规则未执行",
+      "count": 159,
+      "color": "#335cff"
+    },
+    {
+      "name": "指定表示差异",
+      "count": 12,
+      "color": "#9d8bff"
+    },
+    {
+      "name": "JSON / Schema",
+      "count": 9,
+      "color": "#eb8e6a"
+    },
+    {
+      "name": "规范或输入歧义",
+      "count": 15,
+      "color": "#dbba70"
+    },
+    {
+      "name": "Gold / 评分差异",
+      "count": 27,
+      "color": "#74b5ac"
+    }
+  ],
+  "historical": [
+    {
+      "id": "handoff",
+      "title": "接手可用基线，在本地重新适配",
+      "subtitle": "前人交接 · Qwen3 8B / cp200",
+      "metric": "Where 完全匹配",
+      "total": 370,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "前序8B · vLLM 4-bit",
+          "correct": 293,
+          "color": "#8b72dc"
+        }
+      ],
+      "note": "293/370＝79.19%，来自前序交接记录；不是本轮研究者的实验。旧5090与本地5070 Ti、cutoff、框架和划分不同，不直接比较速度或归因模型优势。"
+    },
+    {
+      "id": "rules",
+      "title": "规则增补，并不总带来提升",
+      "subtitle": "强API qwen3.7-max · 旧370开发集",
+      "metric": "旧 Gold 严格 Where",
+      "total": 370,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "v12",
+          "correct": 322,
+          "color": "#335cff"
+        },
+        {
+          "name": "v13",
+          "correct": 312,
+          "color": "#aab5cf"
+        },
+        {
+          "name": "v14",
+          "correct": 316,
+          "color": "#8b72dc"
+        },
+        {
+          "name": "v15",
+          "correct": 306,
+          "color": "#eb8e6a"
+        },
+        {
+          "name": "v16",
+          "correct": 320,
+          "color": "#188a89"
+        }
+      ],
+      "note": "实际调用强API，不是本地4B。数字按母版旧Gold严格Where表；不能与放宽/主链等价指标混用。v14–v16部分输入重新变长，后续重新做长度门禁。"
+    },
+    {
+      "id": "compression",
+      "title": "从跑不稳到完整协议学习",
+      "subtitle": "先解决长度与资源约束，再比较领域微调",
+      "metric": "Where 完全匹配",
+      "total": 370,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "4B 底座 · compact-v3",
+          "correct": 62,
+          "color": "#aab5cf"
+        },
+        {
+          "name": "4B LoRA · Original截断",
+          "correct": 189,
+          "color": "#eb8e6a"
+        },
+        {
+          "name": "4B LoRA · compact-v3",
+          "correct": 294,
+          "color": "#335cff"
+        }
+      ],
+      "note": "Original输入约6470–6499 tokens，cutoff为3072，存在严重截断；不是完整长prompt与压缩版的公平长度单因素实验。"
+    },
+    {
+      "id": "scale",
+      "title": "更大模型，收益没有成比例增长",
+      "subtitle": "早期 compact-v3 学生模型对照",
+      "metric": "Where 完全匹配",
+      "total": 370,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "4B LoRA",
+          "correct": 294,
+          "color": "#335cff"
+        },
+        {
+          "name": "9B LoRA",
+          "correct": 302,
+          "color": "#8b72dc"
+        }
+      ],
+      "note": "早期实验，不是v19或v21。硬件、后端与训练配置需参考原报告；不能推断9B在所有任务都无收益。"
+    },
+    {
+      "id": "old-api",
+      "title": "规则与契约治理带来旧集提升",
+      "subtitle": "强API · 旧370开发回归",
+      "metric": "主链等价 Where",
+      "total": 370,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "v18e API",
+          "correct": 351,
+          "color": "#98bdc1"
+        },
+        {
+          "name": "v19 API",
+          "correct": 355,
+          "color": "#188a89"
+        }
+      ],
+      "note": "355/370＝95.95%；研究者回忆的约97%属于v19进一步放宽口径，明细待补。不是后来的v21 97.27%。"
+    },
+    {
+      "id": "old-student",
+      "title": "共享规范改善，本地模型仍有差距",
+      "subtitle": "4B · 旧370开发回归",
+      "metric": "主链等价 Where",
+      "total": 370,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "v18 4B",
+          "correct": 320,
+          "color": "#a5b5f6"
+        },
+        {
+          "name": "v19 4B",
+          "correct": 323,
+          "color": "#335cff"
+        }
+      ],
+      "note": "净增3题；原报告配对检验p＝0.607，不是显著提升，也不是每次prompt优化都会稳定提高学生成绩。"
+    },
+    {
+      "id": "blind",
+      "title": "旧集高分，不等于新组合泛化",
+      "subtitle": "首次 blind-v2 · 248条",
+      "metric": "Canonical Where",
+      "total": 248,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "v19 4B",
+          "correct": 162,
+          "color": "#335cff"
+        },
+        {
+          "name": "v19 强API",
+          "correct": 213,
+          "color": "#188a89"
+        }
+      ],
+      "note": "对照旧集4B 87.30%、API 95.95%，新集分别65.32%、85.89%。分布与评分口径不同，不是同题配对下降。"
+    },
+    {
+      "id": "hard",
+      "title": "困难查询暴露规范与执行瓶颈",
+      "subtitle": "早期 C-hard · 240条",
+      "metric": "Order / value invariant Where",
+      "total": 240,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "v19 4B",
+          "correct": 27,
+          "color": "#335cff"
+        },
+        {
+          "name": "v19 API",
+          "correct": 94,
+          "color": "#9fc9c4"
+        },
+        {
+          "name": "v20 API",
+          "correct": 120,
+          "color": "#188a89"
+        }
+      ],
+      "note": "后续继续进行Gold、可表达性与路由审计。C-hard后来进入1543条训练集，最终训练内成绩不作泛化证据。"
+    },
+    {
+      "id": "repair",
+      "title": "核验不是越多越好",
+      "subtitle": "blind-v5 · 160条 · 强API",
+      "metric": "首次 Where",
+      "total": 160,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "单次生成",
+          "correct": 133,
+          "color": "#188a89"
+        },
+        {
+          "name": "全量 repair",
+          "correct": 129,
+          "color": "#eb8e6a"
+        }
+      ],
+      "note": "全量repair修复1题、破坏5题，最终采用高精度条件门控，而非无条件重写所有答案。"
+    },
+    {
+      "id": "sealed",
+      "title": "冻结后验证，获得可靠参考",
+      "subtitle": "正式 blind-v6 · 240条 · 强API",
+      "metric": "Order / value invariant Where",
+      "total": 240,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "冻结API单次",
+          "correct": 229,
+          "color": "#188a89"
+        },
+        {
+          "name": "冻结门控后",
+          "correct": 234,
+          "color": "#335cff"
+        }
+      ],
+      "note": "额外调用8/240，修复5题、破坏0题。这是解析指标，不是已测量的线上搜索准确率。"
+    }
+  ]
+}

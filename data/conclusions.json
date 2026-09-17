@@ -1,0 +1,192 @@
+[
+  {
+    "stage": "6-strong-api",
+    "category": "fact",
+    "text": "管线 qwen3.7-max 跑 sealed blind v6 240 条，pipeline 含 4 阶段：one_pass_generation_with_v21_prompt, gold_free_high_precision_query_output_assertions, assertion_gated_reason_specific_repair_v7, deterministic_where_canonicalization",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 config",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "pipeline"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "fact",
+    "text": "单次 Where 229/240, Schema 238/240, compiler-hard 228/240",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 sealed_blind_v6_untouched",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "sealed_blind_v6_untouched"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "fact",
+    "text": "门控后 Where 234/240, Schema 238/240, compiler-hard 232/240; 额外 API 调用 8/240, 修复 5 条、破坏 0 条",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 sealed_blind_v6_untouched",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "assertion_v7"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "interpretation",
+    "text": "v21 and v7 were developed after blind-v5 reveal; these are post-hoc development results, not untouched evidence.",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 blind_v5_diagnostic.warning",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "blind_v5_diagnostic.warning"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "fact",
+    "text": "next_required_experiment: No further prompt tuning on blind-v6. Add a mandatory schema-validation retry at the production boundary, then distill the validated strong pipeline into the 4B student.",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 next_required_experiment",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "next_required_experiment"
+    }
+  },
+  {
+    "stage": "9b-training-audit",
+    "category": "fact",
+    "text": "600 逐题审计：222 Where 失败主归因 + 440 Semantic 失败；当前计算 222/440/600（intersection=62）",
+    "source": {
+      "kind": "student-audit",
+      "label": "attribution.json",
+      "path": "[内部来源路径未公开]"
+    }
+  },
+  {
+    "stage": "9b-training-audit",
+    "category": "fact",
+    "text": "5 类主归因 M/R/P/G/F 定义见 aux/error_codes.json；本审计 no_api_calls / no_gpu_inference / no_gold_changes / no_score_changes",
+    "source": {
+      "kind": "student-audit",
+      "label": "summary.json",
+      "path": "[内部来源路径未公开]"
+    }
+  },
+  {
+    "stage": "9b-training-audit",
+    "category": "fact",
+    "text": "291 步完整连续；日志 loss 与梯度无 NaN/Inf；checkpoint-200 与最终 adapter 各 496 张量；无误开 thinking、混用 4B 权重或中断证据",
+    "source": {
+      "kind": "docx",
+      "label": "9B 训练检查母版",
+      "path": "[内部来源路径未公开]"
+    }
+  },
+  {
+    "stage": "9b-training-audit",
+    "category": "interpretation",
+    "text": "checkpoint-200 vs 最终 blind 持平（Where 198/240, compiler-hard 209/240），Where 逐题 4 修 4 退化，总分持平。 不支持最后 91 步整体退化，但不能排除 200 步前过拟合。",
+    "source": {
+      "kind": "docx",
+      "label": "9B 训练检查母版",
+      "path": "[内部来源路径未公开]"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "fact",
+    "text": "管线 qwen3.7-max 跑 sealed blind v6 240 条，pipeline 含 4 阶段：one_pass_generation_with_v21_prompt, gold_free_high_precision_query_output_assertions, assertion_gated_reason_specific_repair_v7, deterministic_where_canonicalization",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 config",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "pipeline"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "fact",
+    "text": "单次 Where 229/240, Schema 238/240, compiler-hard 228/240",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 sealed_blind_v6_untouched",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "sealed_blind_v6_untouched"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "fact",
+    "text": "门控后 Where 234/240, Schema 238/240, compiler-hard 232/240; 额外 API 调用 8/240, 修复 5 条、破坏 0 条",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 sealed_blind_v6_untouched",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "assertion_v7"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "interpretation",
+    "text": "v21 and v7 were developed after blind-v5 reveal; these are post-hoc development results, not untouched evidence.",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 blind_v5_diagnostic.warning",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "blind_v5_diagnostic.warning"
+    }
+  },
+  {
+    "stage": "6-strong-api",
+    "category": "fact",
+    "text": "next_required_experiment: No further prompt tuning on blind-v6. Add a mandatory schema-validation retry at the production boundary, then distill the validated strong pipeline into the 4B student.",
+    "source": {
+      "kind": "paper-ir",
+      "label": "candidate_v4 next_required_experiment",
+      "path": "[内部来源路径未公开]",
+      "lineOrId": "next_required_experiment"
+    }
+  },
+  {
+    "stage": "9b-training-audit",
+    "category": "fact",
+    "text": "600 逐题审计：222 Where 失败主归因 + 440 Semantic 失败；当前计算 222/440/600（intersection=62）",
+    "source": {
+      "kind": "student-audit",
+      "label": "attribution.json",
+      "path": "[内部来源路径未公开]"
+    }
+  },
+  {
+    "stage": "9b-training-audit",
+    "category": "fact",
+    "text": "5 类主归因 M/R/P/G/F 定义见 aux/error_codes.json；本审计 no_api_calls / no_gpu_inference / no_gold_changes / no_score_changes",
+    "source": {
+      "kind": "student-audit",
+      "label": "summary.json",
+      "path": "[内部来源路径未公开]"
+    }
+  },
+  {
+    "stage": "9b-training-audit",
+    "category": "fact",
+    "text": "291 步完整连续；日志 loss 与梯度无 NaN/Inf；checkpoint-200 与最终 adapter 各 496 张量；无误开 thinking、混用 4B 权重或中断证据",
+    "source": {
+      "kind": "docx",
+      "label": "9B 训练检查母版",
+      "path": "[内部来源路径未公开]"
+    }
+  },
+  {
+    "stage": "9b-training-audit",
+    "category": "interpretation",
+    "text": "checkpoint-200 vs 最终 blind 持平（Where 198/240, compiler-hard 209/240），Where 逐题 4 修 4 退化，总分持平。 不支持最后 91 步整体退化，但不能排除 200 步前过拟合。",
+    "source": {
+      "kind": "docx",
+      "label": "9B 训练检查母版",
+      "path": "[内部来源路径未公开]"
+    }
+  }
+]

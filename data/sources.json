@@ -1,0 +1,32 @@
+[
+  {
+    "kind": "student-eval",
+    "label": "4B × old366",
+    "path": "[内部来源路径未公开]"
+  },
+  {
+    "kind": "student-eval",
+    "label": "4B × C300",
+    "path": "[内部来源路径未公开]"
+  },
+  {
+    "kind": "student-eval",
+    "label": "4B × blind v6",
+    "path": "[内部来源路径未公开]"
+  },
+  {
+    "kind": "student-eval",
+    "label": "9B × old366",
+    "path": "[内部来源路径未公开]"
+  },
+  {
+    "kind": "student-eval",
+    "label": "9B × C300",
+    "path": "[内部来源路径未公开]"
+  },
+  {
+    "kind": "student-eval",
+    "label": "9B × blind v6 (initial)",
+    "path": "[内部来源路径未公开]"
+  }
+]

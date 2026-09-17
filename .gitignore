@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+.idea/
+
+# Internal evaluation evidence: keep locally, never publish.
+data/cases.json
+data/raw/
+data/private/
+data/aux/history_overview.json
+scripts/append_base_diagnostic_to_master.py
+scripts/build_presentation.mjs
+scripts/extract_*.py
+scripts/lib/

@@ -1,0 +1,45 @@
+{
+  "sourceNote": "数据集身份优先依据 coverage.json.actual_dataset 与输入内容核验。",
+  "datasets": [
+    {
+      "datasetId": "blind-v6",
+      "label": "sealed blind v6 (240)",
+      "sampleSize": 240,
+      "purpose": "sealed-blind",
+      "goldVersion": "v21-candidate-v4",
+      "notes": "唯一正式 untouched 盲测；paper_ir_v1 candidate_v4 与 6 组学生评测均跑此集。"
+    },
+    {
+      "datasetId": "old366",
+      "label": "old366 (366)",
+      "sampleSize": 366,
+      "purpose": "in-train-diagnostic",
+      "goldVersion": "v21-reconciled",
+      "notes": "训练内诊断集。历史 API 356/366、97.27% 是开发口径，不入正式对比。"
+    },
+    {
+      "datasetId": "C300",
+      "label": "C300 (300)",
+      "sampleSize": 300,
+      "purpose": "in-train-diagnostic",
+      "goldVersion": "v21-reconciled",
+      "notes": "训练内诊断集。历史 API 271/300、90.33% 是 v19 口径，不与 v21 Gold 重评分混用。"
+    },
+    {
+      "datasetId": "C-hard240",
+      "label": "C-hard240 (240)",
+      "sampleSize": 240,
+      "purpose": "in-train-supervision",
+      "goldVersion": "v20-C-hard",
+      "notes": "训练监督题，训练内 100% 不等于泛化 100%。不属于独立验证。"
+    },
+    {
+      "datasetId": "old370",
+      "label": "old370 (370)",
+      "sampleSize": 370,
+      "purpose": "historical-dev",
+      "goldVersion": "v21",
+      "notes": "历史 v21 Gold 审计重评分集。仅作历史口径参考。"
+    }
+  ]
+}

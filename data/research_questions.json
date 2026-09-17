@@ -1,0 +1,190 @@
+{
+  "note": "按研究问题组织（非时间线、非版本流水账）。每类问题：问题—采取的措施—证据—结论。",
+  "why": {
+    "goal": "自然语言招聘查询转为可执行检索条件（IR），用于候选检索。",
+    "localValue": "本地小模型方案：降低外部 API 依赖、支持本地运行。",
+    "evidenceStatus": {
+      "costSaving": "无实际测量，不写成已验证成果",
+      "privacyGain": "本地运行隐含但未单独测量",
+      "latencyGain": "无实际测量，不写成已验证成果"
+    }
+  },
+  "problems": [
+    {
+      "id": "resource",
+      "title": "本地资源限制",
+      "problem": "前序 8B 模型在 RTX 5070 Ti 16GB 上直接复现受资源约束；初次 prompt 长 6470-6499 tokens，全部 370 条超 3072 门禁。",
+      "actions": [
+        "模型适配：选择 Qwen3.5 4B/9B（替代 8B）。",
+        "压缩 system prompt 以通过 3072-token 训练门禁。",
+        "优化训练吞吐与显存效率。"
+      ],
+      "evidence": [
+        "Qwen3.5 4B 在 RTX 5070 Ti 16GB 上完成训练；显存约 15874/16303 MiB、GPU 利用率约 99%。",
+        "compact-v3 后 训练 1303 max 3060 tokens、0 条超过 3072、最小余量 12 tokens。",
+        "压缩前后训练 1303 数据 human/gpt/样本顺序 SHA-256 不变：35ac78dc6b036d4e8a3b899951453611123c205cdf9f0dcdc63738cb52ca8a07。"
+      ],
+      "conclusion": "本地训练与推理的资源约束通过模型替换与 prompt 压缩可缓解；替换与压缩不引入数据侧改动。"
+    },
+    {
+      "id": "rule-execution",
+      "title": "规则执行不稳定",
+      "problem": "压缩 prompt 后旧集提升，但具体规则边界与表达不准确；学生模型在复杂规则上执行不稳定。",
+      "actions": [
+        "共享 system prompt 改进 API 与学生共用 prompt。",
+        "组织规则表达（v12-v18 迭代，含回落）。",
+        "训练答案与运行时契约对齐（v17 修正 106 条训练样本）。",
+        "建立 repair 与 assertion gate（v7）。"
+      ],
+      "evidence": [
+        "v19 API 旧集 370 主链等价 355/370；v19 4B 旧集 370 主链等价 323/370。",
+        "v18 vs v19 在 370 条预测中 104 条不同，确认复用而非共享结果。",
+        "v17 修正 106 条训练样本（约 8.1%）；修正针对一元 AND、单值 any/all/eq、严格边界、空窗、latest 字段、company semantic 等。",
+        "v12-v16 是 Prompt 规则优化实验，非单调（规则增补会让 prompt 重新变长，分数有回落）。"
+      ],
+      "conclusion": "prompt 压缩与规则组织对 API 与学生都有用，但旧集提升不能等同于复杂规则稳定执行。"
+    },
+    {
+      "id": "generalization-gap",
+      "title": "旧集高分不能保证泛化",
+      "problem": "在旧集上 4B/9B/API 都达到 85%+，但首次未见盲测上下降明显（API 降约 10 pp、4B 降约 20 pp）。",
+      "actions": [
+        "构造首次未见盲测 blind-v2（248 条）。",
+        "分析复杂组合、作用域、边界、路由。",
+        "构造 C-hard240 难题诊断集。"
+      ],
+      "evidence": [
+        "首次 blind-v2 (248)：v19 API canonical 213/248 (85.89%)；v19 4B canonical 162/248 (65.32%)。",
+        "诊断性 symbolic hard-filter equivalence（不同口径）：API 228/248 (91.94%)；4B 173/248 (69.76%)。",
+        "C-hard240 早期：v19 API order/value-invariant 94/240 (39.17%)；v19 4B 27/240 (11.25%)。",
+        "v20 API invariant 120/240 (50.00%)。",
+        "复杂低分同时反映模型错误与规范缺口。"
+      ],
+      "conclusion": "旧集开发期间已查看，复杂分布暴露了真实差距；C-hard 进一步隔离出模型错误与规范缺口。"
+    },
+    {
+      "id": "evaluation-ambiguity",
+      "title": "数据与评测存在歧义",
+      "problem": "Gold 与实际 semantic-search 主链可能自相矛盾；规则可表达性、严格边界、字段路由都存在歧义。",
+      "actions": [
+        "严格审查 Gold、可表达性、主链与 prompt 一致性。",
+        "引入 canonical where 规范化（C300 / old366 区分开发回归与训练内诊断）。",
+        "冻结强 API 参考管线 candidate_v4（sealed blind-v6）。"
+      ],
+      "evidence": [
+        "v17 对 106 条唯一训练样本进行了有依据的修正（针对 Gold 与运行时契约不一致）。",
+        "C300 与 C-hard 不是同一集；C300/old366 是开发回归/诊断集，C-hard240 进入联合训练。",
+        "candidate_v4 frozen；prompt + implementation SHA-256 已冻结。",
+        "sealed blind-v6 (240) 上 API 单次 229/240 (95.42%)；门控后 234/240 (97.50%)。"
+      ],
+      "conclusion": "严格审计揭示契约侧缺口；冻结的强 API 参考管线为本地模型提供独立参考。"
+    }
+  ],
+  "currentLevel": {
+    "headline": "强 API 参考管线与本地 4B/9B 当前水平",
+    "discipline": [
+      "不同数据集（old366 / C300 / blind-v6）不混成一个总准确率。",
+      "API 单次、门控后、学生裸输出是三种不同流程。",
+      "门控 API 与裸学生是不同流程，不可直接混用。",
+      "不同评分口径（strict_where / main_chain_where / canonical_where）区分展示。"
+    ],
+    "groups": [
+      {
+        "label": "强 API 参考管线（sealed blind-v6, 240）",
+        "rows": [
+          {
+            "label": "API 单次",
+            "where": "229/240 (95.42%)",
+            "schema": "238/240 (99.17%)",
+            "kind": "single-pass",
+            "note": "order/value-invariant Where；canonicalizer 后等价"
+          },
+          {
+            "label": "API 门控后",
+            "where": "234/240 (97.50%)",
+            "schema": "238/240 (99.17%)",
+            "kind": "post-assertion",
+            "note": "额外 8 次 API 调用 + 条件修复；不是裸模型能力"
+          }
+        ]
+      },
+      {
+        "label": "本地学生（独立 blind-v6, 240）",
+        "rows": [
+          {
+            "label": "4B 裸输出",
+            "where": "211/240 (87.92%)",
+            "schema": "240/240 (100%)",
+            "kind": "single-pass"
+          },
+          {
+            "label": "9B 裸输出（初次）",
+            "where": "197/240 (82.08%)",
+            "schema": "239/240 (99.58%)",
+            "kind": "single-pass"
+          },
+          {
+            "label": "9B 重复",
+            "where": "198/240 (82.50%)",
+            "schema": null,
+            "kind": "repeated-blind",
+            "note": "与初次 197 持平"
+          }
+        ]
+      },
+      {
+        "label": "本地学生（开发回归/诊断集，非独立验证）",
+        "rows": [
+          {
+            "label": "4B old366 (366)",
+            "where": "332/366 (90.71%)",
+            "schema": null,
+            "kind": "in-train-diagnostic",
+            "note": "old366 是开发回归/诊断集，不进入当前训练"
+          },
+          {
+            "label": "4B C300 (300)",
+            "where": "257/300 (85.67%)",
+            "schema": null,
+            "kind": "in-train-diagnostic",
+            "note": "C300 是开发回归/诊断集，不进入当前训练"
+          },
+          {
+            "label": "9B old366 (366)",
+            "where": "331/366 (90.44%)",
+            "schema": null,
+            "kind": "in-train-diagnostic"
+          },
+          {
+            "label": "9B C300 (300)",
+            "where": "262/300 (87.33%)",
+            "schema": null,
+            "kind": "in-train-diagnostic"
+          }
+        ]
+      }
+    ],
+    "knownLimits": [
+      "学生模型在复杂规则（边界、路由、复合 NOT 作用域、optional 证书与工具遗漏、空档次数与月数、年龄边界 Gold 差异、交换排序、Semantic 词面 vs 真实意图）上仍有差距。",
+      "9B 在当前实验中没有稳定优于 4B（净差 2.16 pp 且 p=0.3123）；不能推断更大模型必然更好。",
+      "本地学生裸输出与 API 门控后差距约 8 个百分点（234→211）；复杂组合是主因之一。",
+      "未做训练期间验证；训练 loss 低不能等同于泛化良好。",
+      "尚未验证生产效果；本机无部署流量与真实检索回包。"
+    ]
+  },
+  "nextSteps": {
+    "principles": [
+      "不默认更大模型或反复重训。",
+      "不编造已完成计划。",
+      "优先补可证伪的证据。"
+    ],
+    "evidentiaryNeeds": [
+      "未微调底座对照：当前 4B/9B 与原 Qwen3.5-4B/9B 在同 blind 上的差距是否来自 LoRA 训练。",
+      "独立 dev 集：与训练同分布且未参与训练的开发集。",
+      "训练内 C-hard 诊断：C-hard 是训练监督，不是独立验证；当前缺少独立验证 C-hard 学习是否泛化。",
+      "门控机制在新数据上的稳定性：API 门控是额外 8 次调用 + 条件修复，部署期需要持续监控。",
+      "复杂规则改进：边界、路由、复合 NOT 作用域等继续以可测样本驱动。"
+    ],
+    "businessTrialCondition": "进入业务试用的条件：当前 frozen 管线在独立 dev 集上复现接近 frozen blind-v6 数字 + 端到端延迟与稳定性达到部署基线 + 异常查询降级策略确定。"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "note": "训练 loss 仅 3 个真实点（4B/9B 各 3 轮平均）。 本机无原始逐 step loss；291 步完整连续、日志 loss 与梯度无 NaN/Inf 仅作为聚合声明。",
+  "config": {
+    "model": "Qwen3.5-4B-Base / Qwen3.5-9B-Base（Base 命名以来源目录名为准，未独立核实底座权重）",
+    "epochs": 3,
+    "optimizerSteps": 291,
+    "quantization": "4-bit BNB QLoRA",
+    "computeDtype": "BF16",
+    "loraRank": 16,
+    "loraAlpha": 32,
+    "loraDropout": 0.05,
+    "learningRate": 5e-05,
+    "lrScheduler": "cosine",
+    "warmupRatio": 0.0,
+    "perDeviceBatch": 2,
+    "gradAccum": 8,
+    "effectiveBatch": 16,
+    "cutoffLen": 4096,
+    "enableThinking": false,
+    "template": "qwen3_5_nothink",
+    "trainingData": "1543 = 1303 常规 + 240 C-hard",
+    "noTrainTimeEval": "eval_strategy=NO, load_best_model_at_end=false, 无 eval_loss / eval_accuracy"
+  },
+  "checkpointCompare": {
+    "checkpoint200_vs_final": {
+      "blindV6_where": "198/240",
+      "blindV6_compiler_hard": "209/240",
+      "note": "checkpoint-200 与最终模型在 batch 20 已查看 blind 回归中持平；Where 逐题 4 条修复、4 条退化，总分持平。 不支持最后 91 步导致整体退化，但不能排除 200 步之前已有过拟合。",
+      "rawData": "[内部来源路径未公开]"
+    },
+    "repeatedBlind": {
+      "blindV6_where": "198/240",
+      "note": "9B 最终模型重复 blind：198/240（与初次 197/240 持平）",
+      "rawData": "[内部来源路径未公开]"
+    }
+  },
+  "caveats": [
+    "低 loss 不能推断复杂规则泛化好",
+    "不能宣称 9B 差距是过拟合/欠拟合/数据覆盖/参数适配",
+    "相同参数不保证更大模型更好",
+    "下一步训练内 C-hard 诊断、独立 dev、未微调底座对照是待补证据"
+  ],
+  "points": [
+    {
+      "runId": "4b-lora-2026-09-15",
+      "epoch": 1,
+      "loss": 0.05076,
+      "source": {
+        "kind": "docx",
+        "label": "核验补全版 / 9B 训练检查",
+        "path": "[内部来源路径未公开]",
+        "note": "聚合检查记录"
+      },
+      "note": "3 轮平均 loss；本机无原始逐 step loss"
+    },
+    {
+      "runId": "4b-lora-2026-09-15",
+      "epoch": 2,
+      "loss": 0.01895,
+      "source": {
+        "kind": "docx",
+        "label": "核验补全版",
+        "path": "[内部来源路径未公开]"
+      },
+      "note": "3 轮平均 loss"
+    },
+    {
+      "runId": "4b-lora-2026-09-15",
+      "epoch": 3,
+      "loss": 0.01115,
+      "source": {
+        "kind": "docx",
+        "label": "核验补全版",
+        "path": "[内部来源路径未公开]"
+      },
+      "note": "3 轮平均 loss"
+    },
+    {
+      "runId": "9b-lora-2026-09-15",
+      "epoch": 1,
+      "loss": 0.04889,
+      "source": {
+        "kind": "docx",
+        "label": "核验补全版 / 9B 训练检查",
+        "path": "[内部来源路径未公开]"
+      },
+      "note": "3 轮平均 loss"
+    },
+    {
+      "runId": "9b-lora-2026-09-15",
+      "epoch": 2,
+      "loss": 0.01836,
+      "source": {
+        "kind": "docx",
+        "label": "核验补全版",
+        "path": "[内部来源路径未公开]"
+      },
+      "note": "3 轮平均 loss"
+    },
+    {
+      "runId": "9b-lora-2026-09-15",
+      "epoch": 3,
+      "loss": 0.01098,
+      "source": {
+        "kind": "docx",
+        "label": "核验补全版",
+        "path": "[内部来源路径未公开]"
+      },
+      "note": "3 轮平均 loss"
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+[
+  {
+    "runId": "4b-old366",
+    "model": "4B",
+    "method": "student-lora",
+    "methodVersion": "v21-candidate-v4",
+    "dataset": "old366",
+    "datasetVersion": "v21-reconciled",
+    "sampleSize": 366,
+    "kind": "in-train-diagnostic",
+    "compatibility": [
+      "comparable-with-old366"
+    ],
+    "sources": [
+      {
+        "kind": "student-eval",
+        "label": "4B × old366",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "metrics"
+      },
+      {
+        "kind": "student-eval",
+        "label": "4B × old366 coverage",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "coverage"
+      }
+    ],
+    "tags": [
+      "student",
+      "4b",
+      "old366"
+    ],
+    "shas": {},
+    "notes": "训练内诊断集 old366。366 条；词典依赖未完全核验。 训练内诊断不是独立验证。"
+  },
+  {
+    "runId": "4b-c300",
+    "model": "4B",
+    "method": "student-lora",
+    "methodVersion": "v21-candidate-v4",
+    "dataset": "C300",
+    "datasetVersion": "v21-reconciled",
+    "sampleSize": 300,
+    "kind": "in-train-diagnostic",
+    "compatibility": [
+      "comparable-with-c300"
+    ],
+    "sources": [
+      {
+        "kind": "student-eval",
+        "label": "4B × C300",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "metrics"
+      },
+      {
+        "kind": "student-eval",
+        "label": "4B × C300 coverage",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "coverage"
+      }
+    ],
+    "tags": [
+      "student",
+      "4b",
+      "C300"
+    ],
+    "shas": {},
+    "notes": "训练内诊断集 C300。300 条；词典依赖未完全核验。 训练内诊断不是独立验证。"
+  },
+  {
+    "runId": "4b-blindv6",
+    "model": "4B",
+    "method": "student-lora",
+    "methodVersion": "v21-candidate-v4",
+    "dataset": "blind-v6",
+    "datasetVersion": "v21-candidate-v4",
+    "sampleSize": 240,
+    "kind": "single-pass",
+    "compatibility": [
+      "comparable-with-blind-v6"
+    ],
+    "sources": [
+      {
+        "kind": "student-eval",
+        "label": "4B × blind-v6",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "metrics"
+      },
+      {
+        "kind": "student-eval",
+        "label": "4B × blind-v6 coverage",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "coverage"
+      }
+    ],
+    "tags": [
+      "student",
+      "4b",
+      "blind-v6"
+    ],
+    "shas": {},
+    "notes": "sealed blind v6 240 条。v21 candidate-v4 prompt 与 Gold 冻结。 9B 重复 blind 与 checkpoint-200 blind 原始数据不在本机。"
+  },
+  {
+    "runId": "9b-old366",
+    "model": "9B",
+    "method": "student-lora",
+    "methodVersion": "v21-candidate-v4",
+    "dataset": "old366",
+    "datasetVersion": "v21-reconciled",
+    "sampleSize": 366,
+    "kind": "in-train-diagnostic",
+    "compatibility": [
+      "comparable-with-old366"
+    ],
+    "sources": [
+      {
+        "kind": "student-eval",
+        "label": "9B × old366",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "metrics"
+      },
+      {
+        "kind": "student-eval",
+        "label": "9B × old366 coverage",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "coverage"
+      }
+    ],
+    "tags": [
+      "student",
+      "9b",
+      "old366"
+    ],
+    "shas": {},
+    "notes": "训练内诊断集 old366。366 条；词典依赖未完全核验。 训练内诊断不是独立验证。"
+  },
+  {
+    "runId": "9b-c300",
+    "model": "9B",
+    "method": "student-lora",
+    "methodVersion": "v21-candidate-v4",
+    "dataset": "C300",
+    "datasetVersion": "v21-reconciled",
+    "sampleSize": 300,
+    "kind": "in-train-diagnostic",
+    "compatibility": [
+      "comparable-with-c300"
+    ],
+    "sources": [
+      {
+        "kind": "student-eval",
+        "label": "9B × C300",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "metrics"
+      },
+      {
+        "kind": "student-eval",
+        "label": "9B × C300 coverage",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "coverage"
+      }
+    ],
+    "tags": [
+      "student",
+      "9b",
+      "C300"
+    ],
+    "shas": {},
+    "notes": "训练内诊断集 C300。300 条；词典依赖未完全核验。 训练内诊断不是独立验证。"
+  },
+  {
+    "runId": "9b-blindv6-initial",
+    "model": "9B",
+    "method": "student-lora",
+    "methodVersion": "v21-candidate-v4",
+    "dataset": "blind-v6",
+    "datasetVersion": "v21-candidate-v4",
+    "sampleSize": 240,
+    "kind": "single-pass",
+    "compatibility": [
+      "comparable-with-blind-v6"
+    ],
+    "sources": [
+      {
+        "kind": "student-eval",
+        "label": "9B × blind-v6",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "metrics"
+      },
+      {
+        "kind": "student-eval",
+        "label": "9B × blind-v6 coverage",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "coverage"
+      }
+    ],
+    "tags": [
+      "student",
+      "9b",
+      "blind-v6"
+    ],
+    "shas": {},
+    "notes": "sealed blind v6 240 条。v21 candidate-v4 prompt 与 Gold 冻结。 9B 重复 blind 与 checkpoint-200 blind 原始数据不在本机。"
+  },
+  {
+    "runId": "api-blindv6-one-pass",
+    "model": "API",
+    "method": "paper_ir_v1",
+    "methodVersion": "candidate-v4",
+    "dataset": "blind-v6",
+    "datasetVersion": "sealed-2026-09-13",
+    "sampleSize": 240,
+    "kind": "single-pass",
+    "compatibility": [
+      "comparable-with-blind-v6"
+    ],
+    "sources": [
+      {
+        "kind": "paper-ir",
+        "label": "paper_ir_v1 single-pass",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "metrics.json"
+      },
+      {
+        "kind": "paper-ir",
+        "label": "candidate_v4 config",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "sealed_blind_v6_untouched"
+      }
+    ],
+    "tags": [
+      "strong-api",
+      "blind-v6",
+      "candidate-v4",
+      "qwen3.7-max"
+    ],
+    "notes": "prompt_sha256/implementation_sha256 见 candidate_v4。 门控是额外的检查与条件修复，不是模型单次裸输出。",
+    "shas": {
+      "promptSha256": null,
+      "implementationSha256": {
+        "scripts/infofromhr/fine_tuning/run_paper_ir_v1_blind_api.py": "1175e126619bff76e8c91060e7d2e7390df4e1ec01093ffdc03a1547e68a88cc",
+        "scripts/infofromhr/fine_tuning/run_nl2ir_api_repair.py": "e7cd0cb9ca67a9f52982a26efb9053ebd43efc6ae3dee2564528a1272a4ed1bd",
+        "scripts/infofromhr/fine_tuning/select_nl2ir_targeted_repair.py": "8376fdb348a05439a363ea3866dc712d4504ee42e1deba0707bf3120badf2933",
+        "scripts/infofromhr/fine_tuning/score_paper_ir_v1_blind.py": "3f4b75f9127fcc073285985d3d44fcd776ce35bc6972012de7c9a2b344fba70f",
+        "app/services/candidate_search/hybrid_v2/ir_canonicalizer.py": "762486722883c18cc0fd47c4927fb34239e8ebb1f79f0547e0b326f32606377c",
+        "data/certs/certs.json": "47d8ae91e892f2d232dafca7e78711d8f821ca1afbb88efb65b23bbfcb06ebac"
+      },
+      "inputsSha256": "eeee134f916afde1163a2a6929df75efce70261cd6474b438b7256913791fad3",
+      "auditSha256": "10fcd8c038989a176426cddc332c01f5c34e0321e761486a75185eed953018f2"
+    }
+  },
+  {
+    "runId": "api-blindv6-assertion-v7",
+    "model": "API",
+    "method": "paper_ir_v1",
+    "methodVersion": "candidate-v4",
+    "dataset": "blind-v6",
+    "datasetVersion": "sealed-2026-09-13",
+    "sampleSize": 240,
+    "kind": "post-assertion",
+    "compatibility": [
+      "comparable-with-blind-v6"
+    ],
+    "sources": [
+      {
+        "kind": "paper-ir",
+        "label": "paper_ir_v1 post-assertion",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "metrics.json"
+      },
+      {
+        "kind": "paper-ir",
+        "label": "candidate_v4 config",
+        "path": "[内部来源路径未公开]",
+        "lineOrId": "sealed_blind_v6_untouched"
+      }
+    ],
+    "tags": [
+      "strong-api",
+      "blind-v6",
+      "candidate-v4",
+      "qwen3.7-max"
+    ],
+    "notes": "prompt_sha256/implementation_sha256 见 candidate_v4。 门控是额外的检查与条件修复，不是模型单次裸输出。",
+    "shas": {
+      "promptSha256": null,
+      "implementationSha256": {
+        "scripts/infofromhr/fine_tuning/run_paper_ir_v1_blind_api.py": "1175e126619bff76e8c91060e7d2e7390df4e1ec01093ffdc03a1547e68a88cc",
+        "scripts/infofromhr/fine_tuning/run_nl2ir_api_repair.py": "e7cd0cb9ca67a9f52982a26efb9053ebd43efc6ae3dee2564528a1272a4ed1bd",
+        "scripts/infofromhr/fine_tuning/select_nl2ir_targeted_repair.py": "8376fdb348a05439a363ea3866dc712d4504ee42e1deba0707bf3120badf2933",
+        "scripts/infofromhr/fine_tuning/score_paper_ir_v1_blind.py": "3f4b75f9127fcc073285985d3d44fcd776ce35bc6972012de7c9a2b344fba70f",
+        "app/services/candidate_search/hybrid_v2/ir_canonicalizer.py": "762486722883c18cc0fd47c4927fb34239e8ebb1f79f0547e0b326f32606377c",
+        "data/certs/certs.json": "47d8ae91e892f2d232dafca7e78711d8f821ca1afbb88efb65b23bbfcb06ebac"
+      },
+      "inputsSha256": "eeee134f916afde1163a2a6929df75efce70261cd6474b438b7256913791fad3",
+      "auditSha256": "10fcd8c038989a176426cddc332c01f5c34e0321e761486a75185eed953018f2"
+    }
+  }
+]
