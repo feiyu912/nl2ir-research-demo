@@ -181,6 +181,30 @@ nl2ir-research-demo/
 - **`/experiments` →「当前模型验证」**：保持原有设计不变，仅顶部新增一张紧凑摘要卡
   （combined where / P50 / 标准化 ¥万次 / 结论），并提供「查看完整对比 →」入口。
 - 三模型摘要统一使用同一尺度，不使用分别归一化的进度条。
-- Arm A 属训练消融实验，不在本页；训练完成后单独加入。
+- Arm A/B 训练消融**已并入本页**：**A/B（C-hard 训练包消融）在 `/experiments` →「历史研究实验」
+  新增一组 `chard`**；**27B 规模臂（C）在 `/experiments` →「当前模型验证」**新增三条 run
+  （old366 / C300 / blind-v6），并在 `/` 总览的「当前能力参考」中一并显示。
+  数据由 `scripts/build_presentation.mjs` 从
+  `docs/modeltest/nl2ir_stage1_chard_ablation_prereg_2026-09-16/stage1_arm_a_results_20260917/`
+  读取并**断言**（数值漂移会直接构建失败）。
 
-更新数据：`python3 scripts/extract_hosted_api_baselines.py`，然后 `npm run validate`。
+### Stage-1 A/B 消融与 27B 规模臂的口径边界
+
+- **`/experiments` →「历史研究实验」的 `chard` 组**只判定 **A vs B 的训练包效应**。
+  预注册 §4 的灰区判据看 `stress96` 净修复题数：**+6 题 → 灰区 → 补 2 个配对 seed，不进 Stage 2**。
+  同时必须一并呈现相反方向的更宽视图：全量 blind-v6（186→211）与 realistic144（119→138）
+  在两种口径下均为稳健提升。**这一张力是结论本身的一部分，不得只引用其中一侧。**
+- **27B 臂不参与 A/B 判决**：它是事后追加的 secondary **scale** arm（与 B 同数据、只变模型规模），
+  **不得**套用 §4 判据；且 `C−A` 同时变规模与数据，**不可**用于估计训练包效应。
+- **27B 推理 `per_device_eval_batch_size=15`，A/B 为 30**（已登记的协议偏差）；
+  其逐条一致性检查尚未收口，结论页已显式标注为待收口项。
+- **`compiler_hard_exact` 不等于 `main_chain_where`**：B 在 `language_exam_dual` 上为 4/8 对 6/8。
+  两指标不得互相替代引用。
+
+更新数据：
+
+```bash
+python3 scripts/extract_hosted_api_baselines.py   # 托管 API 基线
+node scripts/build_presentation.mjs              # 重建 presentation.json（含脱敏，见 scripts/ 内的公开边界处理）
+npm run validate                                 # 数据纪律校验（--strict）
+```

@@ -79,6 +79,36 @@
       "schema": 238,
       "semantic": 118,
       "compiler": 232
+    },
+    {
+      "model": "27B",
+      "dataset": "old366",
+      "n": 366,
+      "where": 348,
+      "schema": 366,
+      "semantic": 302,
+      "compiler": 350,
+      "source": "[内部来源路径未公开]"
+    },
+    {
+      "model": "27B",
+      "dataset": "C300",
+      "n": 300,
+      "where": 276,
+      "schema": 300,
+      "semantic": 261,
+      "compiler": 276,
+      "source": "[内部来源路径未公开]"
+    },
+    {
+      "model": "27B",
+      "dataset": "blind-v6",
+      "n": 240,
+      "where": 223,
+      "schema": 240,
+      "semantic": 141,
+      "compiler": 225,
+      "source": "[内部来源路径未公开]"
     }
   ],
   "baseRuns": [
@@ -817,6 +847,27 @@
         }
       ],
       "note": "额外调用8/240，修复5题、破坏0题。这是解析指标，不是已测量的线上搜索准确率。"
+    },
+    {
+      "id": "chard",
+      "title": "多给 240 条困难监督：主链 Where 上升，判决仍在灰区",
+      "subtitle": "C-hard 训练包消融 · 4B · 正式 blind-v6 240条",
+      "metric": "主链等价 Where",
+      "total": 240,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "Arm A · aligned 1303",
+          "correct": 186,
+          "color": "#aab5cf"
+        },
+        {
+          "name": "Arm B · joint 1543",
+          "correct": 211,
+          "color": "#335cff"
+        }
+      ],
+      "note": "预注册§4只判定 A vs B，判据看 stress96 子集：B 73/96 对 A 67/96，净修复 6 题，落在灰区（+3~+7 题）→ 补 2 个配对 seed，不进入 Stage 2；cluster ΔCI95 -1.04pp~+16.67pp 跨 0、精确 McNemar p=0.21，两种口径均不支持。全量 blind-v6 186→211（CI +2.50pp~+20.00pp）与 realistic144 119→138 属稳健提升；c300 250→257、old366 333→332 无差异。该子集每题≈1.04pp；估计对象是训练包效应（+240 条监督、更多 target tokens、291 对 246 步），不是 C-hard 内容本身的因果作用；单 seed、仅 4B。"
     }
   ]
 }
