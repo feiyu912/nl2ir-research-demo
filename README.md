@@ -187,6 +187,11 @@ nl2ir-research-demo/
   数据由 `scripts/build_presentation.mjs` 从
   `docs/modeltest/nl2ir_stage1_chard_ablation_prereg_2026-09-16/stage1_arm_a_results_20260917/`
   读取并**断言**（数值漂移会直接构建失败）。
+- **27B 底座（C0，无 SFT）**在 `/experiments` →「当前模型验证」的**底座核验区**新增三条
+  （`27B 底座`：old366 61/366、C300 58/300、blind-v6 37/240）。**它的协议与 4B/9B 底座不同**
+  （`qwen3_8_nothink` / 4096 / batch 10 对官方 hard-off / 1024），页面上已显式标注：
+  不可与 4B/9B 底座并列相减；**只有 C0 与 C（27B+SFT）之差才是同口径的 SFT 对照**，
+  且该对照仍待 batch 一致性检查收口。
 
 ### Stage-1 A/B 消融与 27B 规模臂的口径边界
 
