@@ -924,7 +924,48 @@
           "color": "#335cff"
         }
       ],
-      "note": "预注册§4只判定 A vs B，判据看 stress96 子集：B 73/96 对 A 67/96，净修复 6 题，落在灰区（+3~+7 题）→ 补 2 个配对 seed，不进入 Stage 2；cluster ΔCI95 -1.04pp~+16.67pp 跨 0、精确 McNemar p=0.21，两种口径均不支持。全量 blind-v6 186→211（CI +2.50pp~+20.00pp）与 realistic144 119→138 属稳健提升；c300 250→257、old366 333→332 无差异。该子集每题≈1.04pp；估计对象是训练包效应（+240 条监督、更多 target tokens、291 对 246 步），不是 C-hard 内容本身的因果作用；单 seed、仅 4B。"
+      "note": "预注册§4只判定 A vs B，判据看 stress96 子集：B 73/96 对 A 67/96，净修复 6 题，落在灰区（+3~+7 题）→ 补 2 个配对 seed，不进入 Stage 2；cluster ΔCI95 -1.04pp~+16.67pp 跨 0、精确 McNemar p=0.21，两种口径均不支持。全量 blind-v6 186→211（CI +2.50pp~+20.00pp）与 realistic144 119→138 属稳健提升；c300 250→257、old366 333→332 无差异。该子集每题≈1.04pp；估计对象是训练包效应（+240 条监督、更多 target tokens、291 对 246 步），不是 C-hard 内容本身的因果作用；单 seed、仅 4B。该灰区追加行动的执行结果见下一组。"
+    },
+    {
+      "id": "seeds",
+      "title": "灰区补 2 个配对 seed：方向一致为正，幅度未达门槛",
+      "subtitle": "灰区 seed 追加 · 4B · stress96 子集（96题）",
+      "metric": "主链等价 Where",
+      "total": 96,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "seed 42 · A（aligned 1303）",
+          "correct": 67,
+          "color": "#aab5cf"
+        },
+        {
+          "name": "seed 42 · B（joint 1543）",
+          "correct": 73,
+          "color": "#335cff"
+        },
+        {
+          "name": "seed 43 · A（aligned 1303）",
+          "correct": 61,
+          "color": "#aab5cf"
+        },
+        {
+          "name": "seed 43 · B（joint 1543）",
+          "correct": 64,
+          "color": "#335cff"
+        },
+        {
+          "name": "seed 44 · A（aligned 1303）",
+          "correct": 58,
+          "color": "#aab5cf"
+        },
+        {
+          "name": "seed 44 · B（joint 1543）",
+          "correct": 61,
+          "color": "#335cff"
+        }
+      ],
+      "note": "预注册§4判 A vs B 为灰区（seed 42 净修复 +6 题），登记的灰区行动是补 2 个配对 seed。开跑前冻结 seeds 43/44 后执行，三个 seed 的 stress96 净修复为 +6 / +3 / +3，mean +4.17pp ± 1.47（即 +4.0 题），3/3 方向为正；guards realistic144（mean +9.72pp）与 old366（mean +0.46pp）均无退化。按开跑前冻结的 3-seed 规则：mean 高于 No-Go 门槛（+3pp）但低于 Strong 门槛（+5pp）→ 判决 Inconclusive，终止追加 seeds，不进入 Stage 2；结论固定表述为“当前证据不足以支持 C-hard package 具有稳定正效应”。这是未达登记门槛，不等于效应不存在（该规则是资源决策规则，非统计推断）。三个 seed 的 cluster ΔCI95 均跨 0，逐 seed 亦无一达稳健。seed 43/44 为开跑前冻结、非结果后挑选；“配对”指两臂共享同一训练 seed（随机初始化与训练 RNG 设置成对受控），但两臂数据行数与步数不同（1303/246 对 1543/291），随机轨迹并不逐 step 对应。评测端与训练端是两个独立维度：同配置重跑逐字节相同（0/240 翻转），改变评测集分组约 1.25%。"
     }
   ]
 }
