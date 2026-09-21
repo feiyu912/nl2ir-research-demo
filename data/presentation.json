@@ -929,38 +929,38 @@
     {
       "id": "seeds",
       "title": "灰区补 2 个配对 seed：方向一致为正，幅度未达门槛",
-      "subtitle": "灰区 seed 追加 · 4B · stress96 子集（96题）",
+      "subtitle": "灰区 seed 追加 · 4B · stress96 子集（96题）· A=aligned 1303 / B=joint 1543",
       "metric": "主链等价 Where",
       "total": 96,
       "source": "[内部来源路径未公开]",
       "rows": [
         {
-          "name": "seed 42 · A（aligned 1303）",
+          "name": "seed 42 · A（1303）",
           "correct": 67,
           "color": "#aab5cf"
         },
         {
-          "name": "seed 42 · B（joint 1543）",
+          "name": "seed 42 · B（1543）",
           "correct": 73,
           "color": "#335cff"
         },
         {
-          "name": "seed 43 · A（aligned 1303）",
+          "name": "seed 43 · A（1303）",
           "correct": 61,
           "color": "#aab5cf"
         },
         {
-          "name": "seed 43 · B（joint 1543）",
+          "name": "seed 43 · B（1543）",
           "correct": 64,
           "color": "#335cff"
         },
         {
-          "name": "seed 44 · A（aligned 1303）",
+          "name": "seed 44 · A（1303）",
           "correct": 58,
           "color": "#aab5cf"
         },
         {
-          "name": "seed 44 · B（joint 1543）",
+          "name": "seed 44 · B（1543）",
           "correct": 61,
           "color": "#335cff"
         }
