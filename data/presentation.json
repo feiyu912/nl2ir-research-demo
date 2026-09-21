@@ -968,6 +968,47 @@
       "note": "补做 2 个配对 seed 后，stress96 净修复为 +6 / +3 / +3 题，mean +4.17pp：高于 No-Go 门槛（+3pp）但低于 Strong 门槛（+5pp）→ 判决 Inconclusive，终止追加 seeds、不进入 Stage 2。这是未达登记门槛，不等于效应不存在（该规则是资源决策规则，非统计推断）。三个 seed 的 cluster CI 均跨 0，逐 seed 亦无一达稳健。"
     },
     {
+      "id": "nineb",
+      "title": "把\"更大模型反而更差\"交给三个 seed：差距落到噪声内",
+      "subtitle": "规模对照三 seed 复现 · joint 1543 · 正式 blind-v6 240条",
+      "metric": "主链等价 Where",
+      "total": 240,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "4B · seed 42",
+          "correct": 211,
+          "color": "#335cff"
+        },
+        {
+          "name": "9B · seed 42",
+          "correct": 198,
+          "color": "#8b72dc"
+        },
+        {
+          "name": "4B · seed 43",
+          "correct": 189,
+          "color": "#335cff"
+        },
+        {
+          "name": "9B · seed 43",
+          "correct": 195,
+          "color": "#8b72dc"
+        },
+        {
+          "name": "4B · seed 44",
+          "correct": 199,
+          "color": "#335cff"
+        },
+        {
+          "name": "9B · seed 44",
+          "correct": 204,
+          "color": "#8b72dc"
+        }
+      ],
+      "note": "只看 seed 42 会以为 9B 明显弱于 4B（211 对 198，-5.42pp）。补做 seed 43/44 后方向反转：三 seed 盲测均值 4B 83.19% 对 9B 82.92%（-0.28pp），另两个视图同样落在 ±0.4pp 内且符号不一致。seed 间波动约为规模效应的 17 倍，单 seed 的跨模型对比不可靠。两臂同配方（joint 1543）、同一冻结 scorer。"
+    },
+    {
       "id": "rl",
       "title": "在 SFT 之上做 verifier 强化学习：判决被两个混淆阻断",
       "subtitle": "GRPO / RLVR 分支 · 4B · 正式 blind-v6 240条",
@@ -1033,47 +1074,6 @@
         }
       ],
       "note": "量化上面 RL 分支的\"独立阻断因素\"，不需要额外 GPU：原 run 日志 1 epoch 每题恰好采样 4 次，本身即覆盖全集的难度测量（6172 条）。结果 1373 题（89.0%）4 条采样全对，只有 99 题（6.4%）组内有差异。GRPO 优势是组内相对的，得分相同即无梯度：零方差概率为 p⁴+(1−p)⁴（U 形，p=0.5 最优），实测通过率 0.9243 对应约 73% 的死步。改在底座上跑同样无效（约 88.5%，从另一端饱和），清洗也只得到这 99 题，且没有更大的未记忆数据可换。那 99 题经逐条核查是真错误，不是格式噪声。"
-    },
-    {
-      "id": "nineb",
-      "title": "把\"更大模型反而更差\"交给三个 seed：差距落到噪声内",
-      "subtitle": "规模对照三 seed 复现 · joint 1543 · 正式 blind-v6 240条",
-      "metric": "主链等价 Where",
-      "total": 240,
-      "source": "[内部来源路径未公开]",
-      "rows": [
-        {
-          "name": "4B · seed 42",
-          "correct": 211,
-          "color": "#335cff"
-        },
-        {
-          "name": "9B · seed 42",
-          "correct": 198,
-          "color": "#8b72dc"
-        },
-        {
-          "name": "4B · seed 43",
-          "correct": 189,
-          "color": "#335cff"
-        },
-        {
-          "name": "9B · seed 43",
-          "correct": 195,
-          "color": "#8b72dc"
-        },
-        {
-          "name": "4B · seed 44",
-          "correct": 199,
-          "color": "#335cff"
-        },
-        {
-          "name": "9B · seed 44",
-          "correct": 204,
-          "color": "#8b72dc"
-        }
-      ],
-      "note": "只看 seed 42 会以为 9B 明显弱于 4B（211 对 198，-5.42pp）。补做 seed 43/44 后方向反转：三 seed 盲测均值 4B 83.19% 对 9B 82.92%（-0.28pp），另两个视图同样落在 ±0.4pp 内且符号不一致。seed 间波动约为规模效应的 17 倍，单 seed 的跨模型对比不可靠。两臂同配方（joint 1543）、同一冻结 scorer。"
     }
   ]
 }
