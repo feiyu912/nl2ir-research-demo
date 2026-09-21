@@ -966,6 +966,37 @@
         }
       ],
       "note": "预注册§4判 A vs B 为灰区（seed 42 净修复 +6 题），登记的灰区行动是补 2 个配对 seed。开跑前冻结 seeds 43/44 后执行，三个 seed 的 stress96 净修复为 +6 / +3 / +3，mean +4.17pp ± 1.47（即 +4.0 题），3/3 方向为正；guards realistic144（mean +9.72pp）与 old366（mean +0.46pp）均无退化。按开跑前冻结的 3-seed 规则：mean 高于 No-Go 门槛（+3pp）但低于 Strong 门槛（+5pp）→ 判决 Inconclusive，终止追加 seeds，不进入 Stage 2；结论固定表述为“当前证据不足以支持 C-hard package 具有稳定正效应”。这是未达登记门槛，不等于效应不存在（该规则是资源决策规则，非统计推断）。三个 seed 的 cluster ΔCI95 均跨 0，逐 seed 亦无一达稳健。seed 43/44 为开跑前冻结、非结果后挑选；“配对”指两臂共享同一训练 seed（随机初始化与训练 RNG 设置成对受控），但两臂数据行数与步数不同（1303/246 对 1543/291），随机轨迹并不逐 step 对应。评测端与训练端是两个独立维度：同配置重跑逐字节相同（0/240 翻转），改变评测集分组约 1.25%。"
+    },
+    {
+      "id": "rl",
+      "title": "在 SFT 之上做 verifier 强化学习：判决被两个混淆阻断",
+      "subtitle": "GRPO / RLVR 分支 · 4B · 正式 blind-v6 240条",
+      "metric": "主链等价 Where",
+      "total": 240,
+      "source": "[内部来源路径未公开]",
+      "rows": [
+        {
+          "name": "SFT · 4-bit 评测",
+          "correct": 211,
+          "color": "#aab5cf"
+        },
+        {
+          "name": "GRPO · 4-bit 评测",
+          "correct": 190,
+          "color": "#eb8e6a"
+        },
+        {
+          "name": "SFT · bf16 评测",
+          "correct": 188,
+          "color": "#aab5cf"
+        },
+        {
+          "name": "GRPO · bf16 评测",
+          "correct": 200,
+          "color": "#188a89"
+        }
+      ],
+      "note": "在既有 SFT adapter（Arm B seed42）之上继续做 verifier 驱动的 GRPO（奖励 0.10*schema+0.25*order_value_invariant_where+0.45*main_chain_where+0.20*semantic_exact，LR 5e-6，1 epoch，1543 步）。4-bit 正式协议下盲测 211→190（净 −21 题，配对 McNemar p=0.0003，ΔCI95 -13.33pp~-4.17pp），三个纯题目视图一致退化，按开跑前冻结的 stop rule 本应判负结果。但对照实验推翻了这个结论：把两个 adapter 都放到 bf16 下评测，同一对模型变为 188→200（+5.00pp），**符号翻转**，量化交互项 -13.75pp。原因是训练精度不一致：SFT 用 4-bit QLoRA 训练、GRPO 用 bf16 续训，而评测固定 4-bit；4-bit 训练让 adapter 学会补偿量化误差，bf16 续训把它丢掉。实测每个 adapter 都在「自己被训练时的精度」下最好：SFT 4-bit 211 对 bf16 188（-9.58pp），GRPO bf16 200 对 4-bit 190（-4.17pp）。因此不存在能公平比较两者的单一评测协议，本实验无法给出 RL 效应的有效估计——既不能说 GRPO 让模型变差，也不能说变好。另有一个独立阻断因素：训练分布与 SFT 完全相同（joint1543），SFT 已记忆，导致 1242/1543 步（80%）组内奖励零方差、无梯度；该模式下「方法无效」与「饱和导致无信号」不可区分（adapter 权重确实移动了 1.5%，不是没训动）。可复用的方法学发现：adapter 评测精度若与训练精度不匹配，同一 adapter 的成绩可变动约 10pp，大于文献中多数被报告的方法效应。"
     }
   ]
 }
