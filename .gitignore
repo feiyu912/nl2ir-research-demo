@@ -3,6 +3,8 @@ dist/
 *.tsbuildinfo
 .DS_Store
 .idea/
+__pycache__/
+*.pyc
 
 # Internal evaluation evidence: keep locally, never publish.
 data/cases.json
@@ -13,3 +15,21 @@ scripts/append_base_diagnostic_to_master.py
 scripts/build_presentation.mjs
 scripts/extract_*.py
 scripts/lib/
+
+# Raw evaluation exports and annotation material: never publish.
+# The site must only consume aggregated, committed JSON such as
+# data/human_validation.json, never these sources.
+*.jsonl
+*.xlsx
+*.xls
+*.docx
+NL2IR_*_THREE_WAY_COMPARISON.csv
+NL2IR_*_DISAGREEMENTS.csv
+NL2IR_*_REANNOTATION_REPORT.md
+data/**/*.csv
+data/tmp/
+data/exports/
+data/tmp_export/
+exports/
+_export/
+tmp/

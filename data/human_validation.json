@@ -1,0 +1,308 @@
+{
+  "title": "人工盲复核确认多数失败涉及明确规则",
+  "titleEn": "Blinded Human Re-annotation of 222 Canonical-Where Failures",
+  "population": {
+    "n": 222,
+    "label": "冻结的 Canonical-Where 失败",
+    "note": "六组冻结运行的完整 Where 失败集合（4B/9B × old366 / C300 / blind-v6），不是抽样。"
+  },
+  "headline": {
+    "label": "人工判定存在明确且适用的规则被违反",
+    "positive": 177,
+    "negative": 45,
+    "n": 222,
+    "rate": 79.73,
+    "wilson95": [
+      73.96,
+      84.49
+    ],
+    "cp95": [
+      73.83,
+      84.81
+    ],
+    "unsureComponentLevel": 3,
+    "sensitivity": {
+      "positive": 177,
+      "n": 219,
+      "rate": 80.82,
+      "note": "3 条组件级 unsure 按冻结规则计为 headline 阴性；排除它们后的敏感性结果。"
+    }
+  },
+  "agent": {
+    "label": "最早封存的 blinded agent 判定",
+    "positive": 165,
+    "negative": 57,
+    "n": 222,
+    "rate": 74.32,
+    "role": "辅助可靠性检查（auxiliary reliability check），不是人工一致性"
+  },
+  "agreement": {
+    "headline": {
+      "n": 222,
+      "agree": 204,
+      "rate": 91.89,
+      "kappa": 0.772
+    },
+    "ruleApplicability": {
+      "n": 222,
+      "agree": 177,
+      "rate": 79.73,
+      "kappa": 0.221
+    },
+    "ruleViolation": {
+      "n": 222,
+      "agree": 204,
+      "rate": 91.89,
+      "kappa": 0.777
+    },
+    "legacyMRF": {
+      "n": 222,
+      "agree": 207,
+      "rate": 93.24,
+      "kappa": 0.786
+    },
+    "legacyMOnly": {
+      "n": 222,
+      "agree": 186,
+      "rate": 83.78,
+      "kappa": 0.563
+    }
+  },
+  "confusion": {
+    "humanYesAgentYes": 162,
+    "humanYesAgentNo": 15,
+    "humanNoAgentYes": 3,
+    "humanNoAgentNo": 42,
+    "n": 222
+  },
+  "twoLayer": {
+    "steps": [
+      {
+        "key": "applicability",
+        "label": "规则是否明确且适用？",
+        "agreement": 79.73,
+        "kappa": 0.221
+      },
+      {
+        "key": "violation",
+        "label": "预测是否违反了该规则？",
+        "agreement": 91.89,
+        "kappa": 0.777
+      }
+    ],
+    "rule": "两个判断均为 yes 时，headline 才为阳性；unsure 按冻结规则计为阴性。",
+    "note": "中间判断的分歧明显更多（规则适用性），而最终 headline 仍有较强一致；只报最终一致率会掩盖组件层面的差异。"
+  },
+  "reconciliation": [
+    {
+      "key": "legacyM",
+      "label": "旧详细归因 M 类",
+      "yes": 159,
+      "rate": 71.62,
+      "scope": "较窄：只统计实质规则未执行",
+      "binary": false,
+      "tone": "legacyNarrow"
+    },
+    {
+      "key": "legacyMRF",
+      "label": "旧 M/R/F 二元口径",
+      "yes": 180,
+      "rate": 81.08,
+      "scope": "二元 explicit-rule",
+      "binary": true,
+      "tone": "legacyWide"
+    },
+    {
+      "key": "human",
+      "label": "人工盲复核二元",
+      "yes": 177,
+      "rate": 79.73,
+      "scope": "二元 explicit-rule",
+      "binary": true,
+      "tone": "human"
+    },
+    {
+      "key": "agent",
+      "label": "最早封存 agent 二元",
+      "yes": 165,
+      "rate": 74.32,
+      "scope": "二元 explicit-rule",
+      "binary": true,
+      "tone": "agent"
+    }
+  ],
+  "reconciliationNote": "旧 159/222 是详细归因分类中的 M 类，只统计实质规则未执行；人工盲复核采用更宽的二元问题，也包含明确的 representation / schema 规则。因此 159 与 177 不能直接相减解释为“提升”。把旧 M/R/F 合并为同一口径后得到 180/222 的兼容基线，人工与旧口径的一致率为 93.24%（κ=0.786）。论文同时保留 159 的机制分类与 177 的人类二元验证。",
+  "attribution": {
+    "M": 159,
+    "representation": 12,
+    "jsonSchema": 9,
+    "ambiguity": 15,
+    "goldScoring": 27,
+    "n": 222
+  },
+  "disagreementCounts": {
+    "total": 18,
+    "humanYesAgentNo": 15,
+    "humanNoAgentYes": 3,
+    "byMechanism": {
+      "连续量边界方向": 6,
+      "输出不是合法 JSON": 6,
+      "过度约束 / 擅加条件": 2,
+      "契约未定义或存在歧义": 3,
+      "遗漏条款明确要求": 1
+    }
+  },
+  "disagreements": [
+    {
+      "id": "H014",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "连续量边界方向",
+      "humanReason": "边界排除方向错误：生成用包含式上界，保留了本应被排除的边界值；按条款应改为对下界取反。",
+      "agentReason": "认为该条款并未明确管辖所显示的差异，因此该差异不构成对该条款的违反。"
+    },
+    {
+      "id": "H018",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "输出不是合法 JSON",
+      "humanReason": "源输出不是合法 JSON，无法构成契约要求的合法 AST，因此违反了输出契约。",
+      "agentReason": "没有可用生成结果，也未检索到明确条款，认为两个判断都无法由该证据包支持。"
+    },
+    {
+      "id": "H035",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "连续量边界方向",
+      "humanReason": "边界方向错误：生成用包含式上界保留了本应排除的边界值；参考侧取值同样不符合连续量规则。",
+      "agentReason": "认为该条款并未明确管辖所显示的差异，因此该差异不构成对该条款的违反。"
+    },
+    {
+      "id": "H050",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "连续量边界方向",
+      "humanReason": "生成用对下界取反，反而排除了恰好等于阈值的记录；该阈值本身应为包含式上界。",
+      "agentReason": "认为该条款并未明确管辖所显示的差异，因此该差异不构成对该条款的违反。"
+    },
+    {
+      "id": "H067",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "连续量边界方向",
+      "humanReason": "生成用等值匹配替代了下界约束；双方共有的空窗上界同样不符合连续量规则。",
+      "agentReason": "认为该条款并未明确管辖所显示的差异，因此该差异不构成对该条款的违反。"
+    },
+    {
+      "id": "H072",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "过度约束 / 擅加条件",
+      "humanReason": "请求只排除了某一细分渠道，生成擅自补入了请求未规定的近义或下位词，违反不得增补未规定别名的规则。",
+      "agentReason": "认为该条款适用且生成结果遵循了该条款，所显示的差异不构成违反。"
+    },
+    {
+      "id": "H092",
+      "human": "no",
+      "agent": "yes",
+      "mechanism": "契约未定义或存在歧义",
+      "humanReason": "契约未解决某一岗位名是否必须转写为职位，以及该经历指职位还是业务背景；参考标签未必权威。",
+      "agentReason": "认为条款要求把所述既往角色编码为职位，而生成遗漏或将该角色路由进了语义字段。"
+    },
+    {
+      "id": "H102",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "遗漏条款明确要求",
+      "humanReason": "条款明确要求的最小匹配数约束缺失。仅凭该项即可判违反，不依赖单元素 all 与等值之间的争议。",
+      "agentReason": "认为该条款适用且生成结果遵循了该条款，所显示的差异不构成违反。"
+    },
+    {
+      "id": "H103",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "输出不是合法 JSON",
+      "humanReason": "源输出不是合法 JSON，无法构成契约要求的合法 AST，因此违反了输出契约。",
+      "agentReason": "没有可用生成结果，也未检索到明确条款，认为两个判断都无法由该证据包支持。"
+    },
+    {
+      "id": "H119",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "连续量边界方向",
+      "humanReason": "生成用对下界取反，排除了恰好等于阈值的记录；按条款应为包含式上界。",
+      "agentReason": "认为该条款并未明确管辖所显示的差异，因此该差异不构成对该条款的违反。"
+    },
+    {
+      "id": "H135",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "输出不是合法 JSON",
+      "humanReason": "源输出不是合法 JSON，无法构成契约要求的合法 AST，因此违反了输出契约。",
+      "agentReason": "没有可用生成结果，也未检索到明确条款，认为两个判断都无法由该证据包支持。"
+    },
+    {
+      "id": "H148",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "过度约束 / 擅加条件",
+      "humanReason": "偏好性表述被并入 required=true 的合取条件，偏好被硬化成了必填要求。",
+      "agentReason": "认为该条款适用且生成结果遵循了该条款，所显示的差异不构成违反。"
+    },
+    {
+      "id": "H151",
+      "human": "no",
+      "agent": "yes",
+      "mechanism": "契约未定义或存在歧义",
+      "humanReason": "契约未定义名称模式中用户给出的下划线是字面数据还是通配语法。",
+      "agentReason": "认为条款要求原样保留所述名称模式的字符，而生成丢弃了该字符。"
+    },
+    {
+      "id": "H155",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "输出不是合法 JSON",
+      "humanReason": "源输出不是合法 JSON，无法构成契约要求的合法 AST，因此违反了输出契约。",
+      "agentReason": "没有可用生成结果，也未检索到明确条款，认为两个判断都无法由该证据包支持。"
+    },
+    {
+      "id": "H162",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "连续量边界方向",
+      "humanReason": "条款的阈值含边界，生成却把下界加一，违反含边界且不得加一的规则。",
+      "agentReason": "认为该条款并未明确管辖所显示的差异，因此该差异不构成对该条款的违反。"
+    },
+    {
+      "id": "H181",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "输出不是合法 JSON",
+      "humanReason": "原始文本虽非合法 JSON，但否定只包裹了其中一项、其余项另作肯定条件已明确可见，违反完整复合排除规则。",
+      "agentReason": "没有可用生成结果，也未检索到明确条款，认为两个判断都无法由该证据包支持。"
+    },
+    {
+      "id": "H184",
+      "human": "yes",
+      "agent": "no",
+      "mechanism": "输出不是合法 JSON",
+      "humanReason": "源输出不是合法 JSON，无法构成契约要求的合法 AST，因此违反了输出契约。",
+      "agentReason": "没有可用生成结果，也未检索到明确条款，认为两个判断都无法由该证据包支持。"
+    },
+    {
+      "id": "H189",
+      "human": "no",
+      "agent": "yes",
+      "mechanism": "契约未定义或存在歧义",
+      "humanReason": "某一领域经验既可指结构化技能，也可指产品或业务背景；契约未要求唯一表示。",
+      "agentReason": "认为条款管辖具名工具与技术的技能路由并排除泛化经验或特质，而生成遗漏或错误路由了该内容。"
+    }
+  ],
+  "methodNotes": [
+    "证据包只含匿名 ID、请求、相关的生成与参考 IR 片段、一个中性的结构差异说明，以及至多 5 条带位置的冻结契约条款；不含模型身份、seed、数据集名、旧标签、旧家族归属、agent 结论与裁决结果。",
+    "人工复核者与最早封存的 agent 都在揭盲前独立完成“规则适用性 / 预测违反 / 置信度”三项判断。",
+    "没有第二位人工标注者参与，因此这是 blinded human re-annotation，不是 human-human inter-annotator agreement。",
+    "agent 对照使用最初封存的 222 行标注文件。后来一份第二遍替换文件被排除在一致性分析之外。"
+  ],
+  "sourceNote": "聚合数字来自冻结的复标注报告与论文 Table 2 / Table B2；逐题原始材料与内部标识不随网站发布。"
+}

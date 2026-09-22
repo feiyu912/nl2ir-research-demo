@@ -278,6 +278,82 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         report.error("hosted_api_baselines limitations 缺 role_tenure 待验证声明")
 
 
+HUMAN_VALIDATION_N = 222
+
+# 内部标识与评测资产：出现在公开发布数据里即为泄露。
+HUMAN_VALIDATION_FORBIDDEN = (
+    "source_key", "source_sample_id", "nl2ir_v21", "dev_old366", "dev_c300",
+    "blind_v6_240", "/dat/", "adapter", "checkpoint-",
+)
+
+
+def check_human_validation(report: Report, hv: dict) -> None:
+    """人工盲复核聚合结果的数字关系与脱敏检查。"""
+    n = hv.get("population", {}).get("n")
+    if n != HUMAN_VALIDATION_N:
+        report.error(f"human_validation: population.n={n} != {HUMAN_VALIDATION_N}")
+
+    head = hv.get("headline", {})
+    if head.get("positive", 0) + head.get("negative", 0) != HUMAN_VALIDATION_N:
+        report.error("human_validation: human positive + negative != 222")
+    if round(head.get("positive", 0) / HUMAN_VALIDATION_N * 100, 2) != head.get("rate"):
+        report.error("human_validation: human rate 与 177/222 不一致")
+
+    agent = hv.get("agent", {})
+    if agent.get("positive", 0) + agent.get("negative", 0) != HUMAN_VALIDATION_N:
+        report.error("human_validation: agent positive + negative != 222")
+
+    cm = hv.get("confusion", {})
+    cells = [cm.get(k, 0) for k in
+             ("humanYesAgentYes", "humanYesAgentNo", "humanNoAgentYes", "humanNoAgentNo")]
+    if sum(cells) != HUMAN_VALIDATION_N:
+        report.error(f"human_validation: 混淆矩阵合计 {sum(cells)} != 222")
+    if cells[0] != cm.get("humanYesAgentYes") or cm.get("n") != HUMAN_VALIDATION_N:
+        report.error("human_validation: 混淆矩阵结构异常")
+    agree = cells[0] + cells[3]
+    if round(agree / HUMAN_VALIDATION_N * 100, 2) != hv.get("agreement", {}).get("headline", {}).get("rate"):
+        report.error("human_validation: headline agreement 与 204/222 不一致")
+    if agree != hv.get("agreement", {}).get("headline", {}).get("agree"):
+        report.error("human_validation: headline agreement 计数不一致")
+    if cells[1] != 15 or cells[2] != 3:
+        report.error("human_validation: 分歧应为 human+/agent- 15 与 human-/agent+ 3")
+
+    rec = hv.get("reconciliation", [])
+    want = {"legacyM": 159, "legacyMRF": 180, "human": 177, "agent": 165}
+    got = {r.get("key"): r.get("yes") for r in rec}
+    if got != want:
+        report.error(f"human_validation: 四种口径计数 {got} != {want}")
+    if len(rec) != 4:
+        report.error("human_validation: reconciliation 应为 4 项")
+
+    dis = hv.get("disagreements", [])
+    if len(dis) != 18:
+        report.error(f"human_validation: 分歧条数 {len(dis)} != 18")
+    if hv.get("disagreementCounts", {}).get("humanYesAgentNo") != 15:
+        report.error("human_validation: disagreementCounts.humanYesAgentNo != 15")
+    if hv.get("disagreementCounts", {}).get("humanNoAgentYes") != 3:
+        report.error("human_validation: disagreementCounts.humanNoAgentYes != 3")
+    for c in dis:
+        for key in ("id", "human", "agent", "mechanism", "humanReason", "agentReason"):
+            if not c.get(key):
+                report.error(f"human_validation: 分歧 {c.get('id')} 缺少字段 {key}")
+        if c.get("human") not in ("yes", "no") or c.get("agent") not in ("yes", "no"):
+            report.error(f"human_validation: 分歧 {c.get('id')} 判定非二元")
+
+    # 结论方向：必须写明是辅助检查，且不得称人工一致性
+    emphasis = " ".join(hv.get("methodNotes", [])) + " " + str(agent.get("role", ""))
+    if "辅助可靠性检查" not in emphasis:
+        report.error("human_validation: 必须声明 agent 为辅助可靠性检查")
+    if "不是人工一致性" not in emphasis:
+        report.error("human_validation: 必须声明 agent 对照不是人工一致性")
+
+    # 脱敏
+    blob = json.dumps(hv, ensure_ascii=False)
+    for bad in HUMAN_VALIDATION_FORBIDDEN:
+        if bad in blob:
+            report.error(f"human_validation: 公开发布数据含内部标识 {bad!r}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", default="data/")
@@ -353,6 +429,15 @@ def main() -> int:
             check_training(report, training)
         except Exception as e:
             report.error(f"training.json: {e}")
+
+    hv_path = data_dir / "human_validation.json"
+    if hv_path.exists():
+        try:
+            check_human_validation(report, load_json(hv_path) or {})
+        except Exception as e:
+            report.error(f"human_validation.json: {e}")
+    else:
+        report.error("human_validation.json: 缺少人工盲复核聚合数据")
 
     # 输出
     print(f"\n=== 校验报告 ===")
