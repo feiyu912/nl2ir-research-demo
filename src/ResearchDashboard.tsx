@@ -90,6 +90,20 @@ function HumanValidation(){
         <div className="hv-arrow">↓ yes</div>
         <div className="hv-step hv-step-out"><span>✓</span><div><strong>Headline 阳性</strong><b>{h.positive} / {h.n} · {h.rate.toFixed(2)}%</b><i>任一层为 no 或 unsure 即为阴性</i></div></div>
       </div>
+      <div className="hv-table-scroll">
+        <table className="hv-table hv-agree-table">
+          <thead><tr><th>比较项</th><th>一致</th><th>一致率</th><th>Cohen's κ</th></tr></thead>
+          <tbody>
+            {hv.componentTable.rows.map(r=><tr key={r.key} className={`hv-row-${r.tone}`}>
+              <th scope="row">{r.label}{r.note&&<i>{r.note}</i>}</th>
+              <td>{r.agree} / {r.n}</td>
+              <td><strong>{r.rate.toFixed(2)}%</strong></td>
+              <td><span className="hv-kappa">{r.kappa.toFixed(3)}</span></td>
+            </tr>)}
+          </tbody>
+        </table>
+      </div>
+      <p className="chart-caption">中间层 {hv.componentTable.midLayer.disagree} 条判定不同：{hv.componentTable.midLayer.humanNoAgentYes} 条为人工 no / agent yes，{hv.componentTable.midLayer.humanYesAgentNo} 条为人工 yes / agent no；其中 {hv.componentTable.midLayer.sameHeadline} 条两边理由不同但最终同为 negative，不影响 headline。18 条 headline 分歧中 {hv.componentTable.disagreementOrigin.applicability} 条来自适用性层，{hv.componentTable.disagreementOrigin.violation} 条来自违反层。</p>
       <div className="interpretation"><span>为什么不能只报最终一致率</span><p>{hv.twoLayer.note}</p><p>{hv.twoLayer.rule}</p></div>
     </section>
 

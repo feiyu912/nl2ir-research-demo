@@ -56,10 +56,29 @@ FROZEN = {
     "headline_kappa": 0.772,
     "applicability_agree": 177,
     "applicability_rate": 79.73,
-    "applicability_kappa": 0.221,
+    # Recomputed from the frozen 222-row table. The manuscript's Table B2 printed
+    # 0.221 here and 0.777 on the violation row; neither reproduces. The violation
+    # row cannot differ from the headline row at all, because the two are the same
+    # binary decision on all 222 rows and therefore share one 2x2 table:
+    #     162 / 15 / 3 / 42  ->  po = 0.918919, pe = 0.644631, kappa = 0.7718
+    # Cohen's kappa is a function of that table alone, so a single table cannot
+    # yield both 0.772 and 0.777. Both values below are asserted, not copied.
+    "applicability_kappa": 0.203,
     "violation_agree": 204,
     "violation_rate": 91.89,
-    "violation_kappa": 0.777,
+    "violation_kappa": 0.772,
+    # Applicability-layer disagreement split, recomputed from the frozen table.
+    # 45 rows differ at this layer, in two directions: 33 are human=no /
+    # agent=yes and 12 are human=yes / agent=no. Of the 45, 30 still land on the
+    # same headline because both sides judge negative for different stated
+    # reasons; the remaining 15 (12 + 3) become headline disagreements.
+    "applicability_disagree": 45,
+    "mid_layer_same_headline": 30,
+    "mid_layer_human_yes_agent_no": 12,
+    "mid_layer_human_no_agent_yes": 33,
+    # Where the 18 headline disagreements originate.
+    "disagreement_from_applicability": 15,
+    "disagreement_from_violation": 3,
     "legacy_mrf_agree": 207,
     "legacy_mrf_rate": 93.24,
     "legacy_mrf_kappa": 0.786,
@@ -222,10 +241,31 @@ def main() -> int:
         check(a + b + cc + d == N_POPULATION, f"{kind} 2x2 合计 != 222")
         return a + d, kappa(a, b, cc, d)
 
-    app_agree, _app_kappa = agree2("rule")
-    vio_agree, _vio_kappa = agree2("violation")
+    app_agree, app_kappa = agree2("rule")
+    vio_agree, vio_kappa = agree2("violation")
     check(app_agree == FROZEN["applicability_agree"], f"applicability agree {app_agree} != 177")
     check(vio_agree == FROZEN["violation_agree"], f"violation agree {vio_agree} != 204")
+    check(app_kappa == FROZEN["applicability_kappa"], f"applicability kappa {app_kappa} != 0.203")
+    check(vio_kappa == FROZEN["violation_kappa"], f"violation kappa {vio_kappa} != 0.772")
+
+    # The violation layer is the same binary decision as the headline on every
+    # row, so both reduce to one 2x2 table and must yield one kappa. Asserting
+    # this makes the manuscript's 0.777 / 0.772 pairing unbuildable.
+    headline_pairs = [(binz(r["human_headline"]), binz(r["agent_headline"])) for r in rows]
+    violation_pairs = [(binz(r["human_violation"]), binz(r["agent_violation"])) for r in rows]
+    check(violation_pairs == headline_pairs, "违反层与 headline 层不是同一个判断")
+    check(vio_kappa == FROZEN["headline_kappa"], "同一张 2x2 表却得出不同的 kappa")
+    check(app_agree + FROZEN["applicability_disagree"] == N_POPULATION, "177 + 45 != 222")
+
+    # ---- mid-layer disagreement split --------------------------------------
+    mid = [r for r in rows if binz(r["human_rule"]) != binz(r["agent_rule"])]
+    check(len(mid) == FROZEN["applicability_disagree"], f"中间层分歧 {len(mid)} != 45")
+    check(sum(1 for r in mid if binz(r["human_headline"]) == binz(r["agent_headline"]))
+          == FROZEN["mid_layer_same_headline"], "中间层结论仍相同的 != 30")
+    check(sum(1 for r in mid if binz(r["human_rule"]) == "yes" and binz(r["agent_rule"]) == "no")
+          == FROZEN["mid_layer_human_yes_agent_no"], "中间层 human yes/agent no != 12")
+    check(sum(1 for r in mid if binz(r["human_rule"]) == "no" and binz(r["agent_rule"]) == "yes")
+          == FROZEN["mid_layer_human_no_agent_yes"], "中间层 human no/agent yes != 3")
 
     # ---- legacy comparison agreement ---------------------------------------
     def legacy_agree(col: str) -> int:
@@ -257,6 +297,17 @@ def main() -> int:
     check(d_hyn == FROZEN["disagreements"]["human_yes_agent_no"], f"human yes/agent no {d_hyn} != 15")
     check(d_nyy == FROZEN["disagreements"]["human_no_agent_yes"], f"human no/agent yes {d_nyy} != 3")
     check(d_hyn + d_nyy == 18, "15 + 3 != 18")
+
+    # Which layer each headline disagreement comes from.
+    from_app = sum(1 for r in dis if binz(r["human_rule"]) != binz(r["agent_rule"]))
+    from_vio = sum(1 for r in dis
+                   if binz(r["human_rule"]) == binz(r["agent_rule"])
+                   and binz(r["human_violation"]) != binz(r["agent_violation"]))
+    check(from_app == FROZEN["disagreement_from_applicability"],
+          f"来自适用性层的分歧 {from_app} != 15")
+    check(from_vio == FROZEN["disagreement_from_violation"],
+          f"来自违反层的分歧 {from_vio} != 3")
+    check(from_app + from_vio == 18, "分歧来源层合计 != 18")
 
     # cross-check: the disagreement file and the three-way file must agree
     head = {r["annotation_id"]: (r["human_headline"], r["agent_headline"]) for r in rows}
@@ -339,6 +390,49 @@ def main() -> int:
             "rule": "两个判断均为 yes 时，headline 才为阳性；unsure 按冻结规则计为阴性。",
             "note": "中间判断的分歧明显更多（规则适用性），而最终 headline 仍有较强一致；只报最终一致率会掩盖组件层面的差异。",
         },
+        "componentTable": {
+            "rows": [
+                {
+                    "key": "headline",
+                    "label": "最终 headline（两层都为 yes）",
+                    "agree": yy + nn,
+                    "n": N_POPULATION,
+                    "rate": FROZEN["headline_rate"],
+                    "kappa": FROZEN["headline_kappa"],
+                    "tone": "headline",
+                },
+                {
+                    "key": "violation",
+                    "label": "是否违反规则",
+                    "agree": vio_agree,
+                    "n": N_POPULATION,
+                    "rate": FROZEN["violation_rate"],
+                    "kappa": FROZEN["violation_kappa"],
+                    "tone": "same",
+                    "note": "与 headline 是同一个二元判断：222 行逐行相同，共用一张 2×2 表，因此 κ 必然相等。",
+                },
+                {
+                    "key": "applicability",
+                    "label": "规则是否明确且适用",
+                    "agree": app_agree,
+                    "n": N_POPULATION,
+                    "rate": FROZEN["applicability_rate"],
+                    "kappa": FROZEN["applicability_kappa"],
+                    "tone": "mid",
+                    "note": "中间层一致率明显更低，差异集中在“规则是否适用”这一步。",
+                },
+            ],
+            "midLayer": {
+                "disagree": FROZEN["applicability_disagree"],
+                "sameHeadline": FROZEN["mid_layer_same_headline"],
+                "humanYesAgentNo": FROZEN["mid_layer_human_yes_agent_no"],
+                "humanNoAgentYes": FROZEN["mid_layer_human_no_agent_yes"],
+            },
+            "disagreementOrigin": {
+                "applicability": FROZEN["disagreement_from_applicability"],
+                "violation": FROZEN["disagreement_from_violation"],
+            },
+        },
         "reconciliation": [
             {"key": "legacyM", "label": "旧详细归因 M 类", "yes": legacy_m, "rate": FROZEN["legacy_m_rate_of_population"],
              "scope": "较窄：只统计实质规则未执行", "binary": False, "tone": "legacyNarrow"},
@@ -375,6 +469,7 @@ def main() -> int:
             "人工复核者与最早封存的 agent 都在揭盲前独立完成“规则适用性 / 预测违反 / 置信度”三项判断。",
             "没有第二位人工标注者参与，因此这是 blinded human re-annotation，不是 human-human inter-annotator agreement。",
             "agent 对照使用最初封存的 222 行标注文件。后来一份第二遍替换文件被排除在一致性分析之外。",
+            "组件层 κ 按冻结的 222 行表复算。违反规则层与 headline 层在 222 行上是同一个判断，共用一张 2×2 表，κ 同为 0.772；规则适用性层为 0.203。",
         ],
         "sourceNote": "聚合数字来自冻结的复标注报告与论文 Table 2 / Table B2；逐题原始材料与内部标识不随网站发布。",
     }

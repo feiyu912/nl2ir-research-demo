@@ -47,13 +47,13 @@
       "n": 222,
       "agree": 177,
       "rate": 79.73,
-      "kappa": 0.221
+      "kappa": 0.203
     },
     "ruleViolation": {
       "n": 222,
       "agree": 204,
       "rate": 91.89,
-      "kappa": 0.777
+      "kappa": 0.772
     },
     "legacyMRF": {
       "n": 222,
@@ -81,17 +81,60 @@
         "key": "applicability",
         "label": "规则是否明确且适用？",
         "agreement": 79.73,
-        "kappa": 0.221
+        "kappa": 0.203
       },
       {
         "key": "violation",
         "label": "预测是否违反了该规则？",
         "agreement": 91.89,
-        "kappa": 0.777
+        "kappa": 0.772
       }
     ],
     "rule": "两个判断均为 yes 时，headline 才为阳性；unsure 按冻结规则计为阴性。",
     "note": "中间判断的分歧明显更多（规则适用性），而最终 headline 仍有较强一致；只报最终一致率会掩盖组件层面的差异。"
+  },
+  "componentTable": {
+    "rows": [
+      {
+        "key": "headline",
+        "label": "最终 headline（两层都为 yes）",
+        "agree": 204,
+        "n": 222,
+        "rate": 91.89,
+        "kappa": 0.772,
+        "tone": "headline"
+      },
+      {
+        "key": "violation",
+        "label": "是否违反规则",
+        "agree": 204,
+        "n": 222,
+        "rate": 91.89,
+        "kappa": 0.772,
+        "tone": "same",
+        "note": "与 headline 是同一个二元判断：222 行逐行相同，共用一张 2×2 表，因此 κ 必然相等。"
+      },
+      {
+        "key": "applicability",
+        "label": "规则是否明确且适用",
+        "agree": 177,
+        "n": 222,
+        "rate": 79.73,
+        "kappa": 0.203,
+        "tone": "mid",
+        "note": "中间层一致率明显更低，差异集中在“规则是否适用”这一步。"
+      }
+    ],
+    "midLayer": {
+      "disagree": 45,
+      "sameHeadline": 30,
+      "humanYesAgentNo": 12,
+      "humanNoAgentYes": 33
+    },
+    "disagreementOrigin": {
+      "applicability": 15,
+      "violation": 3
+    }
   },
   "reconciliation": [
     {
@@ -302,7 +345,8 @@
     "证据包只含匿名 ID、请求、相关的生成与参考 IR 片段、一个中性的结构差异说明，以及至多 5 条带位置的冻结契约条款；不含模型身份、seed、数据集名、旧标签、旧家族归属、agent 结论与裁决结果。",
     "人工复核者与最早封存的 agent 都在揭盲前独立完成“规则适用性 / 预测违反 / 置信度”三项判断。",
     "没有第二位人工标注者参与，因此这是 blinded human re-annotation，不是 human-human inter-annotator agreement。",
-    "agent 对照使用最初封存的 222 行标注文件。后来一份第二遍替换文件被排除在一致性分析之外。"
+    "agent 对照使用最初封存的 222 行标注文件。后来一份第二遍替换文件被排除在一致性分析之外。",
+    "组件层 κ 按冻结的 222 行表复算。违反规则层与 headline 层在 222 行上是同一个判断，共用一张 2×2 表，κ 同为 0.772；规则适用性层为 0.203。"
   ],
   "sourceNote": "聚合数字来自冻结的复标注报告与论文 Table 2 / Table B2；逐题原始材料与内部标识不随网站发布。"
 }

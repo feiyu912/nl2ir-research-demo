@@ -326,6 +326,38 @@ def check_human_validation(report: Report, hv: dict) -> None:
     if len(rec) != 4:
         report.error("human_validation: reconciliation 应为 4 项")
 
+    # 组件层：违反层与 headline 层在 222 行上是同一个判断，共用一张 2x2 表，
+    # 因此 κ 必须相等。这条断言让"同表不同 κ"无法被构建出来。
+    ct = hv.get("componentTable", {})
+    rows_ct = ct.get("rows", [])
+    if len(rows_ct) != 3:
+        report.error(f"human_validation: componentTable 应为 3 行，实际 {len(rows_ct)}")
+    byk = {r.get("key"): r for r in rows_ct}
+    if set(byk) != {"headline", "violation", "applicability"}:
+        report.error(f"human_validation: componentTable 行键异常 {sorted(byk)}")
+    else:
+        if byk["violation"].get("kappa") != byk["headline"].get("kappa"):
+            report.error("human_validation: 违反层与 headline 层共用一张 2x2 表，κ 必须相等")
+        for key, agree, kappa, rate in (
+            ("headline", 204, 0.772, 91.89),
+            ("violation", 204, 0.772, 91.89),
+            ("applicability", 177, 0.203, 79.73),
+        ):
+            r = byk[key]
+            if (r.get("agree"), r.get("kappa"), r.get("rate")) != (agree, kappa, rate):
+                report.error(
+                    f"human_validation: componentTable[{key}] 期望 "
+                    f"{agree}/{kappa}/{rate}，实际 {r.get('agree')}/{r.get('kappa')}/{r.get('rate')}"
+                )
+    ml = ct.get("midLayer", {})
+    if ml.get("humanNoAgentYes", 0) + ml.get("humanYesAgentNo", 0) != ml.get("disagree"):
+        report.error("human_validation: 中间层两个方向之和不等于分歧总数")
+    if (ml.get("disagree"), ml.get("sameHeadline")) != (45, 30):
+        report.error(f"human_validation: 中间层应为 45 分歧 / 30 结论相同，实际 {ml.get('disagree')}/{ml.get('sameHeadline')}")
+    do = ct.get("disagreementOrigin", {})
+    if do.get("applicability", 0) + do.get("violation", 0) != 18:
+        report.error("human_validation: 分歧来源层之和 != 18")
+
     dis = hv.get("disagreements", [])
     if len(dis) != 18:
         report.error(f"human_validation: 分歧条数 {len(dis)} != 18")
