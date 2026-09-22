@@ -97,22 +97,12 @@
     "rows": [
       {
         "key": "headline",
-        "label": "最终 headline（两层都为 yes）",
+        "label": "最终 headline（规则适用且被违反）",
         "agree": 204,
         "n": 222,
         "rate": 91.89,
         "kappa": 0.772,
         "tone": "headline"
-      },
-      {
-        "key": "violation",
-        "label": "是否违反规则",
-        "agree": 204,
-        "n": 222,
-        "rate": 91.89,
-        "kappa": 0.772,
-        "tone": "same",
-        "note": "与 headline 是同一个二元判断：222 行逐行相同，共用一张 2×2 表，因此 κ 必然相等。"
       },
       {
         "key": "applicability",
@@ -125,6 +115,14 @@
         "note": "中间层一致率明显更低，差异集中在“规则是否适用”这一步。"
       }
     ],
+    "omittedRow": {
+      "label": "是否违反规则",
+      "agree": 204,
+      "n": 222,
+      "rate": 91.89,
+      "kappa": 0.772,
+      "reason": "该列与 headline 是同一个二元判断：222 行逐行相同，共用一张 2×2 表，一致率与 κ 都与 headline 相同，因此不单独列出。"
+    },
     "midLayer": {
       "disagree": 45,
       "sameHeadline": 30,

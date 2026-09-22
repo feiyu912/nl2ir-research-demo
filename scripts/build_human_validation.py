@@ -391,25 +391,18 @@ def main() -> int:
             "note": "中间判断的分歧明显更多（规则适用性），而最终 headline 仍有较强一致；只报最终一致率会掩盖组件层面的差异。",
         },
         "componentTable": {
+            # 只列两个真正不同的层级。冻结数据里 legacy 的"是否违反规则"列与
+            # headline 在 222 行上逐行相同，单独成行会与 headline 行一字不差地
+            # 重复（同一张 2x2 表、同一个一致率、同一个 κ），因此不列出。
             "rows": [
                 {
                     "key": "headline",
-                    "label": "最终 headline（两层都为 yes）",
+                    "label": "最终 headline（规则适用且被违反）",
                     "agree": yy + nn,
                     "n": N_POPULATION,
                     "rate": FROZEN["headline_rate"],
                     "kappa": FROZEN["headline_kappa"],
                     "tone": "headline",
-                },
-                {
-                    "key": "violation",
-                    "label": "是否违反规则",
-                    "agree": vio_agree,
-                    "n": N_POPULATION,
-                    "rate": FROZEN["violation_rate"],
-                    "kappa": FROZEN["violation_kappa"],
-                    "tone": "same",
-                    "note": "与 headline 是同一个二元判断：222 行逐行相同，共用一张 2×2 表，因此 κ 必然相等。",
                 },
                 {
                     "key": "applicability",
@@ -422,6 +415,14 @@ def main() -> int:
                     "note": "中间层一致率明显更低，差异集中在“规则是否适用”这一步。",
                 },
             ],
+            "omittedRow": {
+                "label": "是否违反规则",
+                "agree": vio_agree,
+                "n": N_POPULATION,
+                "rate": FROZEN["violation_rate"],
+                "kappa": FROZEN["violation_kappa"],
+                "reason": "该列与 headline 是同一个二元判断：222 行逐行相同，共用一张 2×2 表，一致率与 κ 都与 headline 相同，因此不单独列出。",
+            },
             "midLayer": {
                 "disagree": FROZEN["applicability_disagree"],
                 "sameHeadline": FROZEN["mid_layer_same_headline"],

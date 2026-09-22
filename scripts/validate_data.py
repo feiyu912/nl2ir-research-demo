@@ -330,17 +330,14 @@ def check_human_validation(report: Report, hv: dict) -> None:
     # 因此 κ 必须相等。这条断言让"同表不同 κ"无法被构建出来。
     ct = hv.get("componentTable", {})
     rows_ct = ct.get("rows", [])
-    if len(rows_ct) != 3:
-        report.error(f"human_validation: componentTable 应为 3 行，实际 {len(rows_ct)}")
+    if len(rows_ct) != 2:
+        report.error(f"human_validation: componentTable 应只列 2 个不同层级，实际 {len(rows_ct)}")
     byk = {r.get("key"): r for r in rows_ct}
-    if set(byk) != {"headline", "violation", "applicability"}:
+    if set(byk) != {"headline", "applicability"}:
         report.error(f"human_validation: componentTable 行键异常 {sorted(byk)}")
     else:
-        if byk["violation"].get("kappa") != byk["headline"].get("kappa"):
-            report.error("human_validation: 违反层与 headline 层共用一张 2x2 表，κ 必须相等")
         for key, agree, kappa, rate in (
             ("headline", 204, 0.772, 91.89),
-            ("violation", 204, 0.772, 91.89),
             ("applicability", 177, 0.203, 79.73),
         ):
             r = byk[key]
@@ -349,6 +346,12 @@ def check_human_validation(report: Report, hv: dict) -> None:
                     f"human_validation: componentTable[{key}] 期望 "
                     f"{agree}/{kappa}/{rate}，实际 {r.get('agree')}/{r.get('kappa')}/{r.get('rate')}"
                 )
+    # 被省略的重复行必须确实与 headline 逐行相同，否则删掉它就丢了信息。
+    om = ct.get("omittedRow", {})
+    if (om.get("agree"), om.get("kappa"), om.get("rate")) != (204, 0.772, 91.89):
+        report.error(f"human_validation: 被省略的违反规则行应与 headline 一致，实际 {om.get('agree')}/{om.get('kappa')}/{om.get('rate')}")
+    if "逐行相同" not in str(om.get("reason", "")):
+        report.error("human_validation: 必须说明省略该行的理由")
     ml = ct.get("midLayer", {})
     if ml.get("humanNoAgentYes", 0) + ml.get("humanYesAgentNo", 0) != ml.get("disagree"):
         report.error("human_validation: 中间层两个方向之和不等于分歧总数")
