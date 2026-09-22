@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nl2ir-public-suite/schema.json",
+  "title": "Synthetic Public NL2IR",
+  "type": "object",
+  "required": ["where", "optional", "unsupported"],
+  "additionalProperties": false,
+  "properties": {
+    "where": {"$ref": "#/$defs/node"},
+    "optional": {"type": "array", "items": {"$ref": "#/$defs/node"}},
+    "unsupported": {"type": "array"}
+  },
+  "$defs": {
+    "node": {
+      "oneOf": [
+        {"type": "object", "required": ["and"], "additionalProperties": false, "properties": {"and": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/node"}}}},
+        {"type": "object", "required": ["or"], "additionalProperties": false, "properties": {"or": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/node"}}}},
+        {"type": "object", "required": ["not"], "additionalProperties": false, "properties": {"not": {"$ref": "#/$defs/node"}}},
+        {"type": "object", "required": ["field", "op", "value"], "additionalProperties": false,
+         "properties": {"field": {"type": "string"}, "op": {"type": "string"}, "value": {}}}
+      ]
+    }
+  }
+}

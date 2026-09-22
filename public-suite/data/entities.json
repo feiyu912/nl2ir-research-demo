@@ -1,0 +1,1090 @@
+[
+  {
+    "entity_id": "SYN-001",
+    "synthetic": true,
+    "city": "Northport",
+    "age": 22,
+    "degree": "bachelor",
+    "skills": [
+      "java",
+      "python"
+    ],
+    "languages": [
+      "english",
+      "german"
+    ],
+    "certificates": [
+      "cloud-a"
+    ],
+    "active": false,
+    "graduation_year": 2014,
+    "gap_months": 0,
+    "work_years": 0,
+    "company_history": [
+      {
+        "company": "Org-A",
+        "role": "engineer",
+        "months": 6
+      },
+      {
+        "company": "Org-C",
+        "role": "analyst",
+        "months": 4
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-002",
+    "synthetic": true,
+    "city": "Eastvale",
+    "age": 23,
+    "degree": "bachelor",
+    "skills": [
+      "kubernetes",
+      "sql"
+    ],
+    "languages": [
+      "german",
+      "japanese"
+    ],
+    "certificates": [
+      "data-b"
+    ],
+    "active": true,
+    "graduation_year": 2015,
+    "gap_months": 3,
+    "work_years": 1,
+    "company_history": [
+      {
+        "company": "Org-B",
+        "role": "analyst",
+        "months": 11
+      },
+      {
+        "company": "Org-D",
+        "role": "analyst",
+        "months": 11
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-003",
+    "synthetic": true,
+    "city": "Southbay",
+    "age": 24,
+    "degree": "master",
+    "skills": [
+      "java",
+      "tableau"
+    ],
+    "languages": [
+      "french",
+      "japanese"
+    ],
+    "certificates": [
+      "security-c"
+    ],
+    "active": true,
+    "graduation_year": 2016,
+    "gap_months": 6,
+    "work_years": 2,
+    "company_history": [
+      {
+        "company": "Org-C",
+        "role": "manager",
+        "months": 16
+      },
+      {
+        "company": "Org-E",
+        "role": "analyst",
+        "months": 18
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-004",
+    "synthetic": true,
+    "city": "Westhaven",
+    "age": 25,
+    "degree": "master",
+    "skills": [
+      "kubernetes",
+      "rust"
+    ],
+    "languages": [
+      "english",
+      "french"
+    ],
+    "certificates": [
+      "project-d"
+    ],
+    "active": false,
+    "graduation_year": 2017,
+    "gap_months": 9,
+    "work_years": 3,
+    "company_history": [
+      {
+        "company": "Org-D",
+        "role": "designer",
+        "months": 21
+      },
+      {
+        "company": "Org-A",
+        "role": "analyst",
+        "months": 25
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-005",
+    "synthetic": true,
+    "city": "Northport",
+    "age": 26,
+    "degree": "doctorate",
+    "skills": [
+      "python",
+      "tableau"
+    ],
+    "languages": [
+      "english",
+      "german"
+    ],
+    "certificates": [
+      "cloud-a"
+    ],
+    "active": true,
+    "graduation_year": 2018,
+    "gap_months": 12,
+    "work_years": 4,
+    "company_history": [
+      {
+        "company": "Org-E",
+        "role": "engineer",
+        "months": 26
+      },
+      {
+        "company": "Org-B",
+        "role": "engineer",
+        "months": 32
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-006",
+    "synthetic": true,
+    "city": "Eastvale",
+    "age": 27,
+    "degree": "doctorate",
+    "skills": [
+      "rust",
+      "sql"
+    ],
+    "languages": [
+      "german",
+      "japanese"
+    ],
+    "certificates": [
+      "data-b"
+    ],
+    "active": true,
+    "graduation_year": 2019,
+    "gap_months": 15,
+    "work_years": 5,
+    "company_history": [
+      {
+        "company": "Org-A",
+        "role": "analyst",
+        "months": 31
+      },
+      {
+        "company": "Org-C",
+        "role": "engineer",
+        "months": 39
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-007",
+    "synthetic": true,
+    "city": "Southbay",
+    "age": 28,
+    "degree": "associate",
+    "skills": [
+      "java",
+      "python"
+    ],
+    "languages": [
+      "french",
+      "japanese"
+    ],
+    "certificates": [
+      "security-c"
+    ],
+    "active": false,
+    "graduation_year": 2020,
+    "gap_months": 0,
+    "work_years": 6,
+    "company_history": [
+      {
+        "company": "Org-B",
+        "role": "manager",
+        "months": 36
+      },
+      {
+        "company": "Org-D",
+        "role": "engineer",
+        "months": 46
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-008",
+    "synthetic": true,
+    "city": "Westhaven",
+    "age": 29,
+    "degree": "associate",
+    "skills": [
+      "kubernetes",
+      "sql"
+    ],
+    "languages": [
+      "english",
+      "french"
+    ],
+    "certificates": [
+      "project-d"
+    ],
+    "active": true,
+    "graduation_year": 2021,
+    "gap_months": 3,
+    "work_years": 7,
+    "company_history": [
+      {
+        "company": "Org-C",
+        "role": "designer",
+        "months": 41
+      },
+      {
+        "company": "Org-E",
+        "role": "engineer",
+        "months": 4
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-009",
+    "synthetic": true,
+    "city": "Northport",
+    "age": 30,
+    "degree": "bachelor",
+    "skills": [
+      "java",
+      "tableau"
+    ],
+    "languages": [
+      "english",
+      "german"
+    ],
+    "certificates": [
+      "cloud-a"
+    ],
+    "active": true,
+    "graduation_year": 2022,
+    "gap_months": 6,
+    "work_years": 8,
+    "company_history": [
+      {
+        "company": "Org-D",
+        "role": "engineer",
+        "months": 46
+      },
+      {
+        "company": "Org-A",
+        "role": "designer",
+        "months": 11
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-010",
+    "synthetic": true,
+    "city": "Eastvale",
+    "age": 31,
+    "degree": "bachelor",
+    "skills": [
+      "kubernetes",
+      "rust"
+    ],
+    "languages": [
+      "german",
+      "japanese"
+    ],
+    "certificates": [
+      "data-b"
+    ],
+    "active": false,
+    "graduation_year": 2023,
+    "gap_months": 9,
+    "work_years": 9,
+    "company_history": [
+      {
+        "company": "Org-E",
+        "role": "analyst",
+        "months": 51
+      },
+      {
+        "company": "Org-B",
+        "role": "designer",
+        "months": 18
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-011",
+    "synthetic": true,
+    "city": "Southbay",
+    "age": 32,
+    "degree": "master",
+    "skills": [
+      "python",
+      "tableau"
+    ],
+    "languages": [
+      "french",
+      "japanese"
+    ],
+    "certificates": [
+      "security-c"
+    ],
+    "active": true,
+    "graduation_year": 2024,
+    "gap_months": 12,
+    "work_years": 10,
+    "company_history": [
+      {
+        "company": "Org-A",
+        "role": "manager",
+        "months": 56
+      },
+      {
+        "company": "Org-C",
+        "role": "designer",
+        "months": 25
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-012",
+    "synthetic": true,
+    "city": "Westhaven",
+    "age": 33,
+    "degree": "master",
+    "skills": [
+      "rust",
+      "sql"
+    ],
+    "languages": [
+      "english",
+      "french"
+    ],
+    "certificates": [
+      "project-d"
+    ],
+    "active": true,
+    "graduation_year": 2025,
+    "gap_months": 15,
+    "work_years": 11,
+    "company_history": [
+      {
+        "company": "Org-B",
+        "role": "designer",
+        "months": 6
+      },
+      {
+        "company": "Org-D",
+        "role": "designer",
+        "months": 32
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-013",
+    "synthetic": true,
+    "city": "Northport",
+    "age": 34,
+    "degree": "doctorate",
+    "skills": [
+      "java",
+      "python"
+    ],
+    "languages": [
+      "english",
+      "german"
+    ],
+    "certificates": [
+      "cloud-a"
+    ],
+    "active": false,
+    "graduation_year": 2026,
+    "gap_months": 0,
+    "work_years": 0,
+    "company_history": [
+      {
+        "company": "Org-C",
+        "role": "engineer",
+        "months": 11
+      },
+      {
+        "company": "Org-E",
+        "role": "manager",
+        "months": 39
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-014",
+    "synthetic": true,
+    "city": "Eastvale",
+    "age": 35,
+    "degree": "doctorate",
+    "skills": [
+      "kubernetes",
+      "sql"
+    ],
+    "languages": [
+      "german",
+      "japanese"
+    ],
+    "certificates": [
+      "data-b"
+    ],
+    "active": true,
+    "graduation_year": 2014,
+    "gap_months": 3,
+    "work_years": 1,
+    "company_history": [
+      {
+        "company": "Org-D",
+        "role": "analyst",
+        "months": 16
+      },
+      {
+        "company": "Org-A",
+        "role": "manager",
+        "months": 46
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-015",
+    "synthetic": true,
+    "city": "Southbay",
+    "age": 36,
+    "degree": "associate",
+    "skills": [
+      "java",
+      "tableau"
+    ],
+    "languages": [
+      "french",
+      "japanese"
+    ],
+    "certificates": [
+      "security-c"
+    ],
+    "active": true,
+    "graduation_year": 2015,
+    "gap_months": 6,
+    "work_years": 2,
+    "company_history": [
+      {
+        "company": "Org-E",
+        "role": "manager",
+        "months": 21
+      },
+      {
+        "company": "Org-B",
+        "role": "manager",
+        "months": 4
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-016",
+    "synthetic": true,
+    "city": "Westhaven",
+    "age": 37,
+    "degree": "associate",
+    "skills": [
+      "kubernetes",
+      "rust"
+    ],
+    "languages": [
+      "english",
+      "french"
+    ],
+    "certificates": [
+      "project-d"
+    ],
+    "active": false,
+    "graduation_year": 2016,
+    "gap_months": 9,
+    "work_years": 3,
+    "company_history": [
+      {
+        "company": "Org-A",
+        "role": "designer",
+        "months": 26
+      },
+      {
+        "company": "Org-C",
+        "role": "manager",
+        "months": 11
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-017",
+    "synthetic": true,
+    "city": "Northport",
+    "age": 38,
+    "degree": "bachelor",
+    "skills": [
+      "python",
+      "tableau"
+    ],
+    "languages": [
+      "english",
+      "german"
+    ],
+    "certificates": [
+      "cloud-a"
+    ],
+    "active": true,
+    "graduation_year": 2017,
+    "gap_months": 12,
+    "work_years": 4,
+    "company_history": [
+      {
+        "company": "Org-B",
+        "role": "engineer",
+        "months": 31
+      },
+      {
+        "company": "Org-D",
+        "role": "analyst",
+        "months": 18
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-018",
+    "synthetic": true,
+    "city": "Eastvale",
+    "age": 39,
+    "degree": "bachelor",
+    "skills": [
+      "rust",
+      "sql"
+    ],
+    "languages": [
+      "german",
+      "japanese"
+    ],
+    "certificates": [
+      "data-b"
+    ],
+    "active": true,
+    "graduation_year": 2018,
+    "gap_months": 15,
+    "work_years": 5,
+    "company_history": [
+      {
+        "company": "Org-C",
+        "role": "analyst",
+        "months": 36
+      },
+      {
+        "company": "Org-E",
+        "role": "analyst",
+        "months": 25
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-019",
+    "synthetic": true,
+    "city": "Southbay",
+    "age": 40,
+    "degree": "master",
+    "skills": [
+      "java",
+      "python"
+    ],
+    "languages": [
+      "french",
+      "japanese"
+    ],
+    "certificates": [
+      "security-c"
+    ],
+    "active": false,
+    "graduation_year": 2019,
+    "gap_months": 0,
+    "work_years": 6,
+    "company_history": [
+      {
+        "company": "Org-D",
+        "role": "manager",
+        "months": 41
+      },
+      {
+        "company": "Org-A",
+        "role": "analyst",
+        "months": 32
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-020",
+    "synthetic": true,
+    "city": "Westhaven",
+    "age": 41,
+    "degree": "master",
+    "skills": [
+      "kubernetes",
+      "sql"
+    ],
+    "languages": [
+      "english",
+      "french"
+    ],
+    "certificates": [
+      "project-d"
+    ],
+    "active": true,
+    "graduation_year": 2020,
+    "gap_months": 3,
+    "work_years": 7,
+    "company_history": [
+      {
+        "company": "Org-E",
+        "role": "designer",
+        "months": 46
+      },
+      {
+        "company": "Org-B",
+        "role": "analyst",
+        "months": 39
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-021",
+    "synthetic": true,
+    "city": "Northport",
+    "age": 42,
+    "degree": "doctorate",
+    "skills": [
+      "java",
+      "tableau"
+    ],
+    "languages": [
+      "english",
+      "german"
+    ],
+    "certificates": [
+      "cloud-a"
+    ],
+    "active": true,
+    "graduation_year": 2021,
+    "gap_months": 6,
+    "work_years": 8,
+    "company_history": [
+      {
+        "company": "Org-A",
+        "role": "engineer",
+        "months": 51
+      },
+      {
+        "company": "Org-C",
+        "role": "engineer",
+        "months": 46
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-022",
+    "synthetic": true,
+    "city": "Eastvale",
+    "age": 43,
+    "degree": "doctorate",
+    "skills": [
+      "kubernetes",
+      "rust"
+    ],
+    "languages": [
+      "german",
+      "japanese"
+    ],
+    "certificates": [
+      "data-b"
+    ],
+    "active": false,
+    "graduation_year": 2022,
+    "gap_months": 9,
+    "work_years": 9,
+    "company_history": [
+      {
+        "company": "Org-B",
+        "role": "analyst",
+        "months": 56
+      },
+      {
+        "company": "Org-D",
+        "role": "engineer",
+        "months": 4
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-023",
+    "synthetic": true,
+    "city": "Southbay",
+    "age": 44,
+    "degree": "associate",
+    "skills": [
+      "python",
+      "tableau"
+    ],
+    "languages": [
+      "french",
+      "japanese"
+    ],
+    "certificates": [
+      "security-c"
+    ],
+    "active": true,
+    "graduation_year": 2023,
+    "gap_months": 12,
+    "work_years": 10,
+    "company_history": [
+      {
+        "company": "Org-C",
+        "role": "manager",
+        "months": 6
+      },
+      {
+        "company": "Org-E",
+        "role": "engineer",
+        "months": 11
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-024",
+    "synthetic": true,
+    "city": "Westhaven",
+    "age": 45,
+    "degree": "associate",
+    "skills": [
+      "rust",
+      "sql"
+    ],
+    "languages": [
+      "english",
+      "french"
+    ],
+    "certificates": [
+      "project-d"
+    ],
+    "active": true,
+    "graduation_year": 2024,
+    "gap_months": 15,
+    "work_years": 11,
+    "company_history": [
+      {
+        "company": "Org-D",
+        "role": "designer",
+        "months": 11
+      },
+      {
+        "company": "Org-A",
+        "role": "engineer",
+        "months": 18
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-025",
+    "synthetic": true,
+    "city": "Northport",
+    "age": 46,
+    "degree": "bachelor",
+    "skills": [
+      "java",
+      "python"
+    ],
+    "languages": [
+      "english",
+      "german"
+    ],
+    "certificates": [
+      "cloud-a"
+    ],
+    "active": false,
+    "graduation_year": 2025,
+    "gap_months": 0,
+    "work_years": 0,
+    "company_history": [
+      {
+        "company": "Org-E",
+        "role": "engineer",
+        "months": 16
+      },
+      {
+        "company": "Org-B",
+        "role": "designer",
+        "months": 25
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-026",
+    "synthetic": true,
+    "city": "Eastvale",
+    "age": 47,
+    "degree": "bachelor",
+    "skills": [
+      "kubernetes",
+      "sql"
+    ],
+    "languages": [
+      "german",
+      "japanese"
+    ],
+    "certificates": [
+      "data-b"
+    ],
+    "active": true,
+    "graduation_year": 2026,
+    "gap_months": 3,
+    "work_years": 1,
+    "company_history": [
+      {
+        "company": "Org-A",
+        "role": "analyst",
+        "months": 21
+      },
+      {
+        "company": "Org-C",
+        "role": "designer",
+        "months": 32
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-027",
+    "synthetic": true,
+    "city": "Southbay",
+    "age": 48,
+    "degree": "master",
+    "skills": [
+      "java",
+      "tableau"
+    ],
+    "languages": [
+      "french",
+      "japanese"
+    ],
+    "certificates": [
+      "security-c"
+    ],
+    "active": true,
+    "graduation_year": 2014,
+    "gap_months": 6,
+    "work_years": 2,
+    "company_history": [
+      {
+        "company": "Org-B",
+        "role": "manager",
+        "months": 26
+      },
+      {
+        "company": "Org-D",
+        "role": "designer",
+        "months": 39
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-028",
+    "synthetic": true,
+    "city": "Westhaven",
+    "age": 49,
+    "degree": "master",
+    "skills": [
+      "kubernetes",
+      "rust"
+    ],
+    "languages": [
+      "english",
+      "french"
+    ],
+    "certificates": [
+      "project-d"
+    ],
+    "active": false,
+    "graduation_year": 2015,
+    "gap_months": 9,
+    "work_years": 3,
+    "company_history": [
+      {
+        "company": "Org-C",
+        "role": "designer",
+        "months": 31
+      },
+      {
+        "company": "Org-E",
+        "role": "designer",
+        "months": 46
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-029",
+    "synthetic": true,
+    "city": "Northport",
+    "age": 50,
+    "degree": "doctorate",
+    "skills": [
+      "python",
+      "tableau"
+    ],
+    "languages": [
+      "english",
+      "german"
+    ],
+    "certificates": [
+      "cloud-a"
+    ],
+    "active": true,
+    "graduation_year": 2016,
+    "gap_months": 12,
+    "work_years": 4,
+    "company_history": [
+      {
+        "company": "Org-D",
+        "role": "engineer",
+        "months": 36
+      },
+      {
+        "company": "Org-A",
+        "role": "manager",
+        "months": 4
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-030",
+    "synthetic": true,
+    "city": "Eastvale",
+    "age": 51,
+    "degree": "doctorate",
+    "skills": [
+      "rust",
+      "sql"
+    ],
+    "languages": [
+      "german",
+      "japanese"
+    ],
+    "certificates": [
+      "data-b"
+    ],
+    "active": true,
+    "graduation_year": 2017,
+    "gap_months": 15,
+    "work_years": 5,
+    "company_history": [
+      {
+        "company": "Org-E",
+        "role": "analyst",
+        "months": 41
+      },
+      {
+        "company": "Org-B",
+        "role": "manager",
+        "months": 11
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-031",
+    "synthetic": true,
+    "city": "Southbay",
+    "age": 52,
+    "degree": "associate",
+    "skills": [
+      "java",
+      "python"
+    ],
+    "languages": [
+      "french",
+      "japanese"
+    ],
+    "certificates": [
+      "security-c"
+    ],
+    "active": false,
+    "graduation_year": 2018,
+    "gap_months": 0,
+    "work_years": 6,
+    "company_history": [
+      {
+        "company": "Org-A",
+        "role": "manager",
+        "months": 46
+      },
+      {
+        "company": "Org-C",
+        "role": "manager",
+        "months": 18
+      }
+    ]
+  },
+  {
+    "entity_id": "SYN-032",
+    "synthetic": true,
+    "city": "Westhaven",
+    "age": 53,
+    "degree": "associate",
+    "skills": [
+      "kubernetes",
+      "sql"
+    ],
+    "languages": [
+      "english",
+      "french"
+    ],
+    "certificates": [
+      "project-d"
+    ],
+    "active": true,
+    "graduation_year": 2019,
+    "gap_months": 3,
+    "work_years": 7,
+    "company_history": [
+      {
+        "company": "Org-B",
+        "role": "designer",
+        "months": 51
+      },
+      {
+        "company": "Org-D",
+        "role": "manager",
+        "months": 25
+      }
+    ]
+  }
+]

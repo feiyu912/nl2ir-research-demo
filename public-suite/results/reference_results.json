@@ -1,0 +1,2401 @@
+{
+  "case_count": 150,
+  "positive_controls_passed": 150,
+  "mutations_caught": 150,
+  "rows": [
+    {
+      "case_id": "PUB-001",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-001"
+      ],
+      "direct_entity_ids": [
+        "SYN-001"
+      ],
+      "lowered_entity_ids": [
+        "SYN-001"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-002",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-002"
+      ],
+      "direct_entity_ids": [
+        "SYN-002"
+      ],
+      "lowered_entity_ids": [
+        "SYN-002"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-003",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-003"
+      ],
+      "direct_entity_ids": [
+        "SYN-003"
+      ],
+      "lowered_entity_ids": [
+        "SYN-003"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-004",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-004"
+      ],
+      "direct_entity_ids": [
+        "SYN-004"
+      ],
+      "lowered_entity_ids": [
+        "SYN-004"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-005",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-005"
+      ],
+      "direct_entity_ids": [
+        "SYN-005"
+      ],
+      "lowered_entity_ids": [
+        "SYN-005"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-006",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-006"
+      ],
+      "direct_entity_ids": [
+        "SYN-006"
+      ],
+      "lowered_entity_ids": [
+        "SYN-006"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-007",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-007"
+      ],
+      "direct_entity_ids": [
+        "SYN-007"
+      ],
+      "lowered_entity_ids": [
+        "SYN-007"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-008",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-008"
+      ],
+      "direct_entity_ids": [
+        "SYN-008"
+      ],
+      "lowered_entity_ids": [
+        "SYN-008"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-009",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-009"
+      ],
+      "direct_entity_ids": [
+        "SYN-009"
+      ],
+      "lowered_entity_ids": [
+        "SYN-009"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-010",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-010"
+      ],
+      "direct_entity_ids": [
+        "SYN-010"
+      ],
+      "lowered_entity_ids": [
+        "SYN-010"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-011",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-011"
+      ],
+      "direct_entity_ids": [
+        "SYN-011"
+      ],
+      "lowered_entity_ids": [
+        "SYN-011"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-012",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-012"
+      ],
+      "direct_entity_ids": [
+        "SYN-012"
+      ],
+      "lowered_entity_ids": [
+        "SYN-012"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-013",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-013"
+      ],
+      "direct_entity_ids": [
+        "SYN-013"
+      ],
+      "lowered_entity_ids": [
+        "SYN-013"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-014",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-014"
+      ],
+      "direct_entity_ids": [
+        "SYN-014"
+      ],
+      "lowered_entity_ids": [
+        "SYN-014"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-015",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-015"
+      ],
+      "direct_entity_ids": [
+        "SYN-015"
+      ],
+      "lowered_entity_ids": [
+        "SYN-015"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-016",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_entity_ids": [
+        "SYN-016"
+      ],
+      "lowered_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-017",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-017"
+      ],
+      "direct_entity_ids": [
+        "SYN-017"
+      ],
+      "lowered_entity_ids": [
+        "SYN-017"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-018",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_entity_ids": [
+        "SYN-018"
+      ],
+      "lowered_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-019",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_entity_ids": [
+        "SYN-019"
+      ],
+      "lowered_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-020",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_entity_ids": [
+        "SYN-020"
+      ],
+      "lowered_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-021",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_entity_ids": [
+        "SYN-021"
+      ],
+      "lowered_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-022",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_entity_ids": [
+        "SYN-022"
+      ],
+      "lowered_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-023",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_entity_ids": [
+        "SYN-023"
+      ],
+      "lowered_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-024",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_entity_ids": [
+        "SYN-024"
+      ],
+      "lowered_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-025",
+      "category": "boolean_negation",
+      "expected_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_entity_ids": [
+        "SYN-025"
+      ],
+      "lowered_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-026",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-004"
+      ],
+      "direct_entity_ids": [
+        "SYN-004"
+      ],
+      "lowered_entity_ids": [
+        "SYN-004"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-027",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-028",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-029",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-007"
+      ],
+      "direct_entity_ids": [
+        "SYN-007"
+      ],
+      "lowered_entity_ids": [
+        "SYN-007"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-030",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-031",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-032",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-010"
+      ],
+      "direct_entity_ids": [
+        "SYN-010"
+      ],
+      "lowered_entity_ids": [
+        "SYN-010"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-033",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-034",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-035",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-013"
+      ],
+      "direct_entity_ids": [
+        "SYN-013"
+      ],
+      "lowered_entity_ids": [
+        "SYN-013"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-036",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-037",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-038",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_entity_ids": [
+        "SYN-016"
+      ],
+      "lowered_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-039",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-040",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-041",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_entity_ids": [
+        "SYN-019"
+      ],
+      "lowered_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-042",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-043",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-044",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_entity_ids": [
+        "SYN-022"
+      ],
+      "lowered_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-045",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-046",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-047",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_entity_ids": [
+        "SYN-025"
+      ],
+      "lowered_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-048",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-049",
+      "category": "nested_same_object",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-050",
+      "category": "nested_same_object",
+      "expected_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_entity_ids": [
+        "SYN-028"
+      ],
+      "lowered_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-051",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-007"
+      ],
+      "direct_entity_ids": [
+        "SYN-007"
+      ],
+      "lowered_entity_ids": [
+        "SYN-007"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-052",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-008"
+      ],
+      "direct_entity_ids": [
+        "SYN-008"
+      ],
+      "lowered_entity_ids": [
+        "SYN-008"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-053",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-009"
+      ],
+      "direct_entity_ids": [
+        "SYN-009"
+      ],
+      "lowered_entity_ids": [
+        "SYN-009"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-054",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-010"
+      ],
+      "direct_entity_ids": [
+        "SYN-010"
+      ],
+      "lowered_entity_ids": [
+        "SYN-010"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-055",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-011"
+      ],
+      "direct_entity_ids": [
+        "SYN-011"
+      ],
+      "lowered_entity_ids": [
+        "SYN-011"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-056",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-012"
+      ],
+      "direct_entity_ids": [
+        "SYN-012"
+      ],
+      "lowered_entity_ids": [
+        "SYN-012"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-057",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-013"
+      ],
+      "direct_entity_ids": [
+        "SYN-013"
+      ],
+      "lowered_entity_ids": [
+        "SYN-013"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-058",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-014"
+      ],
+      "direct_entity_ids": [
+        "SYN-014"
+      ],
+      "lowered_entity_ids": [
+        "SYN-014"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-059",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-015"
+      ],
+      "direct_entity_ids": [
+        "SYN-015"
+      ],
+      "lowered_entity_ids": [
+        "SYN-015"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-060",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_entity_ids": [
+        "SYN-016"
+      ],
+      "lowered_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-061",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-017"
+      ],
+      "direct_entity_ids": [
+        "SYN-017"
+      ],
+      "lowered_entity_ids": [
+        "SYN-017"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-062",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_entity_ids": [
+        "SYN-018"
+      ],
+      "lowered_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-063",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_entity_ids": [
+        "SYN-019"
+      ],
+      "lowered_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-064",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_entity_ids": [
+        "SYN-020"
+      ],
+      "lowered_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-065",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_entity_ids": [
+        "SYN-021"
+      ],
+      "lowered_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-066",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_entity_ids": [
+        "SYN-022"
+      ],
+      "lowered_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-067",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_entity_ids": [
+        "SYN-023"
+      ],
+      "lowered_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-068",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_entity_ids": [
+        "SYN-024"
+      ],
+      "lowered_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-069",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_entity_ids": [
+        "SYN-025"
+      ],
+      "lowered_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-070",
+      "category": "numeric_date_ranges",
+      "expected_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_entity_ids": [
+        "SYN-026"
+      ],
+      "lowered_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-071",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-010"
+      ],
+      "direct_entity_ids": [
+        "SYN-010"
+      ],
+      "lowered_entity_ids": [
+        "SYN-010"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-072",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-073",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-012"
+      ],
+      "direct_entity_ids": [
+        "SYN-012"
+      ],
+      "lowered_entity_ids": [
+        "SYN-012"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-074",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-075",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-014"
+      ],
+      "direct_entity_ids": [
+        "SYN-014"
+      ],
+      "lowered_entity_ids": [
+        "SYN-014"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-076",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-077",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_entity_ids": [
+        "SYN-016"
+      ],
+      "lowered_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-078",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-079",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_entity_ids": [
+        "SYN-018"
+      ],
+      "lowered_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-080",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-081",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_entity_ids": [
+        "SYN-020"
+      ],
+      "lowered_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-082",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-083",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_entity_ids": [
+        "SYN-022"
+      ],
+      "lowered_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-084",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-085",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_entity_ids": [
+        "SYN-024"
+      ],
+      "lowered_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-086",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-087",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_entity_ids": [
+        "SYN-026"
+      ],
+      "lowered_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-088",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-089",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_entity_ids": [
+        "SYN-028"
+      ],
+      "lowered_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-090",
+      "category": "multivalue_all_any",
+      "expected_entity_ids": [],
+      "direct_entity_ids": [],
+      "lowered_entity_ids": [],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-091",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-013"
+      ],
+      "direct_entity_ids": [
+        "SYN-013"
+      ],
+      "lowered_entity_ids": [
+        "SYN-013"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-092",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-014"
+      ],
+      "direct_entity_ids": [
+        "SYN-014"
+      ],
+      "lowered_entity_ids": [
+        "SYN-014"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-093",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-015"
+      ],
+      "direct_entity_ids": [
+        "SYN-015"
+      ],
+      "lowered_entity_ids": [
+        "SYN-015"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-094",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_entity_ids": [
+        "SYN-016"
+      ],
+      "lowered_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-095",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-017"
+      ],
+      "direct_entity_ids": [
+        "SYN-017"
+      ],
+      "lowered_entity_ids": [
+        "SYN-017"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-096",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_entity_ids": [
+        "SYN-018"
+      ],
+      "lowered_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-097",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_entity_ids": [
+        "SYN-019"
+      ],
+      "lowered_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-098",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_entity_ids": [
+        "SYN-020"
+      ],
+      "lowered_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-099",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_entity_ids": [
+        "SYN-021"
+      ],
+      "lowered_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-100",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_entity_ids": [
+        "SYN-022"
+      ],
+      "lowered_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-101",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_entity_ids": [
+        "SYN-023"
+      ],
+      "lowered_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-102",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_entity_ids": [
+        "SYN-024"
+      ],
+      "lowered_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-103",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_entity_ids": [
+        "SYN-025"
+      ],
+      "lowered_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-104",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_entity_ids": [
+        "SYN-026"
+      ],
+      "lowered_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-105",
+      "category": "equality_canonicalization",
+      "expected_entity_ids": [
+        "SYN-027"
+      ],
+      "direct_entity_ids": [
+        "SYN-027"
+      ],
+      "lowered_entity_ids": [
+        "SYN-027"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-106",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_entity_ids": [
+        "SYN-016"
+      ],
+      "lowered_entity_ids": [
+        "SYN-016"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-107",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-017"
+      ],
+      "direct_entity_ids": [
+        "SYN-017"
+      ],
+      "lowered_entity_ids": [
+        "SYN-017"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-108",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_entity_ids": [
+        "SYN-018"
+      ],
+      "lowered_entity_ids": [
+        "SYN-018"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-109",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_entity_ids": [
+        "SYN-019"
+      ],
+      "lowered_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-110",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_entity_ids": [
+        "SYN-020"
+      ],
+      "lowered_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-111",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_entity_ids": [
+        "SYN-021"
+      ],
+      "lowered_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-112",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_entity_ids": [
+        "SYN-022"
+      ],
+      "lowered_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-113",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_entity_ids": [
+        "SYN-023"
+      ],
+      "lowered_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-114",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_entity_ids": [
+        "SYN-024"
+      ],
+      "lowered_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-115",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_entity_ids": [
+        "SYN-025"
+      ],
+      "lowered_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-116",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_entity_ids": [
+        "SYN-026"
+      ],
+      "lowered_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-117",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-027"
+      ],
+      "direct_entity_ids": [
+        "SYN-027"
+      ],
+      "lowered_entity_ids": [
+        "SYN-027"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-118",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_entity_ids": [
+        "SYN-028"
+      ],
+      "lowered_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-119",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-029"
+      ],
+      "direct_entity_ids": [
+        "SYN-029"
+      ],
+      "lowered_entity_ids": [
+        "SYN-029"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-120",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-030"
+      ],
+      "direct_entity_ids": [
+        "SYN-030"
+      ],
+      "lowered_entity_ids": [
+        "SYN-030"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-121",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-031"
+      ],
+      "direct_entity_ids": [
+        "SYN-031"
+      ],
+      "lowered_entity_ids": [
+        "SYN-031"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-122",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-032"
+      ],
+      "direct_entity_ids": [
+        "SYN-032"
+      ],
+      "lowered_entity_ids": [
+        "SYN-032"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-123",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-001"
+      ],
+      "direct_entity_ids": [
+        "SYN-001"
+      ],
+      "lowered_entity_ids": [
+        "SYN-001"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-124",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-002"
+      ],
+      "direct_entity_ids": [
+        "SYN-002"
+      ],
+      "lowered_entity_ids": [
+        "SYN-002"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-125",
+      "category": "normalization_aliases",
+      "expected_entity_ids": [
+        "SYN-003"
+      ],
+      "direct_entity_ids": [
+        "SYN-003"
+      ],
+      "lowered_entity_ids": [
+        "SYN-003"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-126",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_entity_ids": [
+        "SYN-019"
+      ],
+      "lowered_entity_ids": [
+        "SYN-019"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-127",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_entity_ids": [
+        "SYN-020"
+      ],
+      "lowered_entity_ids": [
+        "SYN-020"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-128",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_entity_ids": [
+        "SYN-021"
+      ],
+      "lowered_entity_ids": [
+        "SYN-021"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-129",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_entity_ids": [
+        "SYN-022"
+      ],
+      "lowered_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-130",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_entity_ids": [
+        "SYN-023"
+      ],
+      "lowered_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-131",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_entity_ids": [
+        "SYN-024"
+      ],
+      "lowered_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-132",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_entity_ids": [
+        "SYN-025"
+      ],
+      "lowered_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-133",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_entity_ids": [
+        "SYN-026"
+      ],
+      "lowered_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-134",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-027"
+      ],
+      "direct_entity_ids": [
+        "SYN-027"
+      ],
+      "lowered_entity_ids": [
+        "SYN-027"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-135",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_entity_ids": [
+        "SYN-028"
+      ],
+      "lowered_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-136",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-029"
+      ],
+      "direct_entity_ids": [
+        "SYN-029"
+      ],
+      "lowered_entity_ids": [
+        "SYN-029"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-137",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-030"
+      ],
+      "direct_entity_ids": [
+        "SYN-030"
+      ],
+      "lowered_entity_ids": [
+        "SYN-030"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-138",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-031"
+      ],
+      "direct_entity_ids": [
+        "SYN-031"
+      ],
+      "lowered_entity_ids": [
+        "SYN-031"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-139",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-032"
+      ],
+      "direct_entity_ids": [
+        "SYN-032"
+      ],
+      "lowered_entity_ids": [
+        "SYN-032"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-140",
+      "category": "cross_field_conflicts",
+      "expected_entity_ids": [
+        "SYN-001"
+      ],
+      "direct_entity_ids": [
+        "SYN-001"
+      ],
+      "lowered_entity_ids": [
+        "SYN-001"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-141",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_entity_ids": [
+        "SYN-022"
+      ],
+      "lowered_entity_ids": [
+        "SYN-022"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-142",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_entity_ids": [
+        "SYN-023"
+      ],
+      "lowered_entity_ids": [
+        "SYN-023"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-143",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_entity_ids": [
+        "SYN-024"
+      ],
+      "lowered_entity_ids": [
+        "SYN-024"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-144",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_entity_ids": [
+        "SYN-025"
+      ],
+      "lowered_entity_ids": [
+        "SYN-025"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-145",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_entity_ids": [
+        "SYN-026"
+      ],
+      "lowered_entity_ids": [
+        "SYN-026"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-146",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-027"
+      ],
+      "direct_entity_ids": [
+        "SYN-027"
+      ],
+      "lowered_entity_ids": [
+        "SYN-027"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-147",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_entity_ids": [
+        "SYN-028"
+      ],
+      "lowered_entity_ids": [
+        "SYN-028"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-148",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-029"
+      ],
+      "direct_entity_ids": [
+        "SYN-029"
+      ],
+      "lowered_entity_ids": [
+        "SYN-029"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-149",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-030"
+      ],
+      "direct_entity_ids": [
+        "SYN-030"
+      ],
+      "lowered_entity_ids": [
+        "SYN-030"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    },
+    {
+      "case_id": "PUB-150",
+      "category": "invalid_schema_only",
+      "expected_entity_ids": [
+        "SYN-031"
+      ],
+      "direct_entity_ids": [
+        "SYN-031"
+      ],
+      "lowered_entity_ids": [
+        "SYN-031"
+      ],
+      "direct_matches_oracle": true,
+      "lowered_matches_oracle": true,
+      "positive_control_passed": true,
+      "mutation_caught": true
+    }
+  ]
+}
