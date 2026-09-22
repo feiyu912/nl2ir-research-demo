@@ -26,16 +26,16 @@ function HumanValidation(){
 
     <div className="hv-cards">
       <article className="hv-card hv-card-human">
-        <span>人工确认：存在明确且适用的规则被违反</span>
+        <span>人工确认存在违反 · Human-confirmed violations</span>
         <strong>{h.positive}<small> / {h.n}</small></strong>
         <b>{h.rate.toFixed(2)}%</b>
         <p>95% Wilson CI {h.wilson95[0].toFixed(2)}–{h.wilson95[1].toFixed(2)} · 精确 Clopper–Pearson CI {h.cp95[0].toFixed(2)}–{h.cp95[1].toFixed(2)}<br/>{h.unsureComponentLevel} 条组件级 unsure 按冻结规则计为阴性；排除后敏感性结果为 {h.sensitivity.positive}/{h.sensitivity.n} = {h.sensitivity.rate.toFixed(2)}%。</p>
       </article>
       <article className="hv-card hv-card-agent">
-        <span>人工与最早封存 agent 的 headline 一致</span>
+        <span>人工与 agent 一致 · Human–agent agreement</span>
         <strong>{agr.headline.agree}<small> / {agr.headline.n}</small></strong>
         <b>{agr.headline.rate.toFixed(2)}%</b>
-        <p>agent 阳性 {ag.positive}/{ag.n}（{ag.rate.toFixed(2)}%）。agent 仅作<strong>辅助可靠性检查</strong>，不是人工一致性，也不构成第二个标注者。</p>
+        <p>agent 阳性 {ag.positive}/{ag.n}（{ag.rate.toFixed(2)}%）。agent 仅作<strong>辅助可靠性检查</strong>（auxiliary reliability check），不是人工一致性，也不构成第二个标注者。</p>
       </article>
       <article className="hv-card hv-card-kappa">
         <span>Chance-corrected agreement</span>
