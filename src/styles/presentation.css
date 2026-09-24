@@ -167,3 +167,6 @@ html,body{margin:0;padding:0}button:focus-visible,a:focus-visible,summary:focus-
 .hv-kappa{display:inline-block;font-variant-numeric:tabular-nums;font-weight:600;color:#335cff;background:#eef3ff;border-radius:5px;padding:2px 8px}
 .hv-row-mid .hv-kappa{color:#a9603a;background:#fdf1ea}
 .hv-row-mid td strong{color:#a9603a}
+.api-dataset-comparison{margin-top:30px;padding-top:24px;border-top:1px solid #e9edf5}
+.api-dataset-comparison h3{font-size:14px;font-weight:650;color:#304665;margin:0 0 8px}
+.api-dataset-comparison .chart-caption{margin:8px 0 14px}

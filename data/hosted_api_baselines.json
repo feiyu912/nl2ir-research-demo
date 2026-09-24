@@ -101,15 +101,18 @@
       "slices": {
         "old366": {
           "n": 366,
-          "where": 95.63
+          "where": 95.63,
+          "whereCorrect": 350
         },
         "c300": {
           "n": 300,
-          "where": 91.67
+          "where": 91.67,
+          "whereCorrect": 275
         },
         "blindV6": {
           "n": 240,
-          "where": 95.42
+          "where": 95.42,
+          "whereCorrect": 229
         },
         "stress96": {
           "n": 96,
@@ -185,15 +188,18 @@
       "slices": {
         "old366": {
           "n": 366,
-          "where": 90.98
+          "where": 90.98,
+          "whereCorrect": 333
         },
         "c300": {
           "n": 300,
-          "where": 89.0
+          "where": 89.0,
+          "whereCorrect": 267
         },
         "blindV6": {
           "n": 240,
-          "where": 88.33
+          "where": 88.33,
+          "whereCorrect": 212
         },
         "stress96": {
           "n": 96,
@@ -271,15 +277,18 @@
       "slices": {
         "old366": {
           "n": 366,
-          "where": 87.43
+          "where": 87.43,
+          "whereCorrect": 320
         },
         "c300": {
           "n": 300,
-          "where": 80.0
+          "where": 80.0,
+          "whereCorrect": 240
         },
         "blindV6": {
           "n": 240,
-          "where": 92.08
+          "where": 92.08,
+          "whereCorrect": 221
         },
         "stress96": {
           "n": 96,

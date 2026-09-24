@@ -301,6 +301,16 @@
           "status": "事实",
           "source": "candidate_v4 blind_v5_diagnostic",
           "note": "v21/v7 在 blind-v5 reveal 后开发，post-hoc 不是 untouched"
+        },
+        {
+          "label": "DeepSeek Jev 式逐项校验 → Qwen 离线复查",
+          "model": "Qwen3.7-Max 生成/复查 + DeepSeek V4.1 Flash 校验",
+          "prompt": "现有 NL2IR prompt；DS atomic 逐项判断；Qwen 按错误类型通用提示复查",
+          "dataset": "200 条自然查询；compact-v3 旧参考 IR",
+          "metric": "Where 与语义向量路由同时符合旧参考：147/200 (73.5%) → 149/200 (74.5%)，净 +2/200 (+1.0 个百分点)；修好 3、误伤 1；50/200 触发复查",
+          "status": "事实（离线诊断）",
+          "source": "semantic-search-service 本地 DS atomic → Qwen 修复实验汇总（2026-09-24）",
+          "note": "只测旧参考 IR 的 Where 与向量字段集合，不是完整 IR 或检索准确率；旧参考未见人工复核，且 6 条不符当前 schema。未做同预算 Qwen 自检对照，不能单独归因给 DS；实际 Jev API 未调用，未接入线上。"
         }
       ]
     },

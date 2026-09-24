@@ -188,6 +188,18 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         den = sum((sl.get(k) or {}).get("n", 0) for k in ("old366", "c300", "blindV6"))
         if den and abs(num / den - m["combinedWhere"]) > 0.02:
             report.error(f"hosted_api_baselines combined 与三切片不一致: {mid}")
+        slice_correct = 0
+        for key in ("old366", "c300", "blindV6"):
+            part = sl.get(key) or {}
+            correct, n = part.get("whereCorrect"), part.get("n")
+            if not isinstance(correct, int) or not isinstance(n, int) or not 0 <= correct <= n:
+                report.error(f"hosted_api_baselines {mid}.{key} 缺有效 whereCorrect/n")
+                continue
+            slice_correct += correct
+            if abs(round(correct / n * 100, 2) - part.get("where", -1)) > 0.005:
+                report.error(f"hosted_api_baselines {mid}.{key} where 与正确数不符")
+        if slice_correct != m.get("combinedWhereCorrect"):
+            report.error(f"hosted_api_baselines {mid} 分片正确数与总数不符")
         stress = sl.get("stress96") or {}
         if stress.get("n") != 96:
             report.error(f"hosted_api_baselines stress96 n 不符: {mid}")

@@ -174,9 +174,9 @@ type HostedApiBaselines = {
     combinedWhere: number;             // 百分数，如 94.26
     combinedWhereCorrect: number;
     slices: {
-      old366: {n: number; where: number};
-      c300: {n: number; where: number};
-      blindV6: {n: number; where: number};
+      old366: {n: number; where: number; whereCorrect: number};
+      c300: {n: number; where: number; whereCorrect: number};
+      blindV6: {n: number; where: number; whereCorrect: number};
       stress96: {n: 96; where: number; note: string};   // blind-v6 子集，不重复计入 combined
     };
     hardF1: number;
