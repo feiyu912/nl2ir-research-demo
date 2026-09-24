@@ -188,22 +188,31 @@ function ApiRiskChart(){const rows=hostedApi.models.map(m=>({name:shortModel(m.m
 function ApiLatencyChart(){const rows=hostedApi.models.map(m=>({name:shortModel(m.modelId),p50:m.latency.p50,p95:m.latency.p95}));return <div className="api-chart api-risk-chart"><ResponsiveContainer width="100%" height="100%"><BarChart data={rows} layout="vertical" margin={{top:8,right:30,bottom:8,left:0}} barSize={12}><CartesianGrid stroke="#edf1f7" horizontal={false}/><XAxis type="number" tickFormatter={v=>`${v}s`} axisLine={false} tickLine={false} tick={{fill:'#8792a8',fontSize:10}}/><YAxis type="category" dataKey="name" width={125} axisLine={false} tickLine={false} tick={{fill:'#42516b',fontSize:11}}/><Tooltip formatter={(v:number)=>[`${f2(v)}s`]}/><Legend iconType="circle" iconSize={7} wrapperStyle={{fontSize:11,color:'#6d7d94'}}/><Bar name="P50" dataKey="p50" fill="#335cff" radius={[0,4,4,0]} isAnimationActive={false}/><Bar name="P95" dataKey="p95" fill="#aab8d2" radius={[0,4,4,0]} isAnimationActive={false}/></BarChart></ResponsiveContainer></div>}
 function ApiStabilitySection() {
   const study = apiStability;
+  const qwen = study.models.find(model => model.modelId === 'qwen3.7-max')!;
+  const deepseek = study.models.find(model => model.modelId === 'deepseek-v4.1-flash')!;
+  const deepseekLow = Math.min(...deepseek.whereCorrectPerRepeat);
+  const deepseekHigh = Math.max(...deepseek.whereCorrectPerRepeat);
   return <section className="panel api-section" id="api-stability">
-    <Title tag="新增 · API 侧重复推理" title="同一输入重复三次，Where 判对判错仍会翻转" text={`${study.models.length} 个模型 × ${study.sampleItems} 条偏难查询 × ${study.repeats} 次；${study.completedCalls}/${study.totalCalls} 次请求完成`}/>
+    <Title tag="API 侧重复推理" title="同一道题问三次，答案可能从对变错" text={`${study.models.length} 个模型 × ${study.sampleItems} 条偏难查询 × ${study.repeats} 次；${study.completedCalls}/${study.totalCalls} 次请求返回（部分输出有格式问题）`}/>
+    <div className="api-stability-highlights">
+      <article><span>先看关键数字</span><strong>{qwen.flipCount}/{study.sampleItems} 题</strong><p>Qwen 3.7 Max 有这些题在三次调用中既判对过、也判错过。它不是“只做错了 {qwen.flipCount} 题”。</p></article>
+      <article><span>多数是内容真的变了</span><strong>{study.flipPairs.leafLevelDifference}/{study.flipPairs.total}</strong><p>所有模型的翻转合计中，这些涉及字段、算子或取值变化；不只是回答换了个说法。</p></article>
+      <article><span>单次分数会波动</span><strong>{deepseekLow} → {deepseekHigh} 题</strong><p>DeepSeek 在同一批 {study.sampleItems} 题上，三次分别答对 {deepseek.whereCorrectPerRepeat.join('、')} 题。</p></article>
+    </div>
     <div className="api-table-scroll"><table className="api-table">
-      <thead><tr><th>模型</th><th>逐字一致</th><th>规范化 IR 一致</th><th>Where 对错翻转</th><th>Wilson 95% 区间</th><th>三次 Where 正确率</th></tr></thead>
+      <thead><tr><th>模型</th><th>同题三次有时对、有时错</th><th>三次各答对几题（每次 {study.sampleItems} 题）</th></tr></thead>
       <tbody>{study.models.map(model=><tr key={model.modelId}>
         <th scope="row">{model.modelId}</th>
-        <td>{model.literalConsistencyPct.toFixed(0)}%</td>
-        <td>{model.normalizedIrConsistencyPct.toFixed(0)}%</td>
         <td className="api-strong">{model.flipCount}/{study.sampleItems}（{(100*model.flipCount/study.sampleItems).toFixed(0)}%）</td>
-        <td>[{model.flipWilson95Pct[0].toFixed(2)}%, {model.flipWilson95Pct[1].toFixed(2)}%]</td>
-        <td>{model.whereCorrectPerRepeat.map(n=>`${(100*n/study.sampleItems).toFixed(0)}%`).join(' / ')}</td>
+        <td>{model.whereCorrectPerRepeat.join(' / ')}</td>
       </tr>)}</tbody>
     </table></div>
-    <p className="chart-caption">翻转指同一题三次中至少一次判对、至少一次判错，每次均独立用冻结 scorer 评分。区间标为 Wilson：原报告的 CP 字段在缺少 SciPy 时回退为 Wilson。qwen3.8-max 仅参加本次稳定性实验，未进入上方 906 题三模型质量与成本比较。</p>
-    <div className="api-callout"><strong>格式可用，不代表语义稳定</strong><span>28 个模型-题翻转中，24 个涉及字段、算子或取值等叶子级差异，4 个属于极性编码写法差异。temperature=0 仍观察到实质解析变化。</span></div>
-    <details className="api-detail"><summary>协议、格式异常与适用边界 <span>＋</span></summary>
+    <p className="chart-caption"><strong>怎么读：</strong>“{qwen.flipCount}/{study.sampleItems} 翻转”指 {study.sampleItems} 题里有 {qwen.flipCount} 题三次中既对又错；它不是错误率，也不是线上故障率。“{qwen.whereCorrectPerRepeat.join(' / ')}”则是三次各自答对的题数。四个模型都出现了翻转，temperature=0 也不能保证每次解析相同。</p>
+    <p className="chart-caption">这些数字来自刻意偏难的 {study.sampleItems} 题，只能说明 API 重复调用会波动；不能拿它给四个模型做严格稳定性排名，更不能判断 API 与本地小模型谁更稳。</p>
+    <details className="api-detail"><summary>展开一致率、统计区间、格式异常与实验边界 <span>＋</span></summary>
+      <p className="chart-caption">逐字一致＝三次原始文本完全相同；规范化 IR 一致＝去掉表示差异后三次解析结果相同。两者都不是正确率。Wilson 95% 区间表示仅抽 {study.sampleItems} 题时，翻转比例估计的不确定范围；原报告的 CP 字段因缺少 SciPy 回退为 Wilson。</p>
+      <div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>逐字一致</th><th>规范化 IR 一致</th><th>Where 翻转率 Wilson 95% 区间</th></tr></thead><tbody>{study.models.map(model=><tr key={model.modelId}><th scope="row">{model.modelId}</th><td>{model.literalConsistencyPct.toFixed(0)}%</td><td>{model.normalizedIrConsistencyPct.toFixed(0)}%</td><td>[{model.flipWilson95Pct[0].toFixed(2)}%, {model.flipWilson95Pct[1].toFixed(2)}%]</td></tr>)}</tbody></table></div>
+      <p className="chart-caption">全部 {study.flipPairs.total} 个模型-题翻转中，{study.flipPairs.leafLevelDifference} 个有字段、算子或取值等叶子级差异，{study.flipPairs.polarityEncodingDifference} 个属于极性编码写法差异。qwen3.8-max 仅参加本次稳定性实验，未进入上方 906 题三模型质量与成本比较。</p>
       <p className="chart-caption">冻结 v21 prompt、json_object、temperature 0、直调 DashScope 端点。50 题按旧实验的联合错误族分层，20 个族，仅 17 题属于两模型原实验都做对的族；偏难采样的翻转率不能作为完整 906 题或线上流量故障率。</p>
       <div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>至少一次非严格 JSON</th><th>至少一次 Schema 失败</th><th>至少一次截断</th></tr></thead><tbody>{study.models.map(model=><tr key={model.modelId}><th scope="row">{model.modelId}</th><td>{model.nonStrictJsonItems}/{study.sampleItems}</td><td>{model.schemaFailItems}/{study.sampleItems}</td><td>{model.truncatedItems}/{study.sampleItems}</td></tr>)}</tbody></table></div>
       <p className="chart-caption">600 次请求均完成，但仍有格式或截断异常。只测 API 直调；生产 AI 网关、并发压力和本地小模型同配置重复推理未测，因此不能判断 API 与小模型谁更稳。每模型仅三次重复，区间较宽；模型间运行窗口不同，也不把翻转率差异当作严格排名。</p>
