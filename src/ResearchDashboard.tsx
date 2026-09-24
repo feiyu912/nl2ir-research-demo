@@ -84,27 +84,28 @@ function HumanValidation(){
     <section className="panel hv-layer">
       <Title tag="两层判断 · 结构" title="只有两层都为 yes，headline 才为阳性" text="中间判断的分歧远多于最终判断"/>
       <div className="hv-flow">
-        <div className="hv-step"><span>1</span><div><strong>规则是否明确且适用？</strong><b>{agr.ruleApplicability.rate.toFixed(2)}% · κ={agr.ruleApplicability.kappa.toFixed(3)}</b><i>{agr.ruleApplicability.agree} / {agr.ruleApplicability.n} 一致</i></div></div>
+        <div className="hv-step"><span>1</span><div><strong>规则是否明确且适用？</strong><b>{agr.ruleApplicability.rate.toFixed(2)}% · κ={agr.ruleApplicability.kappa.toFixed(3)}</b><i>{agr.ruleApplicability.agree} / {agr.ruleApplicability.n} 一致 · 原始三分类</i></div></div>
         <div className="hv-arrow">↓ yes</div>
-        <div className="hv-step"><span>2</span><div><strong>预测是否违反了该规则？</strong><b>与 headline 合为一个层级</b><i>{hv.componentTable.omittedRow.reason}</i></div></div>
+        <div className="hv-step"><span>2</span><div><strong>预测是否违反了该规则？</strong><b>{agr.ruleViolation.rate.toFixed(2)}% · κ={agr.ruleViolation.kappa.toFixed(3)}</b><i>{agr.ruleViolation.agree} / {agr.ruleViolation.n} 一致 · 原始三分类</i></div></div>
         <div className="hv-arrow">↓ yes</div>
         <div className="hv-step hv-step-out"><span>✓</span><div><strong>Headline 阳性</strong><b>{h.positive} / {h.n} · {h.rate.toFixed(2)}%</b><i>任一层为 no 或 unsure 即为阴性</i></div></div>
       </div>
       <div className="hv-table-scroll">
         <table className="hv-table hv-agree-table">
-          <thead><tr><th>比较项</th><th>一致</th><th>一致率</th><th>Cohen's κ</th></tr></thead>
-          <tbody>
-            {hv.componentTable.rows.map(r=><tr key={r.key} className={`hv-row-${r.tone}`}>
-              <th scope="row">{r.label}{r.note&&<i>{r.note}</i>}</th>
+            <thead><tr><th>比较项</th><th>n</th><th>一致</th><th>一致率</th><th>Cohen's κ</th><th>标签数</th></tr></thead>
+            <tbody>
+              {hv.componentTable.rows.map(r=><tr key={r.key} className={`hv-row-${r.tone}`}>
+              <th scope="row">{r.label}</th>
+              <td>{r.n}</td>
               <td>{r.agree} / {r.n}</td>
               <td><strong>{r.rate.toFixed(2)}%</strong></td>
               <td><span className="hv-kappa">{r.kappa.toFixed(3)}</span></td>
+              <td>{r.labels}</td>
             </tr>)}
           </tbody>
         </table>
       </div>
-      <p className="chart-caption">只列两个真正不同的层级。<b>是否违反规则</b>这一行不单独列出：它与 headline 在 222 行上逐行相同，共用一张 2×2 表，一致率与 κ 都是 {hv.componentTable.omittedRow.rate.toFixed(2)}% / {hv.componentTable.omittedRow.kappa.toFixed(3)}，与 headline 行完全重复。</p>
-      <p className="chart-caption">中间层 {hv.componentTable.midLayer.disagree} 条判定不同：{hv.componentTable.midLayer.humanNoAgentYes} 条为人工 no / agent yes，{hv.componentTable.midLayer.humanYesAgentNo} 条为人工 yes / agent no；其中 {hv.componentTable.midLayer.sameHeadline} 条两边理由不同但最终同为 negative，不影响 headline。18 条 headline 分歧中 {hv.componentTable.disagreementOrigin.applicability} 条来自适用性层，{hv.componentTable.disagreementOrigin.violation} 条来自违反层。</p>
+      <p className="chart-caption">{hv.componentTable.note}</p>
       <div className="interpretation"><span>为什么不能只报最终一致率</span><p>{hv.twoLayer.note}</p><p>{hv.twoLayer.rule}</p></div>
     </section>
 

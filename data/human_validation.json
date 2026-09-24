@@ -47,13 +47,13 @@
       "n": 222,
       "agree": 177,
       "rate": 79.73,
-      "kappa": 0.203
+      "kappa": 0.221
     },
     "ruleViolation": {
       "n": 222,
       "agree": 204,
       "rate": 91.89,
-      "kappa": 0.772
+      "kappa": 0.777
     },
     "legacyMRF": {
       "n": 222,
@@ -81,58 +81,72 @@
         "key": "applicability",
         "label": "规则是否明确且适用？",
         "agreement": 79.73,
-        "kappa": 0.203
+        "kappa": 0.221
       },
       {
         "key": "violation",
         "label": "预测是否违反了该规则？",
         "agreement": 91.89,
-        "kappa": 0.772
+        "kappa": 0.777
       }
     ],
     "rule": "两个判断均为 yes 时，headline 才为阳性；unsure 按冻结规则计为阴性。",
-    "note": "中间判断的分歧明显更多（规则适用性），而最终 headline 仍有较强一致；只报最终一致率会掩盖组件层面的差异。"
+    "note": "组件判断保留 yes / no / unsure 三类原始标签；headline 则由两个组件均为 yes 推导为二元结果。三分类组件 κ 与二分类 headline κ 使用不同标签空间，不能互相替代。"
   },
   "componentTable": {
     "rows": [
       {
+        "key": "ruleApplicability",
+        "label": "人工 vs agent：规则适用性",
+        "agree": 177,
+        "n": 222,
+        "rate": 79.73,
+        "kappa": 0.221,
+        "labels": "3-cat",
+        "tone": "mid"
+      },
+      {
+        "key": "ruleViolation",
+        "label": "人工 vs agent：是否违反规则",
+        "agree": 204,
+        "n": 222,
+        "rate": 91.89,
+        "kappa": 0.777,
+        "labels": "3-cat",
+        "tone": "mid"
+      },
+      {
         "key": "headline",
-        "label": "最终 headline（规则适用且被违反）",
+        "label": "人工 vs agent：headline",
         "agree": 204,
         "n": 222,
         "rate": 91.89,
         "kappa": 0.772,
+        "labels": "binary",
         "tone": "headline"
       },
       {
-        "key": "applicability",
-        "label": "规则是否明确且适用",
-        "agree": 177,
+        "key": "legacyMRF",
+        "label": "人工 vs legacy：M/R/F 二元",
+        "agree": 207,
         "n": 222,
-        "rate": 79.73,
-        "kappa": 0.203,
-        "tone": "mid",
-        "note": "中间层一致率明显更低，差异集中在“规则是否适用”这一步。"
+        "rate": 93.24,
+        "kappa": 0.786,
+        "labels": "binary",
+        "tone": "legacy"
+      },
+      {
+        "key": "legacyMOnly",
+        "label": "人工 vs legacy：M-only 类别",
+        "agree": 186,
+        "n": 222,
+        "rate": 83.78,
+        "kappa": 0.563,
+        "labels": "multi",
+        "tone": "legacy"
       }
     ],
-    "omittedRow": {
-      "label": "是否违反规则",
-      "agree": 204,
-      "n": 222,
-      "rate": 91.89,
-      "kappa": 0.772,
-      "reason": "该列与 headline 是同一个二元判断：222 行逐行相同，共用一张 2×2 表，一致率与 κ 都与 headline 相同，因此不单独列出。"
-    },
-    "midLayer": {
-      "disagree": 45,
-      "sameHeadline": 30,
-      "humanYesAgentNo": 12,
-      "humanNoAgentYes": 33
-    },
-    "disagreementOrigin": {
-      "applicability": 15,
-      "violation": 3
-    }
+    "note": "组件项按原始 yes / no / unsure 三分类计算；headline 按两个组件均为 yes 推导，采用二分类；legacy 项沿用论文表中的对应标签空间。"
   },
   "reconciliation": [
     {
@@ -344,7 +358,7 @@
     "人工复核者与最早封存的 agent 都在揭盲前独立完成“规则适用性 / 预测违反 / 置信度”三项判断。",
     "没有第二位人工标注者参与，因此这是 blinded human re-annotation，不是 human-human inter-annotator agreement。",
     "agent 对照使用最初封存的 222 行标注文件。后来一份第二遍替换文件被排除在一致性分析之外。",
-    "组件层 κ 按冻结的 222 行表复算。违反规则层与 headline 层在 222 行上是同一个判断，共用一张 2×2 表，κ 同为 0.772；规则适用性层为 0.203。"
+    "规则适用性与是否违反规则按原始 yes / no / unsure 三分类复算 Cohen's κ；headline 是两项均为 yes 后导出的二分类判断，因此其 κ 与组件 κ 不同。"
   ],
   "sourceNote": "聚合数字来自冻结的复标注报告与论文 Table 2 / Table B2；逐题原始材料与内部标识不随网站发布。"
 }

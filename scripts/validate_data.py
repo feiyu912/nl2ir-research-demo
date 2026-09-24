@@ -326,40 +326,33 @@ def check_human_validation(report: Report, hv: dict) -> None:
     if len(rec) != 4:
         report.error("human_validation: reconciliation 应为 4 项")
 
-    # 组件层：违反层与 headline 层在 222 行上是同一个判断，共用一张 2x2 表，
-    # 因此 κ 必须相等。这条断言让"同表不同 κ"无法被构建出来。
+    # Keep the three-category component comparisons distinct from the derived
+    # binary headline comparison. Their kappas need not be equal.
     ct = hv.get("componentTable", {})
     rows_ct = ct.get("rows", [])
-    if len(rows_ct) != 2:
-        report.error(f"human_validation: componentTable 应只列 2 个不同层级，实际 {len(rows_ct)}")
+    if len(rows_ct) != 5:
+        report.error(f"human_validation: componentTable 应列 5 项比较，实际 {len(rows_ct)}")
     byk = {r.get("key"): r for r in rows_ct}
-    if set(byk) != {"headline", "applicability"}:
+    expected_keys = {"headline", "ruleApplicability", "ruleViolation", "legacyMRF", "legacyMOnly"}
+    if set(byk) != expected_keys:
         report.error(f"human_validation: componentTable 行键异常 {sorted(byk)}")
     else:
-        for key, agree, kappa, rate in (
-            ("headline", 204, 0.772, 91.89),
-            ("applicability", 177, 0.203, 79.73),
+        for key, agree, kappa, rate, labels in (
+            ("ruleApplicability", 177, 0.221, 79.73, "3-cat"),
+            ("ruleViolation", 204, 0.777, 91.89, "3-cat"),
+            ("headline", 204, 0.772, 91.89, "binary"),
+            ("legacyMRF", 207, 0.786, 93.24, "binary"),
+            ("legacyMOnly", 186, 0.563, 83.78, "multi"),
         ):
             r = byk[key]
-            if (r.get("agree"), r.get("kappa"), r.get("rate")) != (agree, kappa, rate):
+            if (r.get("agree"), r.get("kappa"), r.get("rate"), r.get("labels")) != (agree, kappa, rate, labels):
                 report.error(
                     f"human_validation: componentTable[{key}] 期望 "
-                    f"{agree}/{kappa}/{rate}，实际 {r.get('agree')}/{r.get('kappa')}/{r.get('rate')}"
+                    f"{agree}/{kappa}/{rate}/{labels}，实际 "
+                    f"{r.get('agree')}/{r.get('kappa')}/{r.get('rate')}/{r.get('labels')}"
                 )
-    # 被省略的重复行必须确实与 headline 逐行相同，否则删掉它就丢了信息。
-    om = ct.get("omittedRow", {})
-    if (om.get("agree"), om.get("kappa"), om.get("rate")) != (204, 0.772, 91.89):
-        report.error(f"human_validation: 被省略的违反规则行应与 headline 一致，实际 {om.get('agree')}/{om.get('kappa')}/{om.get('rate')}")
-    if "逐行相同" not in str(om.get("reason", "")):
-        report.error("human_validation: 必须说明省略该行的理由")
-    ml = ct.get("midLayer", {})
-    if ml.get("humanNoAgentYes", 0) + ml.get("humanYesAgentNo", 0) != ml.get("disagree"):
-        report.error("human_validation: 中间层两个方向之和不等于分歧总数")
-    if (ml.get("disagree"), ml.get("sameHeadline")) != (45, 30):
-        report.error(f"human_validation: 中间层应为 45 分歧 / 30 结论相同，实际 {ml.get('disagree')}/{ml.get('sameHeadline')}")
-    do = ct.get("disagreementOrigin", {})
-    if do.get("applicability", 0) + do.get("violation", 0) != 18:
-        report.error("human_validation: 分歧来源层之和 != 18")
+    if not ct.get("note"):
+        report.error("human_validation: componentTable 缺少标签空间说明")
 
     dis = hv.get("disagreements", [])
     if len(dis) != 18:
