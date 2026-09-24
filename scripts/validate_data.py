@@ -290,6 +290,40 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         report.error("hosted_api_baselines limitations 缺 role_tenure 待验证声明")
 
 
+def check_api_stability(report: Report, payload: dict) -> None:
+    """只允许发布稳定性实验的聚合计数。"""
+    if payload.get("schema") != "api-stability-public/v1":
+        report.error("api_stability: schema 不符")
+    n, repeats = payload.get("sampleItems"), payload.get("repeats")
+    if (n, repeats, payload.get("totalCalls"), payload.get("completedCalls"), payload.get("failedRequests")) != (50, 3, 600, 600, 0):
+        report.error("api_stability: 样本/重复/请求数不符")
+    if payload.get("metric") != "main_chain_where" or not payload.get("intervalMethod", "").startswith("Wilson 95%"):
+        report.error("api_stability: 指标或区间口径不符")
+    models = payload.get("models") or []
+    expected = {"qwen3.7-max": 5, "qwen3.8-max": 3, "qwen3.8-flash": 11, "deepseek-v4.1-flash": 9}
+    if {m.get("modelId") for m in models} != set(expected) or len(models) != 4:
+        report.error("api_stability: 模型集合不符")
+    for model in models:
+        mid = model.get("modelId")
+        if model.get("flipCount") != expected.get(mid):
+            report.error(f"api_stability: {mid} 翻转数不符")
+        ci = model.get("flipWilson95Pct") or []
+        if len(ci) != 2 or not ci[0] <= 100 * model["flipCount"] / n <= ci[1]:
+            report.error(f"api_stability: {mid} Wilson 区间不含点估计")
+        counts = model.get("whereCorrectPerRepeat") or []
+        if len(counts) != repeats or any(not isinstance(c, int) or not 0 <= c <= n for c in counts):
+            report.error(f"api_stability: {mid} 三次正确数无效")
+    pairs = payload.get("flipPairs") or {}
+    if (pairs.get("total"), pairs.get("leafLevelDifference"), pairs.get("polarityEncodingDifference")) != (28, 24, 4):
+        report.error("api_stability: 翻转归因计数不符")
+    for digest in (payload.get("sourceSha256") or {}).values():
+        if len(digest) != 64:
+            report.error("api_stability: 来源哈希无效")
+    forbidden = ("query", "gold", "prediction", "raw", "responses", "items")
+    if any(key in (payload.keys() | set().union(*(m.keys() for m in models))) for key in forbidden):
+        report.error("api_stability: 聚合数据含逐题字段")
+
+
 HUMAN_VALIDATION_N = 222
 
 # 内部标识与评测资产：出现在公开发布数据里即为泄露。
@@ -452,6 +486,13 @@ def main() -> int:
             check_hosted_api_baselines(report, hosted)
         except Exception as e:
             report.error(f"hosted_api_baselines.json: {e}")
+
+    stability_path = data_dir / "api_stability.json"
+    if stability_path.exists():
+        try:
+            check_api_stability(report, load_json(stability_path) or {})
+        except Exception as e:
+            report.error(f"api_stability.json: {e}")
 
     # aux
     overlap_path = data_dir / "aux" / "overlap_report.json"

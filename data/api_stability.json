@@ -1,0 +1,104 @@
+{
+  "schema": "api-stability-public/v1",
+  "experimentDate": "2026-09-24",
+  "sampleItems": 50,
+  "repeats": 3,
+  "totalCalls": 600,
+  "completedCalls": 600,
+  "failedRequests": 0,
+  "metric": "main_chain_where",
+  "intervalMethod": "Wilson 95%; original report CP label fell back to Wilson without SciPy",
+  "protocol": {
+    "cohort": "stratified hard sample from the 2026-09-17 three-model evaluation; 20 error families",
+    "fullyCorrectFamilyItems": 17,
+    "endpoint": "direct DashScope API (production gateway not tested)",
+    "temperature": 0,
+    "responseFormat": "json_object",
+    "maxTokens": 1024,
+    "prompt": "frozen v21"
+  },
+  "models": [
+    {
+      "modelId": "qwen3.7-max",
+      "literalConsistencyPct": 58.0,
+      "normalizedIrConsistencyPct": 78.0,
+      "flipCount": 5,
+      "flipWilson95Pct": [
+        4.35,
+        21.36
+      ],
+      "whereCorrectPerRepeat": [
+        30,
+        32,
+        30
+      ],
+      "nonStrictJsonItems": 0,
+      "schemaFailItems": 1,
+      "truncatedItems": 0
+    },
+    {
+      "modelId": "qwen3.8-max",
+      "literalConsistencyPct": 52.0,
+      "normalizedIrConsistencyPct": 66.0,
+      "flipCount": 3,
+      "flipWilson95Pct": [
+        2.06,
+        16.22
+      ],
+      "whereCorrectPerRepeat": [
+        29,
+        28,
+        28
+      ],
+      "nonStrictJsonItems": 0,
+      "schemaFailItems": 4,
+      "truncatedItems": 0
+    },
+    {
+      "modelId": "qwen3.8-flash",
+      "literalConsistencyPct": 36.0,
+      "normalizedIrConsistencyPct": 48.0,
+      "flipCount": 11,
+      "flipWilson95Pct": [
+        12.75,
+        35.24
+      ],
+      "whereCorrectPerRepeat": [
+        28,
+        30,
+        30
+      ],
+      "nonStrictJsonItems": 1,
+      "schemaFailItems": 6,
+      "truncatedItems": 1
+    },
+    {
+      "modelId": "deepseek-v4.1-flash",
+      "literalConsistencyPct": 48.0,
+      "normalizedIrConsistencyPct": 58.0,
+      "flipCount": 9,
+      "flipWilson95Pct": [
+        9.77,
+        30.8
+      ],
+      "whereCorrectPerRepeat": [
+        25,
+        28,
+        30
+      ],
+      "nonStrictJsonItems": 0,
+      "schemaFailItems": 3,
+      "truncatedItems": 0
+    }
+  ],
+  "flipPairs": {
+    "total": 28,
+    "leafLevelDifference": 24,
+    "polarityEncodingDifference": 4
+  },
+  "sourceLabel": "本地冻结 API 稳定性实验公开聚合结果（2026-09-24；逐题记录未发布）",
+  "sourceSha256": {
+    "report": "4ed5483261d6e20219029a8a96f188329e9ad521785e4a9ac660742f5cdec88b",
+    "manifest": "cbf765551ad2e7b64fbafa3c6c8645e99b16622c6c65c02eb9febf2f9a8cf9c5"
+  }
+}

@@ -229,3 +229,11 @@ type HostedApiBaselines = {
 - `clusterCrossesZero` 必须与 `ciCluster` 区间自洽；
 - 六个来源文件的 SHA256 必须齐全；
 - `limitations` 必须包含 role_tenure 的"仍在验证"声明；模型结论中不得出现 role_tenure 实现结论。
+
+## 10. `data/api_stability.json`（API 重复推理，独立实验）
+
+- 仅发布聚合计数：4 个模型 × 50 条偏难查询 × 3 次，600 次请求完成；不发布逐题 query、Gold 或响应。
+- `models[]` 保存逐字一致、规范化 IR 一致、Where 对错翻转、Wilson 95% 区间、三次正确数及格式异常题数。
+- `qwen3.8-max` 仅属于该稳定性实验，未参加上方 906 条三模型质量与成本对比。
+- 原始实验报告中的 `flip_cp_ci` 因缺少 SciPy 回退为 Wilson；公开页明确按 Wilson 标注。
+- 只测 API 直调端点和偏难样本；不得外推为线上故障率或本地小模型的稳定性结论。
