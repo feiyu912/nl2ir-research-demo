@@ -15,6 +15,8 @@ scripts/append_base_diagnostic_to_master.py
 scripts/build_presentation.mjs
 scripts/extract_*.py
 scripts/lib/
+# Local-only denylist of internal identifiers for the public-sanitization guard.
+scripts/denylist.local
 
 # Raw evaluation exports and annotation material: never publish.
 # The site must only consume aggregated, committed JSON such as

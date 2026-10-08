@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import re
 import sys
 from pathlib import Path
 
@@ -19,6 +21,76 @@ AUX = DATA / "aux"
 
 DATE_MIN = "1970-01-01"
 DATE_MAX = "2999-12-31"
+
+
+# ---------------------------------------------------------------------------
+# 公开发布物脱敏守卫
+#
+# 只描述"形状"（路径/网段/邮箱/主机名），不列举任何真实内部标识，避免守卫
+# 本身成为泄露源。data/ 下仅本地保留、永不发布的文件不参与扫描。
+# ---------------------------------------------------------------------------
+LOCAL_ONLY_PARTS = (
+    "data/cases.json", "data/raw/", "data/private/", "data/tmp/", "data/tmp_export/",
+    "data/exports/", "data/aux/history_overview.json",
+)
+
+SANITIZE_PATTERNS = (
+    ("本地绝对路径", re.compile(r"(?:^|[\s\"'=:\[(,])/(?:Users|home|mnt|workspace|Volumes|dat)/")),
+    ("Windows 绝对路径", re.compile(r"[A-Za-z]:\\")),
+    ("家目录相对路径", re.compile(r"~/[^\s]")),
+    ("私有网段 IP", re.compile(r"(?<![\d.])(?:10|192\.168|172\.(?:1[6-9]|2\d|3[01]))\.\d{1,3}\.\d{1,3}(?:\.\d{1,3})?(?![\d.])")),
+    ("邮箱地址", re.compile(r"\b[\w.+-]+@[\w-]+\.[A-Za-z]{2,}\b")),
+    ("内部主机名", re.compile(r"\b[\w-]+\.(?:internal|corp|lan)\b")),
+)
+
+
+def _local_denylist() -> tuple[str, ...]:
+    """本机私有黑名单（永不入库）：覆盖无法用"形状"识别的内部名字。
+
+    来源：环境变量 NL2IR_PUBLIC_DENYLIST（逗号分隔）与 gitignored 的
+    scripts/denylist.local（每行一个 token，# 开头为注释）。
+    """
+    tokens: list[str] = [
+        t.strip() for t in os.environ.get("NL2IR_PUBLIC_DENYLIST", "").split(",") if t.strip()
+    ]
+    path = ROOT / "scripts" / "denylist.local"
+    if path.exists():
+        tokens.extend(
+            line.strip()
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        )
+    return tuple(dict.fromkeys(tokens))
+
+
+def _published_text_files() -> list[Path]:
+    files: list[Path] = []
+    for pattern in ("data/**/*.json", "docs/**/*.md", "src/**/*.ts", "src/**/*.tsx"):
+        files.extend(ROOT.glob(pattern))
+    readme = ROOT / "README.md"
+    if readme.exists():
+        files.append(readme)
+    published = []
+    for path in files:
+        rel = path.relative_to(ROOT).as_posix()
+        if any(rel == part.rstrip("/") or rel.startswith(part) for part in LOCAL_ONLY_PARTS):
+            continue
+        published.append(path)
+    return sorted(set(published))
+
+
+def check_public_sanitization(report: Report) -> None:
+    """公开发布物不得出现本地路径、内网地址或内部主机名。"""
+    denylist = _local_denylist()
+    for path in _published_text_files():
+        rel = path.relative_to(ROOT).as_posix()
+        for lineno, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
+            for label, pattern in SANITIZE_PATTERNS:
+                if pattern.search(line):
+                    report.error(f"sanitization: {rel}:{lineno} 含{label}")
+            for token in denylist:
+                if token in line:
+                    report.error(f"sanitization: {rel}:{lineno} 含私有黑名单词条（{len(token)} 字符）")
 
 
 class Report:
@@ -659,6 +731,9 @@ def main() -> int:
         return 1
 
     report = Report()
+
+    # 公开发布物脱敏（先跑：任何内部路径/网段/主机名都直接失败）
+    check_public_sanitization(report)
 
     # 各文件
     try:
