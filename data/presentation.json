@@ -211,7 +211,7 @@
       "hitLimit_scope": "max_new_tokens 4096，实测 0/906 命中（非截断导致低分）",
       "runtime_seconds_total": 16275.5316,
       "runtime_scope": "old366+c300+blind_v6 合并 906 行，单次运行",
-      "source": "/Users/kaicheng/coding/python/semantic-search-service/docs/modeltest/nl2ir_stage1_chard_ablation_prereg_2026-09-16/stage1_arm_a_results_20260917/arm_27bbase/metrics_27Bb_old366.json",
+      "source": "[内部来源路径未公开]",
       "color": "#ddc79a",
       "protocol": "qwen3_8_nothink / max_new_tokens 4096 / batch 10（与 4B/9B 底座的 hard-off·1024 口径不同，不可并列相减）"
     },
@@ -230,7 +230,7 @@
       "hitLimit_scope": "max_new_tokens 4096，实测 0/906 命中（非截断导致低分）",
       "runtime_seconds_total": 16275.5316,
       "runtime_scope": "old366+c300+blind_v6 合并 906 行，单次运行",
-      "source": "/Users/kaicheng/coding/python/semantic-search-service/docs/modeltest/nl2ir_stage1_chard_ablation_prereg_2026-09-16/stage1_arm_a_results_20260917/arm_27bbase/metrics_27Bb_c300.json",
+      "source": "[内部来源路径未公开]",
       "color": "#ddc79a",
       "protocol": "qwen3_8_nothink / max_new_tokens 4096 / batch 10（与 4B/9B 底座的 hard-off·1024 口径不同，不可并列相减）"
     },
@@ -249,7 +249,7 @@
       "hitLimit_scope": "max_new_tokens 4096，实测 0/906 命中（非截断导致低分）",
       "runtime_seconds_total": 16275.5316,
       "runtime_scope": "old366+c300+blind_v6 合并 906 行，单次运行",
-      "source": "/Users/kaicheng/coding/python/semantic-search-service/docs/modeltest/nl2ir_stage1_chard_ablation_prereg_2026-09-16/stage1_arm_a_results_20260917/arm_27bbase/metrics_27Bb_blind.json",
+      "source": "[内部来源路径未公开]",
       "color": "#ddc79a",
       "protocol": "qwen3_8_nothink / max_new_tokens 4096 / batch 10（与 4B/9B 底座的 hard-off·1024 口径不同，不可并列相减）"
     }

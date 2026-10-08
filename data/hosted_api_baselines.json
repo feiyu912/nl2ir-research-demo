@@ -457,7 +457,7 @@
         "runDate": "2026-10-08",
         "batch": "追加批次（非 2026-09-17 冻结批次）",
         "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
-        "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
+        "sourceLabel": "[内部来源路径未公开]",
         "requests": 906,
         "httpSuccess": 906,
         "transportFailures": 0
@@ -560,7 +560,7 @@
         "runDate": "2026-10-08",
         "batch": "追加批次（非 2026-09-17 冻结批次）",
         "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
-        "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
+        "sourceLabel": "[内部来源路径未公开]",
         "requests": 906,
         "httpSuccess": 906,
         "transportFailures": 0
@@ -660,7 +660,7 @@
         "runDate": "2026-10-08",
         "batch": "追加批次（非 2026-09-17 冻结批次）",
         "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
-        "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
+        "sourceLabel": "[内部来源路径未公开]",
         "requests": 906,
         "httpSuccess": 906,
         "transportFailures": 0
@@ -999,7 +999,7 @@
       "qwen3.7-plus",
       "qwen3.7-flash"
     ],
-    "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
+    "sourceLabel": "[内部来源路径未公开]",
     "sourceFiles": {
       "metrics_track_A_all_models.json": {
         "sha256": "a0c31f3e7e15ebe540471daeb428abc7a8b9500cb9bc41194da6b53a26880e02",

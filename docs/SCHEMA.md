@@ -139,7 +139,7 @@ type SourceRef = {
 > 展示时必须与 `runs.json` / `metrics.json` 的 LoRA 图表分开，不得混入同一组图。
 
 由 `scripts/extract_hosted_api_baselines.py` 从
-`semantic-search-service/docs/modeltest/nl2ir_api_ab_qwen37max_vs_deepseekv41flash_2026-09-17/`
+`[内部来源路径未公开]`
 的正式工件提取。**只读来源，不调用模型/API，不重新评分。**
 
 ```ts

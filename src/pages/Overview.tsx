@@ -114,8 +114,8 @@ export default function Overview({ data }: Props) {
 
             <h3>证据来源</h3>
             <ul className="small" style={{ paddingLeft: 20 }}>
-              <li>研究主版：<span className="mono">~/Downloads/NL2IR_全部研究材料汇总母版.docx</span></li>
-              <li>9B 训练检查母版：<span className="mono">~/Downloads/NL2IR_全部研究材料汇总母版_追加9B训练检查结论.docx</span></li>
+              <li>研究主版：<span className="mono">内部研究汇总母版（未公开）</span></li>
+              <li>9B 训练检查母版：<span className="mono">内部研究汇总母版 · 9B 训练检查（未公开）</span></li>
               <li>强 API 配置：<span className="mono">nl2ir_strong_api_pipeline_candidate_v4.json</span></li>
               <li>学生六评估审计：<span className="mono">nl2ir_student_six_eval_prompt_audit/</span></li>
               <li>学生评测数据：<span className="mono">audit-inputs/Qwen3.5-4B-Base/lora/</span> 与 <span className="mono">Qwen3.5-9B-Base/lora/</span></li>
