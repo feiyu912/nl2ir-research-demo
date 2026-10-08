@@ -1022,5 +1022,143 @@
         "bytes": 5117
       }
     }
+  },
+  "routersNoMax": {
+    "oracleNonMax": 98.75,
+    "note": "完全不用 qwen3.7-max：链内与兜底目标都限定在非 max 模型。oracle 为不可部署上界（需 gold）。",
+    "strategies": [
+      {
+        "policy": "ds 直连（单模型，不升级）",
+        "tiers": [
+          "ds"
+        ],
+        "escalationTarget": null,
+        "blindWhere": 92.08,
+        "deltaVsMaxPp": -3.33,
+        "mcnemarP": 0.096,
+        "clusterCi95Pp": [
+          -9.17,
+          2.08
+        ],
+        "clusterCrossesZero": true,
+        "cnyPer10kStandardized": 16.4,
+        "shareOfMaxCost": 0.081,
+        "escalationRate": 0.0,
+        "acceptancePrecision": 1.0,
+        "latencySequentialS": 1.93,
+        "latencyParallelCheapS": 1.93
+      },
+      {
+        "policy": "q37f→q38→ds",
+        "tiers": [
+          "q37f",
+          "q38"
+        ],
+        "escalationTarget": "ds",
+        "blindWhere": 92.08,
+        "deltaVsMaxPp": -3.33,
+        "mcnemarP": 0.09625244140625,
+        "clusterCi95Pp": [
+          -9.17,
+          2.08
+        ],
+        "clusterCrossesZero": true,
+        "cnyPer10kStandardized": 27.7,
+        "shareOfMaxCost": 0.137,
+        "escalationRate": 0.6917,
+        "acceptancePrecision": 0.9865,
+        "latencySequentialS": 7.96,
+        "latencyParallelCheapS": 4.76
+      },
+      {
+        "policy": "q38→plus→ds",
+        "tiers": [
+          "q38",
+          "plus"
+        ],
+        "escalationTarget": "ds",
+        "blindWhere": 93.33,
+        "deltaVsMaxPp": -2.08,
+        "mcnemarP": 0.3017578125,
+        "clusterCi95Pp": [
+          -6.67,
+          2.5
+        ],
+        "clusterCrossesZero": true,
+        "cnyPer10kStandardized": 61.34,
+        "shareOfMaxCost": 0.304,
+        "escalationRate": 0.6792,
+        "acceptancePrecision": 1.0,
+        "latencySequentialS": 10.66,
+        "latencyParallelCheapS": 7.23
+      },
+      {
+        "policy": "q38→0902→ds",
+        "tiers": [
+          "q38",
+          "0902"
+        ],
+        "escalationTarget": "ds",
+        "blindWhere": 93.75,
+        "deltaVsMaxPp": -1.67,
+        "mcnemarP": 0.4239501953125,
+        "clusterCi95Pp": [
+          -6.25,
+          2.92
+        ],
+        "clusterCrossesZero": true,
+        "cnyPer10kStandardized": 200.8,
+        "shareOfMaxCost": 0.996,
+        "escalationRate": 0.5,
+        "acceptancePrecision": 0.9917,
+        "latencySequentialS": 7.37,
+        "latencyParallelCheapS": 4.4
+      },
+      {
+        "policy": "0902→plus→ds",
+        "tiers": [
+          "0902",
+          "plus"
+        ],
+        "escalationTarget": "ds",
+        "blindWhere": 94.17,
+        "deltaVsMaxPp": -1.25,
+        "mcnemarP": 0.60723876953125,
+        "clusterCi95Pp": [
+          -5.42,
+          2.5
+        ],
+        "clusterCrossesZero": true,
+        "cnyPer10kStandardized": 227.58,
+        "shareOfMaxCost": 1.129,
+        "escalationRate": 0.6083,
+        "acceptancePrecision": 0.9787,
+        "latencySequentialS": 10.06,
+        "latencyParallelCheapS": 7.09
+      },
+      {
+        "policy": "q38→0902→plus→ds",
+        "tiers": [
+          "q38",
+          "0902",
+          "plus"
+        ],
+        "escalationTarget": "ds",
+        "blindWhere": 94.58,
+        "deltaVsMaxPp": -0.83,
+        "mcnemarP": 0.79052734375,
+        "clusterCi95Pp": [
+          -4.58,
+          2.92
+        ],
+        "clusterCrossesZero": true,
+        "cnyPer10kStandardized": 236.96,
+        "shareOfMaxCost": 1.175,
+        "escalationRate": 0.4125,
+        "acceptancePrecision": 0.9787,
+        "latencySequentialS": 13.12,
+        "latencyParallelCheapS": 6.72
+      }
+    ]
   }
 }

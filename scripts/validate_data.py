@@ -328,6 +328,25 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         if not 0 <= r.get("acceptancePrecision", -1) <= 1 or not 0 <= r.get("escalationRate", -1) <= 1:
             report.error(f"hosted_api_baselines router 比率越界: {r.get('policy')}")
 
+    # ---- 完全不用 max 的策略块 ----
+    nomax = payload.get("routersNoMax") or {}
+    strats = nomax.get("strategies") or []
+    if not strats:
+        report.error("hosted_api_baselines 缺 routersNoMax.strategies")
+    allowed_nomax = {"q38", "ds", "0902", "plus", "q37f"}
+    for r in strats:
+        tiers = r.get("tiers") or []
+        if not tiers or any(t not in allowed_nomax for t in tiers) or r.get("escalationTarget") in {None, "max"} and r.get("escalationTarget") is not None:
+            report.error(f"hosted_api_baselines 无 max 策略层级非法: {r.get('policy')}")
+        if max_cost and abs(r.get("cnyPer10kStandardized", 0) / max_cost - r.get("shareOfMaxCost", -1)) > 0.01:
+            report.error(f"hosted_api_baselines 无 max 策略成本占比不自洽: {r.get('policy')}")
+        ci = r.get("clusterCi95Pp") or [0, 0]
+        if (ci[0] < 0 < ci[1]) != bool(r.get("clusterCrossesZero")):
+            report.error(f"hosted_api_baselines 无 max 策略 clusterCrossesZero 不一致: {r.get('policy')}")
+    best = max((r.get("blindWhere", 0) for r in strats), default=0)
+    if nomax.get("oracleNonMax", 0) < best:
+        report.error("hosted_api_baselines 无 max oracle 低于最佳可部署策略（不可能是上界）")
+
     # role_tenure 审计未冻结：不得写入实现结论
     for m in models:
         text = f"{m.get('role','')}{m.get('conclusion','')}"

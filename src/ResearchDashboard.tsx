@@ -248,7 +248,14 @@ function RouterComparison(){
       <td>{r.deltaVsMaxPp>=0?'+':''}{r.deltaVsMaxPp.toFixed(2)}pp</td><td>¥{r.cnyPer10kStandardized.toFixed(2)}</td>
       <td>{(r.shareOfMaxCost*100).toFixed(0)}%</td><td>{(r.escalationRate*100).toFixed(1)}%</td>
       <td>{(r.acceptancePrecision*100).toFixed(2)}%</td><td>{r.latencySequentialS.toFixed(2)}/{r.latencyParallelCheapS.toFixed(2)}s</td></tr>)}</tbody></table></div>
-    <p className="chart-caption">级联的每一层在<strong>每个请求</strong>上都必须执行（否则无法比较一致性），故成本 = 各层单价之和 + 升级率 × max 单价。延迟为合成值；"并"= 廉价层并发执行。采纳精度 = 采纳（未升级）答案中正确的比例。</p></section>;}
+    <p className="chart-caption">级联的每一层在<strong>每个请求</strong>上都必须执行（否则无法比较一致性），故成本 = 各层单价之和 + 升级率 × max 单价。延迟为合成值；"并"= 廉价层并发执行。采纳精度 = 采纳（未升级）答案中正确的比例。</p>
+    <div className="api-table-scroll" style={{marginTop:18}}><table className="api-table"><thead><tr><th>完全不用 max</th><th>blind where</th><th>vs max</th><th>¥/万次</th><th>占 max</th><th>升级率</th><th>采纳精度</th><th>延迟 串/并</th></tr></thead>
+    <tbody>{(api.routersNoMax?.strategies??[]).map((r:any)=><tr key={r.policy}><th scope="row">{r.policy}</th>
+      <td className="api-strong">{r.blindWhere.toFixed(2)}%</td><td>{r.deltaVsMaxPp>=0?'+':''}{r.deltaVsMaxPp.toFixed(2)}pp{r.mcnemarP>=0.05?'（不显著）':''}</td>
+      <td>¥{r.cnyPer10kStandardized.toFixed(2)}</td><td>{(r.shareOfMaxCost*100).toFixed(0)}%</td>
+      <td>{(r.escalationRate*100).toFixed(1)}%</td><td>{(r.acceptancePrecision*100).toFixed(1)}%</td>
+      <td>{r.latencySequentialS.toFixed(2)}/{r.latencyParallelCheapS.toFixed(2)}s</td></tr>)}</tbody></table></div>
+    <p className="chart-caption"><strong>结论：完全不用 max 达不到 max。</strong>最好可部署配置 {((api.routersNoMax?.strategies??[]).at(-1)?.policy)??''} 为 {(api.routersNoMax?.strategies??[]).at(-1)?.blindWhere?.toFixed(2)??'—'}%，但成本 {(100*((api.routersNoMax?.strategies??[]).at(-1)?.shareOfMaxCost??0)).toFixed(0)}% of max —— 比直接用 max 更贵（因为逼近 max 必须引入 0902，其单价≈max 的 89%）。非 max oracle 上界 {api.routersNoMax?.oracleNonMax??'—'}%（不可部署）。<strong>真正的降本来自直接换模型</strong>：ds 直连 92.08% @ 8% 成本、q38→plus→ds 93.33% @ 30%，两者与 max 的差异在盲集上均不显著。</p></section>;}
 
 function ModelComparison(){const api=hostedApi;const nf=(v:number)=>(v>0?`+${v}`:`${v}`);return <><Heading tag="当前模型 / API 基线验证" title="API 模型横向对比（6 个候选）" text={`判定标准 = sealed blind v6（240 条，未参与 prompt 迭代）；old366/c300 为开发集，其 combined 数字仅作参考。共 ${api.n} 条；3 个冻结候选来自 2026-09-17 批次，另 3 个（0902 / 3.7-plus / 3.7-flash）为 2026-10-08 同协议补跑。本页不是 Arm A 训练消融。`}/>
 <BlindJudgment/>
