@@ -106,7 +106,7 @@
       "alias": "Qwen 3.7 Plus",
       "tone": "candidate",
       "role": "中间档候选",
-      "conclusion": "成本高于现役（占 123%）；质量未测。",
+      "conclusion": "成对评审两向一致（64% / 58%）——不劣于现役，但成本是现役的 123%，比现役更贵。",
       "costShareOfBaselinePct": 13.9,
       "costShareOfIncumbentPct": 123.2,
       "batchWallP50S": 12.1,
@@ -125,7 +125,7 @@
       "alias": "DeepSeek V4.1 Flash",
       "tone": "hold",
       "role": "不建议（幻觉 + 偶发请求失败）",
-      "conclusion": "成本高于现役（占 141%）且不支持现有结构化输出格式；质量未测。",
+      "conclusion": "成对评审两向一致（60% / 71%）——不劣于现役，但成本是现役的 141%，且不支持现有结构化输出格式。",
       "costShareOfBaselinePct": 15.9,
       "costShareOfIncumbentPct": 141.3,
       "batchWallP50S": 7.5,
@@ -144,7 +144,7 @@
       "alias": "Qwen 3.8 Max 0902",
       "tone": "hold",
       "role": "同价位不划算",
-      "conclusion": "成本是现役的 8.6 倍；质量未测。",
+      "conclusion": "成对评审两向一致（64% / 68%）——不劣于现役，但成本是现役的 8.6 倍。",
       "costShareOfBaselinePct": 97.1,
       "costShareOfIncumbentPct": 862.6,
       "batchWallP50S": 11.8,
@@ -200,7 +200,7 @@
     "caliber": "成对偏好评审：每场 prompt 内只有两个方案，A/B 顺序互换，每格重复 3 次；候选人资料含完整工作经历。判定单位 = 场（多数票），另给两个方向各自的胜率。",
     "sessions": 16,
     "callsPerPair": 6,
-    "orderTolerancePct": 15,
+    "orderTolerancePct": 15.0,
     "candidates": [
       {
         "key": "qwen3.8-flash",
@@ -241,6 +241,66 @@
         },
         "conservativeWinRatePct": 54.8,
         "signP": 0.791
+      },
+      {
+        "key": "qwen3.7-plus",
+        "modelKey": "qwen3.7-plus",
+        "alias": "Qwen 3.7 Plus",
+        "wins": 7,
+        "losses": 5,
+        "ties": 4,
+        "incumbentFirst": {
+          "candidateWins": 25,
+          "incumbentWins": 14,
+          "winRatePct": 64.1
+        },
+        "candidateFirst": {
+          "candidateWins": 25,
+          "incumbentWins": 18,
+          "winRatePct": 58.1
+        },
+        "conservativeWinRatePct": 58.1,
+        "signP": 0.774
+      },
+      {
+        "key": "deepseek-v4.1-flash",
+        "modelKey": "deepseek-v4.1-flash",
+        "alias": "DeepSeek V4.1 Flash",
+        "wins": 11,
+        "losses": 5,
+        "ties": 0,
+        "incumbentFirst": {
+          "candidateWins": 26,
+          "incumbentWins": 17,
+          "winRatePct": 60.5
+        },
+        "candidateFirst": {
+          "candidateWins": 34,
+          "incumbentWins": 14,
+          "winRatePct": 70.8
+        },
+        "conservativeWinRatePct": 60.5,
+        "signP": 0.21
+      },
+      {
+        "key": "qwen3.8-max-0902",
+        "modelKey": "qwen3.8-max-0902",
+        "alias": "Qwen 3.8 Max 0902",
+        "wins": 9,
+        "losses": 5,
+        "ties": 2,
+        "incumbentFirst": {
+          "candidateWins": 27,
+          "incumbentWins": 15,
+          "winRatePct": 64.3
+        },
+        "candidateFirst": {
+          "candidateWins": 27,
+          "incumbentWins": 13,
+          "winRatePct": 67.5
+        },
+        "conservativeWinRatePct": 64.3,
+        "signP": 0.424
       },
       {
         "key": "qwen3.7-flash",
@@ -331,7 +391,7 @@
       }
     },
     "rootCause": "早期评审把候选人工作经历截断为「最近 1 段 + 历史 3 段」：评审因此无法核验「最近一份在X」这类条件，并把摘要里没出现的公司当成编造，表现为大量判平与分数漂移。补全工作经历并改为成对比较后，评审恢复可判（见定标对照）。",
-    "verdict": "换掉现役是否值得：唯一两个方向一致、且都不劣于现役的候选是 Qwen 3.8 Flash（场次 8 胜 7 负 1 平；两向胜率 56% / 56%），成本为现役的 60%。最便宜的 Qwen 3.7 Flash 两个方向互相矛盾（54% / 33%），判定不可用——省下的成本对应未被排除的质量风险。路由没有收益：按软条件分流（5 胜 9 负）、软条件+结构化条件分流（6 胜 8 负），都不优于「全部走 Qwen 3.8 Flash」。Borda 融合的场次战绩看似更好，但两个方向不一致（50% / 74%），按保守口径判为与现役打平。Qwen 3.7 Max 同样两向一致、略优于现役，但成本是现役的 8.9 倍。"
+    "verdict": "换掉现役是否值得：两个方向一致、且不劣于现役的有 5 个——Qwen 3.8 Flash（两向 56% / 56%，成本现役的 60%）、Qwen 3.7 Max（两向 55% / 64%，成本现役的 889%）、Qwen 3.7 Plus（两向 64% / 58%，成本现役的 123%）、DeepSeek V4.1 Flash（两向 60% / 71%，成本现役的 141%）、Qwen 3.8 Max 0902（两向 64% / 68%，成本现役的 863%）。其余候选不能用：Qwen 3.7 Flash（两向 54% / 33%，成本现役的 16%）；Borda 融合（3.7 Flash + 3.8 Flash 排名合并）（两向 50% / 74%）——两个方向互相矛盾说明结果由位置决定，顺着它省下的成本对应未被排除的质量风险。路由没有收益：按软条件分流（5 胜 9 负）、软条件+结构化条件分流（6 胜 8 负），都不优于本表最好的固定策略「全部走 Qwen 3.8 Flash」（8 胜 7 负）。全部差异都不显著，因此只能说「不劣于现役」，不能说「更好」。"
   },
   "limitations": [
     "内部评测集规模有限，来自同一来源与同一时间段，不可外推为线上整体效果。",
@@ -341,7 +401,8 @@
     "成本按公开价目当日折扣价折算，未计入缓存命中；实际支出会低于按价目折算的结果。",
     "现役合格线不可平移（分数刻度存在代际差），阈值迁移与排名分位方案尚未验证。",
     "现有结构化输出请求格式不被部分候选支持，启用前必须改代码。",
-    "三个候选（中间档、DeepSeek、3.8 Max 0902）只有成本与兼容性数据，质量未测。"
+    "多数候选在两向一致口径下都「不劣于现役」——差异不显著，因此结论是「不劣于」而非「更好」；真正区分它们的是成本，而不是这次能测出的质量差异。",
+    "成对偏好只看排序与理由，**不专门惩罚理由里的编造**：DeepSeek 已知的理由幻觉与偶发请求失败不会体现在这个指标里，因此它的「不劣于」不等于可以上线。"
   ],
   "provenance": {
     "evaluatedBy": "内部离线评估（脱敏聚合；原始工件与提取脚本不发布）",

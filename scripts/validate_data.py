@@ -668,6 +668,12 @@ RERANK_EXPECTED_STRATEGIES = {"cheapOnly", "flash38Only", "softN", "softN_hardN"
 RERANK_ORDER_TOLERANCE = 15.0
 
 
+RERANK_EXPECTED_CANDIDATES = {"qwen3.8-flash", "qwen3.7-max", "qwen3.7-plus", "qwen3.7-flash",
+                              "deepseek-v4.1-flash", "qwen3.8-max-0902", "bordaMerge"}
+RERANK_EXPECTED_STRATEGIES = {"cheapOnly", "flash38Only", "softN", "softN_hardN"}
+RERANK_ORDER_TOLERANCE = 15.0
+
+
 def check_rerank_model_selection(report: Report, payload: dict) -> None:
     """精排（rerank）模型选型的公开聚合数据不变量。
 
@@ -812,12 +818,14 @@ def check_rerank_model_selection(report: Report, payload: dict) -> None:
     verdict = str(pw.get("verdict") or "")
     if len(verdict) < 80:
         report.error("rerank_model_selection 缺结论文本")
-    cons_txt = f"{(flat.get('conservativeWinRatePct') or 0):.0f}%"
-    if cons_txt not in verdict:
-        report.error(f"rerank_model_selection 结论未携带 3.8 Flash 的保守胜率 {cons_txt}")
+    # 不可用的候选必须在结论里被点名，不能悄悄留在表里当备选项
+    for key, c in cands.items():
+        usable = c.get("orderConsistent") and (c.get("conservativeWinRatePct") or 0) >= 50
+        if not usable and c.get("alias") and c["alias"] not in verdict:
+            report.error(f"rerank_model_selection 结论未点名不可用候选: {key}")
 
     limits = " ".join(payload.get("limitations") or [])
-    for need in ("不劣于", "位置敏感", "未测"):
+    for need in ("不劣于", "位置敏感", "编造"):
         if need not in limits:
             report.error(f"rerank_model_selection limitations 缺风险声明: {need}")
     review = (payload.get("provenance") or {}).get("codexReview") or {}

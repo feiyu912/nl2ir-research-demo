@@ -135,8 +135,15 @@ export default function RerankOverview() {
   const ds = models.find((m) => m.modelId === 'deepseek-v4.1-flash')!;
   const pw = data.pairwise;
   const cands = pw.candidates;
-  const flat = cands.find((c) => c.key === 'qwen3.8-flash');
   const medianMap = data.calibration.medianScoreByModel as Record<string, number>;
+
+  /** 更便宜、且两个方向都不劣于现役的候选 —— 这才是"值得换"的定义 */
+  const switchable = cands
+    .filter((c) => orderConsistent(c) && c.conservativeWinRatePct >= 50)
+    .map((c) => ({ c, m: models.find((mm) => mm.modelId === c.modelKey) }))
+    .filter((x) => x.m && x.m.costShareOfIncumbentPct < 100)
+    .sort((a, b) => (a.m!.costShareOfIncumbentPct - b.m!.costShareOfIncumbentPct));
+  const bestSwitch = switchable[0];
 
   return (
     <>
@@ -156,10 +163,10 @@ export default function RerankOverview() {
 
       <div className="api-insight-grid">
         <article className="api-insight api-insight-primary">
-          <span>唯一可换的候选</span>
-          <strong>{flat ? `${share(flat.conservativeWinRatePct)}` : '—'}<small> 对现役胜率</small></strong>
-          <h3>{flat?.alias ?? '—'}</h3>
-          <p>{flat?.modelKey ? models.find((m) => m.modelId === flat.modelKey)?.conclusion : ''}</p>
+          <span>更便宜且不劣于现役</span>
+          <strong>{bestSwitch ? share(bestSwitch.c.conservativeWinRatePct) : '—'}<small> 对现役胜率</small></strong>
+          <h3>{bestSwitch?.c.alias ?? '—'}</h3>
+          <p>{bestSwitch?.m?.conclusion ?? ''}</p>
         </article>
         <article className="api-insight api-insight-value">
           <span>成本最低</span>
@@ -216,7 +223,7 @@ export default function RerankOverview() {
         <Title
           tag="决策总表"
           title="先看客观面，再看质量"
-          text={`现役 = ${incumbent.alias}，成本分母。质量只对 3 个候选测过；其余候选只有成本与兼容性数据。`}
+          text={`现役 = ${incumbent.alias}，成本分母。7 个候选的质量都测过（表 B），但差异都不显著——真正区分它们的是成本。`}
         />
 
         <h3 className="api-subhead">A · 单模型（成本 / 延迟 / 兼容性，均为客观测量）</h3>
