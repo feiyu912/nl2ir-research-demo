@@ -1,14 +1,15 @@
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, LabelList } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, LabelList, ReferenceLine } from 'recharts';
 import data from '../../data/rerank_model_selection.json';
 
 /**
- * 独立实验页：生产检索链路的精排（rerank）情况——模型选型 + 路由回测。
+ * 独立实验页：生产检索链路的精排（rerank）情况——模型选型（客观面）+ 对现役的成对偏好。
  * 数字全部来自 data/rerank_model_selection.json（由内部提取脚本生成，只含脱敏聚合）。
  * 与 NL2IR 解析评测无关，两者不得混入同一组图。
  */
 
 type ModelRow = (typeof data.models)[number];
-type StrategyRow = (typeof data.router.strategies)[number];
+type CandidateRow = (typeof data.pairwise.candidates)[number];
+type StrategyRow = (typeof data.pairwise.strategies)[number];
 
 const TONE_COLOR: Record<string, string> = {
   baseline: '#335cff',
@@ -18,8 +19,17 @@ const TONE_COLOR: Record<string, string> = {
   incumbent: '#8090aa',
 };
 const tone = (t: string) => TONE_COLOR[t] ?? '#8090aa';
-const f2 = (v: number) => v.toFixed(2);
 const share = (v: number) => `${v < 10 ? v.toFixed(1) : Math.round(v)}%`;
+const TOL = data.pairwise.orderTolerancePct;
+
+const orderConsistent = (c: CandidateRow) =>
+  Math.abs(c.incumbentFirst.winRatePct - c.candidateFirst.winRatePct) <= TOL;
+
+function candidateVerdict(c: CandidateRow): { text: string; bad: boolean } {
+  if (!orderConsistent(c)) return { text: '不可用（位置敏感）', bad: true };
+  if (c.conservativeWinRatePct >= 50) return { text: '不劣于现役', bad: false };
+  return { text: '劣于现役', bad: true };
+}
 
 function Heading({ tag, title, text }: { tag: string; title: string; text: string }) {
   return (
@@ -41,9 +51,9 @@ function Title({ tag, title, text }: { tag: string; title: string; text?: string
   );
 }
 
-function HBars({ rows, max, caption, height = 250 }: {
+function HBars({ rows, max, caption, height = 250, unit = '' }: {
   rows: { name: string; value: number; color: string; label: string }[];
-  max: number; caption: string; height?: number;
+  max: number; caption: string; height?: number; unit?: string;
 }) {
   return (
     <>
@@ -63,23 +73,69 @@ function HBars({ rows, max, caption, height = 250 }: {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <p className="chart-caption">{caption}</p>
+      <p className="chart-caption">{caption}{unit}</p>
+    </>
+  );
+}
+
+/** 每个候选两根条：现役在前 / 候选在前。50% 为"没有差别"的基准线。 */
+function PreferenceChart() {
+  const rows = data.pairwise.candidates.map((c) => ({
+    name: c.alias,
+    first: c.incumbentFirst.winRatePct,
+    second: c.candidateFirst.winRatePct,
+    consistent: orderConsistent(c),
+  }));
+  return (
+    <>
+      <div className="research-chart" style={{ height: 280 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={rows} layout="vertical" margin={{ top: 10, right: 60, bottom: 8, left: 0 }} barSize={13}>
+            <CartesianGrid stroke="#edf0f6" horizontal={false} />
+            <XAxis type="number" domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(v) => `${v}%`}
+                   axisLine={false} tickLine={false} tick={{ fill: '#8792a8', fontSize: 11 }} />
+            <YAxis type="category" dataKey="name" width={150} axisLine={false} tickLine={false} tick={{ fill: '#42516b', fontSize: 12 }} />
+            <ReferenceLine x={50} stroke="#c0392b" strokeDasharray="4 3" />
+            <Tooltip cursor={{ fill: '#f5f7fc' }} content={({ active, payload }) => {
+              if (!active || !payload?.length) return null;
+              const r = payload[0].payload;
+              return (
+                <div className="chart-tip">
+                  <strong>{r.name}</strong>
+                  <span>现役在前 {r.first}% · 候选在前 {r.second}%</span>
+                  <span>{r.consistent ? '两个方向一致' : '两个方向不一致（位置敏感）'}</span>
+                </div>
+              );
+            }} />
+            <Bar dataKey="first" fill="#335cff" radius={[0, 4, 4, 0]} isAnimationActive={false} />
+            <Bar dataKey="second" fill="#8b72dc" radius={[0, 4, 4, 0]} isAnimationActive={false} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <p className="chart-caption">
+        候选方案在两个方向上的胜率（对现役）。红色虚线 = 50%。<strong>两根条都落在同一侧才算结论</strong>；
+        分居两侧说明结果由位置决定，不进入结论。
+      </p>
+      <div className="hv-legend">
+        <span><i style={{ background: '#335cff' }} />现役写在前面</span>
+        <span><i style={{ background: '#8b72dc' }} />候选写在前面</span>
+        <span><i style={{ background: '#c0392b' }} />50% 无差别线</span>
+      </div>
     </>
   );
 }
 
 export default function RerankOverview() {
   const models: ModelRow[] = data.models;
-  const byQuality = [...models].sort((a, b) => b.judgeScore10 - a.judgeScore10);
-  const byCost = [...models].sort((a, b) => a.costShareOfBaselinePct - b.costShareOfBaselinePct);
-  const cheapest = byCost[0];
+  const byIncumbentCost = [...models].sort((a, b) => a.costShareOfIncumbentPct - b.costShareOfIncumbentPct);
+  const cheapest = byIncumbentCost[0];
   const fastest = [...models].sort((a, b) => a.batchWallP50S - b.batchWallP50S)[0];
-  const best = byQuality[0];
   const incumbent = models.find((m) => m.tone === 'incumbent')!;
-  const candidates = models.filter((m) => m.tone !== 'incumbent');
-  const router = data.router;
-  const base = router.baseline;
-  const ni = router.nonInferiority;
+  const midTier = models.find((m) => m.modelId === 'qwen3.7-plus')!;
+  const ds = models.find((m) => m.modelId === 'deepseek-v4.1-flash')!;
+  const pw = data.pairwise;
+  const cands = pw.candidates;
+  const flat = cands.find((c) => c.key === 'qwen3.8-flash');
   const medianMap = data.calibration.medianScoreByModel as Record<string, number>;
 
   return (
@@ -87,23 +143,23 @@ export default function RerankOverview() {
       <Heading
         tag={`独立实验 · ${data.experimentDate} · 生产检索链路`}
         title="精排模型横向对比与路由回测"
-        text={`离线冻结候选池上的精排（rerank）选型：${candidates.length} 个候选 + 现役对照（共 ${models.length} 个模型），质量由独立模型盲评（0–10），成本按公开价目折算为相对基线的比例。与 NL2IR 解析评测无关，两者不得混入同一组图。`}
+        text={`离线冻结候选池上的精排（rerank）选型：成本与兼容性是客观测量；质量用「对现役的成对偏好」衡量——${pw.sessions} 场真实检索、每场两个方向各重复 3 次，只看两个方向一致的结论。与 NL2IR 解析评测无关。`}
       />
 
       <div className="api-callout">
         <strong>口径边界</strong>
         <span>
           评测在固定规模的冻结候选池上复现生产精排路径（只替换模型）；不调线上流量、不发布查询、候选人、逐题输出或可还原评测集的标识。
-          判定为独立评审模型盲评（匿名乱序，{data.track.judgeRounds} 轮/会话），成本口径为{data.track.costCaliber}。
+          成本口径为{data.track.costCaliber}。
         </span>
       </div>
 
       <div className="api-insight-grid">
         <article className="api-insight api-insight-primary">
-          <span>质量最高（盲评）</span>
-          <strong>{f2(best.judgeScore10)}<small> / 10</small></strong>
-          <h3>{best.alias}</h3>
-          <p>{best.conclusion}</p>
+          <span>唯一可换的候选</span>
+          <strong>{flat ? `${share(flat.conservativeWinRatePct)}` : '—'}<small> 对现役胜率</small></strong>
+          <h3>{flat?.alias ?? '—'}</h3>
+          <p>{flat?.modelKey ? models.find((m) => m.modelId === flat.modelKey)?.conclusion : ''}</p>
         </article>
         <article className="api-insight api-insight-value">
           <span>成本最低</span>
@@ -121,30 +177,23 @@ export default function RerankOverview() {
 
       <div className="two-column api-chart-grid">
         <section className="panel">
-          <Title tag="决策图 01 · 质量" title="盲评得分（0–10）" text="同一批冻结候选池、同一评审口径，越高越好" />
-          <HBars
-            rows={byQuality.map((m) => ({ name: m.alias, value: m.judgeScore10, color: tone(m.tone), label: f2(m.judgeScore10) }))}
-            max={10}
-            caption={`分 · 每场 ${data.track.judgeRounds} 轮盲评取均值（排序合理性 + 理由质量）`}
-          />
-          <p className="chart-caption">
-            {best.alias} 以 {f2(best.judgeScore10)} 分居首；现役对照 {incumbent.alias} 为 {f2(incumbent.judgeScore10)} 分，
-            差距主要来自弱池查询上的评分失真。
-          </p>
+          <Title tag="决策图 01 · 质量" title="对现役的成对偏好" text="每场只有两个方案在场；同一对调换 A/B 顺序各评 3 次" />
+          <PreferenceChart />
         </section>
 
         <section className="panel">
-          <Title tag="决策图 02 · 成本" title="相对基线的成本占比" text="按公开价目折算；不公布绝对金额与 token 量级" />
+          <Title tag="决策图 02 · 成本" title="相对现役的成本占比" text="按公开价目折算；不公布绝对金额与 token 量级" />
           <HBars
-            rows={byCost.map((m) => ({
-              name: m.alias, value: m.costShareOfBaselinePct, color: tone(m.tone), label: share(m.costShareOfBaselinePct),
+            rows={byIncumbentCost.map((m) => ({
+              name: m.alias, value: Math.min(m.costShareOfIncumbentPct, 100),
+              color: tone(m.tone), label: share(m.costShareOfIncumbentPct),
             }))}
             max={100}
-            caption="占 max 基线成本的百分比 · 未计入缓存命中，实际支出更低"
+            caption="占现役成本的百分比，超出 100% 的按 100% 封顶显示 · 未计入缓存命中，实际支出更低"
           />
           <p className="chart-caption">
-            成本跨两个数量级：最高与最低相差约 {Math.round(100 / cheapest.costShareOfBaselinePct)} 倍；成本只反映单价，不等于质量。
-            但 max 并不是我们在付的钱——以<strong>现役</strong>为基准，中间档与 DeepSeek 反而更贵（见下表「占现役」列）。
+            以<strong>现役</strong>为分母，而不是质量天花板：中间档（{share(midTier.costShareOfIncumbentPct)}）与 DeepSeek（{share(ds.costShareOfIncumbentPct)}）
+            <strong>看着便宜、实际比现役还贵</strong>。
           </p>
         </section>
       </div>
@@ -166,26 +215,26 @@ export default function RerankOverview() {
       <section className="panel api-section">
         <Title
           tag="决策总表"
-          title="单模型与路由放在一起看：质量、价格、延迟"
-          text={`质量基线 = ${base.alias} 直连（干净子集 ${f2(base.judgeClean16)} 分 / 全集 ${f2(base.judgeAll20)} 分）；成本两列分别以该基线与现役模型为分母。`}
+          title="先看客观面，再看质量"
+          text={`现役 = ${incumbent.alias}，成本分母。质量只对 3 个候选测过；其余候选只有成本与兼容性数据。`}
         />
-        <h3 className="api-subhead">A · 单模型（含公开价目）</h3>
+
+        <h3 className="api-subhead">A · 单模型（成本 / 延迟 / 兼容性，均为客观测量）</h3>
         <div className="api-table-scroll">
           <table className="api-table">
             <thead>
               <tr>
-                <th>模型</th><th>盲评 0–10</th><th>公开价目 ¥/百万 tok（入 / 出）</th>
-                <th>占 max 基线</th><th>占现役</th><th>批量 P50</th><th>生产形态</th><th>角色</th>
+                <th>模型</th><th>公开价目 ¥/百万 tok（入 / 出）</th><th>占现役</th><th>占 max</th>
+                <th>批量 P50</th><th>生产形态</th><th>角色</th>
               </tr>
             </thead>
             <tbody>
-              {byQuality.map((m) => (
+              {byIncumbentCost.map((m) => (
                 <tr key={m.modelId}>
                   <th scope="row"><i className="api-dot" style={{ background: tone(m.tone) }} />{m.alias}</th>
-                  <td className="api-strong">{f2(m.judgeScore10)}</td>
                   <td>{m.priceCnyPerMTok.input} / {m.priceCnyPerMTok.output}</td>
-                  <td>{share(m.costShareOfBaselinePct)}</td>
                   <td className={m.costShareOfIncumbentPct > 100 ? 'api-bad' : ''}>{share(m.costShareOfIncumbentPct)}</td>
+                  <td>{share(m.costShareOfBaselinePct)}</td>
                   <td>{m.batchWallP50S}s</td>
                   <td className={m.compatibility.productionShape === 400 ? 'api-bad' : ''}>
                     {m.compatibility.productionShape === 200 ? '可直接跑' : '请求被拒'}
@@ -197,93 +246,117 @@ export default function RerankOverview() {
           </table>
         </div>
         <p className="chart-caption">
-          「占现役」= 相对现役模型的每次检索成本（同批冻结池实测用量 × 公开价目），<strong>现役 = 100%，超过即比现役更贵</strong>。
           价目为公开信息（{data.priceList.date}，{data.priceList.unit}）。现有结构化输出请求格式不被部分候选支持——
-          <strong>任何候选上线前都要先改代码</strong>。
+          <strong>任何候选上线前都要先改代码</strong>。红色 = 比现役更贵。
         </p>
 
-        <h3 className="api-subhead">B · 路由策略（同样按成本占比）</h3>
+        <h3 className="api-subhead">B · 对现役的成对偏好（质量，{pw.sessions} 场 × 每场 {pw.callsPerPair} 次调用）</h3>
         <div className="api-table-scroll">
           <table className="api-table">
             <thead>
               <tr>
-                <th>策略</th><th>是否用 max</th><th>干净子集 {router.cleanSubsetN} 场</th>
-                <th>全集 {router.cleanSubsetN + router.truncatedSessions} 场</th><th>占 max 基线</th><th>批量 P50</th>
+                <th>候选</th><th>场次（胜 / 负 / 平）</th>
+                <th>现役在前 胜率</th><th>候选在前 胜率</th><th>两向一致</th><th>判定</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row"><i className="api-dot" style={{ background: tone('baseline') }} />基线：全部走 {base.alias}</th>
-                <td>—</td>
-                <td className="api-strong">{f2(base.judgeClean16)}</td>
-                <td className="api-strong">{f2(base.judgeAll20)}</td>
-                <td>{share(base.costShareOfBaselinePct)}</td>
-                <td>{base.wallP50S}s</td>
-              </tr>
-              {router.strategies.map((s: StrategyRow) => (
+              {cands.map((c: CandidateRow) => {
+                const v = candidateVerdict(c);
+                const ok = orderConsistent(c);
+                return (
+                  <tr key={c.key}>
+                    <th scope="row">{c.alias}</th>
+                    <td>{c.wins} / {c.losses} / {c.ties}</td>
+                    <td>{c.incumbentFirst.candidateWins}–{c.incumbentFirst.incumbentWins}（{c.incumbentFirst.winRatePct}%）</td>
+                    <td className={ok ? '' : 'api-bad'}>{c.candidateFirst.candidateWins}–{c.candidateFirst.incumbentWins}（{c.candidateFirst.winRatePct}%）</td>
+                    <td className={ok ? '' : 'api-bad'}>{ok ? '一致' : '不一致'}</td>
+                    <td className={v.bad ? 'api-bad' : 'api-strong'}>{v.text}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="chart-caption">
+          「现役在前 / 候选在前」是同一对的两种呈现顺序。<strong>两向相差超过 {TOL} 个百分点即判为位置敏感、结论不可用</strong>
+          （表格保留原始数字，不做平滑）。判定按两个方向里对候选最不利的胜率给出。
+        </p>
+
+        <h3 className="api-subhead">C · 路由策略（由模型胜负推导，无需额外评审）</h3>
+        <div className="api-table-scroll">
+          <table className="api-table">
+            <thead><tr><th>策略</th><th>是否调用 max</th><th>场次（胜 / 负 / 平）</th><th>对照</th></tr></thead>
+            <tbody>
+              {pw.strategies.map((s: StrategyRow) => (
                 <tr key={s.key}>
                   <th scope="row">
                     {s.policy}
-                    {s.key === router.bestNoMaxKey && <b className="api-flag">不用 max 最优</b>}
+                    {s.key === pw.bestStrategyKey && <b className="api-flag">本表最高</b>}
                   </th>
                   <td>{s.usesMax ? '是' : '否'}</td>
-                  <td className={s.judgeClean16 < base.judgeClean16 ? 'api-bad' : ''}>{f2(s.judgeClean16)}</td>
-                  <td className={s.judgeAll20 < base.judgeAll20 ? 'api-bad' : ''}>{f2(s.judgeAll20)}</td>
-                  <td>{share(s.costShareOfBaselinePct)}</td>
-                  <td>{s.wallP50S}s</td>
+                  <td className={s.wins < s.losses ? 'api-bad' : ''}>{s.wins} / {s.losses} / {s.ties}</td>
+                  <td>{s.key === 'flash38Only' ? '即"全部走 3.8 Flash"' : ''}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <p className="chart-caption">
-          本表成本以质量基线（max）为分母。路由回测未跑现役模型，因此<strong>无法给出「占现役」列</strong>——
-          这批会话上现役的成本与质量都缺测，是后续要补的缺口。
+          策略每场选了哪个模型，就等于该模型在本场对现役的胜负——所以不需要再评一遍。
+          <strong>没有任何分流策略优于「全部走 Qwen 3.8 Flash」</strong>。
         </p>
 
         <div className="api-callout api-callout-block">
           <strong>结论</strong>
-          <span>{router.verdict}</span>
+          <span>{pw.verdict}</span>
         </div>
 
         <div className="two-column api-chart-grid">
           <div className="panel api-subpanel">
-            <Title tag="非劣口径" title={`「接近 max」= 差距 ≤ ${ni.margin.toFixed(1)} 分？`} text={ni.note} />
+            <Title tag="方法学 · 为什么这次的数字可以用" title="评审自己先过了定标对照" text={pw.rootCause} />
             <div className="api-table-scroll">
               <table className="api-table">
-                <thead><tr><th>口径</th><th>不用 max 最优差距</th><th>是否达标</th></tr></thead>
+                <thead><tr><th>对照</th><th>修复前</th><th>修复后</th></tr></thead>
                 <tbody>
                   <tr>
-                    <th scope="row">干净子集（{router.cleanSubsetN} 场）</th>
-                    <td>{f2(ni.gapClean16)} 分</td>
-                    <td className={ni.passesClean16 ? '' : 'api-bad'}>{ni.passesClean16 ? '达标' : '未达标'}</td>
+                    <th scope="row">两侧完全相同（应全判平）</th>
+                    <td>{pw.validation.beforeFix?.identicalPairAllTie}</td>
+                    <td className="api-strong">{pw.validation.afterFix?.identicalPairAllTie}</td>
                   </tr>
                   <tr>
-                    <th scope="row">全集（{router.cleanSubsetN + router.truncatedSessions} 场）</th>
-                    <td>{f2(ni.gapAll20)} 分</td>
-                    <td className={ni.passesAll20 ? '' : 'api-bad'}>{ni.passesAll20 ? '达标' : '未达标'}</td>
+                    <th scope="row">故意排坏（应被认出）</th>
+                    <td>{pw.validation.beforeFix?.degradedOrderDetected}</td>
+                    <td className="api-strong">{pw.validation.afterFix?.degradedOrderDetected}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">反而认为坏排序更好</th>
+                    <td className="api-bad">{pw.validation.beforeFix?.degradedOrderInverted}</td>
+                    <td className="api-strong">{pw.validation.afterFix?.degradedOrderInverted}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <p className="chart-caption">界限由本页显式设定为 {ni.margin.toFixed(1)} 分，便于替换成业务口径后重读上表。</p>
+            <p className="chart-caption">
+              「故意排坏」= 把同一份排序按置信度升序重排（最不相关的排最前）。修复前评审看不出来、还会 2/16 场反着判；
+              修复后不再出现反向误判。定标不过关的数字不写进结论。
+            </p>
           </div>
           <div className="panel api-subpanel">
-            <Title tag="必须知道的两个风险" title="数字之外，还有两件事" />
-            <div className="interpretation"><span>评审噪声</span><p>{router.judgeNoiseNote}</p></div>
-            <div className="interpretation"><span>规则来源</span><p>{router.postHocNote}</p></div>
-            <p className="chart-caption">{router.oracleNote}</p>
+            <Title tag="必须知道的三个限制" title="数字之外" />
+            <div className="interpretation">
+              <span>只能说「不劣于」</span>
+              <p>全部差异都不显著（{cands.map((c) => `${c.alias.split('（')[0]} p=${c.signP}`).join('、')}），16 场会话的样本量支撑不了「更好」。</p>
+            </div>
+            <div className="interpretation">
+              <span>单一评审</span>
+              <p>{pw.caliber}</p>
+            </div>
+            <div className="interpretation">
+              <span>截断场次被排除</span>
+              <p>有评测场的候选名单被生产后处理过滤截断，评审只看到极少数候选人，这些场次不参与质量对比。</p>
+            </div>
           </div>
         </div>
-
-        <div className="interpretation">
-          <span>为什么全集数字更好看</span>
-          <p>
-            {router.truncatedSessions} 场评测的候选名单被生产后处理过滤截断，评审只看到少量候选人（{router.truncatedRange.min}–{router.truncatedRange.max} 人），
-            这些场次的分差不可比；剔除后得到干净子集。
-          </p>
-        </div>
-        <p className="chart-caption">leave-one-out 选规则均值 {router.looMean} 分（低于基线）。</p>
       </section>
 
       <div className="two-column">

@@ -1,13 +1,11 @@
 {
   "schema": "rerank-model-selection/v1",
   "experimentDate": "2026-10-08",
-  "scope": "生产检索链路的 LLM 精排（rerank）模型选型与路由回测；离线冻结候选池；与 NL2IR 解析评测无关，两者不得混入同一组图。",
-  "primaryMetric": "judgeScore10",
+  "scope": "生产检索链路的 LLM 精排（rerank）模型选型；离线冻结候选池；与 NL2IR 解析评测无关，两者不得混入同一组图。",
+  "primaryMetric": "pairwisePreferenceVsIncumbent",
   "track": {
     "frozenPools": true,
-    "judge": "独立评审模型盲评（匿名乱序，2 轮/会话，排序合理性 + 理由质量，0–10）",
-    "judgeRounds": 2,
-    "costCaliber": "按公开价目折算的每次检索成本，以基线百分比表示；不公布绝对金额与 token 量级",
+    "costCaliber": "按公开价目折算的每次检索成本，以百分比表示；不公布绝对金额与 token 量级",
     "noPerItemData": "不发布查询、候选人、逐题输出或任何可还原评测集的标识"
   },
   "priceList": {
@@ -47,76 +45,11 @@
   },
   "models": [
     {
-      "modelId": "qwen3.7-max",
-      "alias": "Qwen 3.7 Max",
-      "tone": "baseline",
-      "role": "质量基线",
-      "conclusion": "质量最稳（无低于 7 的轮次），但成本约为最低成本候选的 57 倍。",
-      "judgeScore10": 7.92,
-      "judgeSessions": 3,
-      "costShareOfBaselinePct": 100.0,
-      "costShareOfIncumbentPct": 888.6,
-      "batchWallP50S": 12.4,
-      "priceCnyPerMTok": {
-        "input": 12.0,
-        "output": 36.0
-      },
-      "compatibility": {
-        "productionShape": 400,
-        "structuredOutputVariant": 200,
-        "jsonObject": 200
-      }
-    },
-    {
-      "modelId": "qwen3.7-plus",
-      "alias": "Qwen 3.7 Plus",
-      "tone": "candidate",
-      "role": "中间档候选",
-      "conclusion": "全场景中庸、无重大缺陷；适合作为中间档观察。",
-      "judgeScore10": 7.0,
-      "judgeSessions": 3,
-      "costShareOfBaselinePct": 13.9,
-      "costShareOfIncumbentPct": 123.2,
-      "batchWallP50S": 12.1,
-      "priceCnyPerMTok": {
-        "input": 1.6,
-        "output": 6.4
-      },
-      "compatibility": {
-        "productionShape": 400,
-        "structuredOutputVariant": 200,
-        "jsonObject": 200
-      }
-    },
-    {
-      "modelId": "qwen3.8-flash",
-      "alias": "Qwen 3.8 Flash",
-      "tone": "candidate",
-      "role": "弱池行为修正候选",
-      "conclusion": "弱池排序最正确，但结构化条件场景会误标院校；成本约为最低成本候选的 3.9 倍。",
-      "judgeScore10": 6.67,
-      "judgeSessions": 3,
-      "costShareOfBaselinePct": 6.8,
-      "costShareOfIncumbentPct": 60.1,
-      "batchWallP50S": 13.1,
-      "priceCnyPerMTok": {
-        "input": 0.8,
-        "output": 2.7
-      },
-      "compatibility": {
-        "productionShape": 400,
-        "structuredOutputVariant": 200,
-        "jsonObject": 200
-      }
-    },
-    {
       "modelId": "qwen3.7-flash",
       "alias": "Qwen 3.7 Flash",
       "tone": "value",
       "role": "最低成本候选",
-      "conclusion": "成本最低（约为基线的 1/57）；结构化条件场景最强，但弱池上复现现役的评分虚高与模板化理由。",
-      "judgeScore10": 6.42,
-      "judgeSessions": 3,
+      "conclusion": "成本最低（占现役 16%）；成对评审两个方向互相矛盾，质量差异未被排除。",
       "costShareOfBaselinePct": 1.7,
       "costShareOfIncumbentPct": 15.5,
       "batchWallP50S": 10.1,
@@ -131,13 +64,68 @@
       }
     },
     {
+      "modelId": "qwen3.8-flash",
+      "alias": "Qwen 3.8 Flash",
+      "tone": "candidate",
+      "role": "弱池行为修正候选",
+      "conclusion": "成对评审 8 胜 7 负且两个方向一致——未显示劣于现役，成本降到现役 60%。",
+      "costShareOfBaselinePct": 6.8,
+      "costShareOfIncumbentPct": 60.1,
+      "batchWallP50S": 13.1,
+      "priceCnyPerMTok": {
+        "input": 0.8,
+        "output": 2.7
+      },
+      "compatibility": {
+        "productionShape": 400,
+        "structuredOutputVariant": 200,
+        "jsonObject": 200
+      }
+    },
+    {
+      "modelId": "qwen3.6-flash",
+      "alias": "Qwen 3.6 Flash（现役）",
+      "tone": "incumbent",
+      "role": "现役对照",
+      "conclusion": "现役：唯一能在生产请求形态下原样跑通的模型，批量耗时最低。",
+      "costShareOfBaselinePct": 11.3,
+      "costShareOfIncumbentPct": 100.0,
+      "batchWallP50S": 5.7,
+      "priceCnyPerMTok": {
+        "input": 1.2,
+        "output": 7.2
+      },
+      "compatibility": {
+        "productionShape": 200,
+        "structuredOutputVariant": 200,
+        "jsonObject": 200
+      }
+    },
+    {
+      "modelId": "qwen3.7-plus",
+      "alias": "Qwen 3.7 Plus",
+      "tone": "candidate",
+      "role": "中间档候选",
+      "conclusion": "成本高于现役（占 123%）；质量未测。",
+      "costShareOfBaselinePct": 13.9,
+      "costShareOfIncumbentPct": 123.2,
+      "batchWallP50S": 12.1,
+      "priceCnyPerMTok": {
+        "input": 1.6,
+        "output": 6.4
+      },
+      "compatibility": {
+        "productionShape": 400,
+        "structuredOutputVariant": 200,
+        "jsonObject": 200
+      }
+    },
+    {
       "modelId": "deepseek-v4.1-flash",
       "alias": "DeepSeek V4.1 Flash",
       "tone": "hold",
       "role": "不建议（幻觉 + 偶发请求失败）",
-      "conclusion": "理由幻觉与偶发请求失败未解决；不建议替换现役。",
-      "judgeScore10": 6.33,
-      "judgeSessions": 3,
+      "conclusion": "成本高于现役（占 141%）且不支持现有结构化输出格式；质量未测。",
       "costShareOfBaselinePct": 15.9,
       "costShareOfIncumbentPct": 141.3,
       "batchWallP50S": 7.5,
@@ -156,9 +144,7 @@
       "alias": "Qwen 3.8 Max 0902",
       "tone": "hold",
       "role": "同价位不划算",
-      "conclusion": "与质量基线同价位但结构化场景表现明显更差。",
-      "judgeScore10": 6.08,
-      "judgeSessions": 3,
+      "conclusion": "成本是现役的 8.6 倍；质量未测。",
       "costShareOfBaselinePct": 97.1,
       "costShareOfIncumbentPct": 862.6,
       "batchWallP50S": 11.8,
@@ -173,22 +159,20 @@
       }
     },
     {
-      "modelId": "qwen3.6-flash",
-      "alias": "Qwen 3.6 Flash（现役）",
-      "tone": "incumbent",
-      "role": "现役对照",
-      "conclusion": "现役对照：弱池评分失真最严重（理由自述不相关却给 0.95），响应最快。",
-      "judgeScore10": 5.33,
-      "judgeSessions": 3,
-      "costShareOfBaselinePct": 11.3,
-      "costShareOfIncumbentPct": 100.0,
-      "batchWallP50S": 5.7,
+      "modelId": "qwen3.7-max",
+      "alias": "Qwen 3.7 Max",
+      "tone": "baseline",
+      "role": "质量基线",
+      "conclusion": "成对评审 8 胜 6 负（不显著），但成本是现役的 8.9 倍。",
+      "costShareOfBaselinePct": 100.0,
+      "costShareOfIncumbentPct": 888.6,
+      "batchWallP50S": 12.4,
       "priceCnyPerMTok": {
-        "input": 1.2,
-        "output": 7.2
+        "input": 12.0,
+        "output": 36.0
       },
       "compatibility": {
-        "productionShape": 200,
+        "productionShape": 400,
         "structuredOutputVariant": 200,
         "jsonObject": 200
       }
@@ -201,125 +185,173 @@
   "calibration": {
     "probeNote": "在检索结果与查询需求几乎不匹配的池子上，各模型给出的分数刻度差异很大",
     "medianScoreByModel": {
-      "qwen3.8-flash": 0.1,
-      "qwen3.8-max-0902": 0.1,
-      "deepseek-v4.1-flash": 0.16,
-      "qwen3.7-plus": 0.1,
-      "qwen3.6-flash": 0.5,
       "qwen3.7-flash": 0.5,
-      "qwen3.7-max": 0.1
+      "qwen3.8-flash": 0.1,
+      "qwen3.6-flash": 0.5,
+      "qwen3.7-plus": 0.1,
+      "deepseek-v4.1-flash": 0.16,
+      "qwen3.7-max": 0.1,
+      "qwen3.8-max-0902": 0.1
     },
     "scaleNotPortable": true,
     "note": "现役的合格线是按旧一代模型的分数刻度校准的；新一代模型在同一池上的分数刻度低一个数量级，直接换模型会让这类查询返回空结果页，换模型前必须重新校准合格线。"
   },
-  "router": {
-    "caliber": "固定规模的内部评测集（脱敏聚合），冻结候选池；判定 = 独立模型盲评（0–10，2 轮/会话）",
-    "baseline": {
-      "modelId": "qwen3.7-max",
-      "alias": "Qwen 3.7 Max",
-      "judgeAll20": 7.31,
-      "judgeAll20Min": 3.75,
-      "judgeClean16": 7.34,
-      "judgeClean16Min": 3.75,
-      "costShareOfBaselinePct": 100.0,
-      "wallP50S": 13.8
-    },
-    "strategies": [
+  "pairwise": {
+    "caliber": "成对偏好评审：每场 prompt 内只有两个方案，A/B 顺序互换，每格重复 3 次；候选人资料含完整工作经历。判定单位 = 场（多数票），另给两个方向各自的胜率。",
+    "sessions": 16,
+    "callsPerPair": 6,
+    "orderTolerancePct": 15,
+    "candidates": [
       {
-        "policy": "全部走最低成本候选（Qwen 3.7 Flash）",
-        "key": "cheapOnly",
-        "usesMax": false,
-        "judgeAll20": 6.28,
-        "judgeAll20Min": 2.5,
-        "judgeClean16": 6.0,
-        "judgeClean16Min": 2.5,
-        "costShareOfBaselinePct": 1.8,
-        "wallP50S": 10.2
+        "key": "qwen3.8-flash",
+        "modelKey": "qwen3.8-flash",
+        "alias": "Qwen 3.8 Flash",
+        "wins": 8,
+        "losses": 7,
+        "ties": 1,
+        "incumbentFirst": {
+          "candidateWins": 24,
+          "incumbentWins": 19,
+          "winRatePct": 55.8
+        },
+        "candidateFirst": {
+          "candidateWins": 23,
+          "incumbentWins": 18,
+          "winRatePct": 56.1
+        },
+        "conservativeWinRatePct": 55.8,
+        "signP": 1.0
       },
       {
-        "policy": "全部走 Qwen 3.8 Flash",
-        "key": "flash38Only",
-        "usesMax": false,
-        "judgeAll20": 6.51,
-        "judgeAll20Min": 2.5,
-        "judgeClean16": 6.28,
-        "judgeClean16Min": 2.5,
-        "costShareOfBaselinePct": 6.8,
-        "wallP50S": 12.1
+        "key": "qwen3.7-max",
+        "modelKey": "qwen3.7-max",
+        "alias": "Qwen 3.7 Max",
+        "wins": 8,
+        "losses": 6,
+        "ties": 2,
+        "incumbentFirst": {
+          "candidateWins": 23,
+          "incumbentWins": 19,
+          "winRatePct": 54.8
+        },
+        "candidateFirst": {
+          "candidateWins": 28,
+          "incumbentWins": 16,
+          "winRatePct": 63.6
+        },
+        "conservativeWinRatePct": 54.8,
+        "signP": 0.791
       },
       {
-        "policy": "软条件≥2 → 3.8 Flash，其余 → 3.7 Flash",
-        "key": "softN",
-        "usesMax": false,
-        "judgeAll20": 7.15,
-        "judgeAll20Min": 4.0,
-        "judgeClean16": 6.75,
-        "judgeClean16Min": 4.0,
-        "costShareOfBaselinePct": 4.3,
-        "wallP50S": 11.4
+        "key": "qwen3.7-flash",
+        "modelKey": "qwen3.7-flash",
+        "alias": "Qwen 3.7 Flash",
+        "wins": 5,
+        "losses": 8,
+        "ties": 3,
+        "incumbentFirst": {
+          "candidateWins": 20,
+          "incumbentWins": 17,
+          "winRatePct": 54.1
+        },
+        "candidateFirst": {
+          "candidateWins": 13,
+          "incumbentWins": 26,
+          "winRatePct": 33.3
+        },
+        "conservativeWinRatePct": 33.3,
+        "signP": 0.581
       },
       {
-        "policy": "软条件≥2 → 3.8 Flash；结构化条件≥4 → 3.7 Max；其余 → 3.7 Flash",
-        "key": "softN_hardN",
-        "usesMax": true,
-        "judgeAll20": 7.26,
-        "judgeAll20Min": 4.0,
-        "judgeClean16": 6.89,
-        "judgeClean16Min": 4.0,
-        "costShareOfBaselinePct": 5.4,
-        "wallP50S": 11.7
-      },
-      {
-        "policy": "排名融合：两个 Flash 候选的排名合并（并行）",
         "key": "bordaMerge",
-        "usesMax": false,
-        "judgeAll20": 6.59,
-        "judgeAll20Min": 3.5,
-        "judgeClean16": 6.84,
-        "judgeClean16Min": 5.5,
-        "costShareOfBaselinePct": 8.5,
-        "wallP50S": 13.3
+        "modelKey": null,
+        "alias": "Borda 融合（3.7 Flash + 3.8 Flash 排名合并）",
+        "wins": 8,
+        "losses": 3,
+        "ties": 5,
+        "incumbentFirst": {
+          "candidateWins": 24,
+          "incumbentWins": 24,
+          "winRatePct": 50.0
+        },
+        "candidateFirst": {
+          "candidateWins": 32,
+          "incumbentWins": 11,
+          "winRatePct": 74.4
+        },
+        "conservativeWinRatePct": 50.0,
+        "signP": 0.227
       }
     ],
-    "cleanSubsetN": 16,
-    "truncatedSessions": 4,
-    "truncatedRange": {
-      "min": 2,
-      "max": 22
+    "strategies": [
+      {
+        "key": "cheapOnly",
+        "policy": "全部走最低成本候选（Qwen 3.7 Flash）",
+        "usesMax": false,
+        "wins": 5,
+        "losses": 8,
+        "ties": 3
+      },
+      {
+        "key": "flash38Only",
+        "policy": "全部走 Qwen 3.8 Flash",
+        "usesMax": false,
+        "wins": 8,
+        "losses": 7,
+        "ties": 1
+      },
+      {
+        "key": "softN",
+        "policy": "软条件≥2 → 3.8 Flash，其余 → 3.7 Flash",
+        "usesMax": false,
+        "wins": 5,
+        "losses": 9,
+        "ties": 2
+      },
+      {
+        "key": "softN_hardN",
+        "policy": "软条件≥2 → 3.8 Flash；结构化条件≥4 → 3.7 Max；其余 → 3.7 Flash",
+        "usesMax": true,
+        "wins": 6,
+        "losses": 8,
+        "ties": 2
+      }
+    ],
+    "bestStrategyKey": "flash38Only",
+    "validation": {
+      "afterFix": {
+        "identicalPairAllTie": "16/16",
+        "degradedOrderDetected": "7/16",
+        "degradedOrderInverted": "0/16"
+      },
+      "beforeFix": {
+        "identicalPairAllTie": "16/16",
+        "degradedOrderDetected": "3/16",
+        "degradedOrderInverted": "2/16"
+      }
     },
-    "looMean": 7.15,
-    "bestNoMaxKey": "bordaMerge",
-    "nonInferiority": {
-      "margin": 0.5,
-      "gapClean16": 0.5,
-      "gapAll20": 0.72,
-      "passesClean16": true,
-      "passesAll20": false,
-      "note": "「接近 max」是否算成功取决于预先设定的非劣界限；本页不代替该业务判断，只给出两种口径下的差距。"
-    },
-    "verdict": "不用 max 的最优策略（按干净子集）是「排名融合：两个 Flash 候选的排名合并（并行）」：干净子集 6.84 对基线 7.34，达标（差 0.50 ≤ 界限 0.5）；全集口径差 0.72，未达标（差 0.72 > 界限 0.5）。成本仅为基线的 8%。允许在结构化条件多时调用 max 的变体差 0.45 分（该策略已不属于「不用 max」）。以「打平 max」为目标不成立；以「接近 max」为目标则取决于预先设定的非劣界限——本页把界限设为 0.5 分并给出两种口径的通过情况；规则为事后提出，定论仍需独立留出集复验。",
-    "judgeNoiseNote": "同一提示词重跑，单场 Qwen 3.7 Flash 的判定在 9/8 与 3/4 之间翻转；单轮 1 分级别的差异不可解读为模型优劣。",
-    "postHocNote": "分流规则是在看过这批评测之后提出的，leave-one-out 不能消除规则族的选择偏差；落地前需要在预先冻结规则与预先设定非劣界限的前提下，用独立留出集复验。",
-    "oracleNote": "上限参考：逐场取最优模型（oracle）显著高于任一固定策略，说明信息存在但当前可计算的特征尚不足以稳定地利用它。"
+    "rootCause": "早期评审把候选人工作经历截断为「最近 1 段 + 历史 3 段」：评审因此无法核验「最近一份在X」这类条件，并把摘要里没出现的公司当成编造，表现为大量判平与分数漂移。补全工作经历并改为成对比较后，评审恢复可判（见定标对照）。",
+    "verdict": "换掉现役是否值得：唯一两个方向一致、且都不劣于现役的候选是 Qwen 3.8 Flash（场次 8 胜 7 负 1 平；两向胜率 56% / 56%），成本为现役的 60%。最便宜的 Qwen 3.7 Flash 两个方向互相矛盾（54% / 33%），判定不可用——省下的成本对应未被排除的质量风险。路由没有收益：按软条件分流（5 胜 9 负）、软条件+结构化条件分流（6 胜 8 负），都不优于「全部走 Qwen 3.8 Flash」。Borda 融合的场次战绩看似更好，但两个方向不一致（50% / 74%），按保守口径判为与现役打平。Qwen 3.7 Max 同样两向一致、略优于现役，但成本是现役的 8.9 倍。"
   },
   "limitations": [
     "内部评测集规模有限，来自同一来源与同一时间段，不可外推为线上整体效果。",
-    "判定为单一评审模型，未做第二评审交叉验证；同一提示词重跑存在翻转，±1 分级差异不可解读。",
-    "路由规则为看数据后提出（post-hoc），leave-one-out 不能消除规则族选择偏差；需要预先冻结规则 + 独立留出集复验。",
-    "部分评测场的候选名单被生产后处理过滤截断，评审只看到少量候选人；全集数字因此偏高。",
+    "质量对比为单一评审模型、16 场会话、单次运行；全部差异都不显著，只能支撑「不劣于」，不能支撑「更好」。",
+    "两个方向的胜率不一致（约 15 个百分点以上）时判定为不可用——位置敏感的结果不进入结论。",
+    "部分评测场的候选名单被生产后处理过滤截断，评审只看到少量候选人；这些场次不参与质量对比。",
     "成本按公开价目当日折扣价折算，未计入缓存命中；实际支出会低于按价目折算的结果。",
     "现役合格线不可平移（分数刻度存在代际差），阈值迁移与排名分位方案尚未验证。",
-    "现有结构化输出请求格式不被部分候选支持，启用前必须改代码。"
+    "现有结构化输出请求格式不被部分候选支持，启用前必须改代码。",
+    "三个候选（中间档、DeepSeek、3.8 Max 0902）只有成本与兼容性数据，质量未测。"
   ],
   "provenance": {
     "evaluatedBy": "内部离线评估（脱敏聚合；原始工件与提取脚本不发布）",
     "codexReview": {
       "date": "2026-10-08",
-      "scope": "独立复核回测结论：复算全部数字一致；指出候选名单截断、冻结池未持久化、计数竞态与缺现役对照",
-      "effect": "结论由「router 与 max 持平」下调为「需留出集复验；两种口径下是否达标不同」"
+      "scope": "独立复核：指出候选名单截断、冻结池未持久化与缺现役对照；后续复核又定位到评审输入把工作经历截断，导致评审无法核验条件",
+      "effect": "质量结论由「评分排名」下调为「成对偏好 + 定标对照」；不可复现的差异一律不写进结论"
     },
     "artifacts": [
-      "内部工件（不发布）：模型对比与路由回测的逐场分数与用量记录"
+      "内部工件（不发布）：逐场排序结果、用量记录与评审定标对照"
     ]
   }
 }
