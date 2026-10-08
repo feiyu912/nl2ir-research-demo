@@ -544,25 +544,33 @@ def check_rerank_model_selection(report: Report, payload: dict) -> None:
     if worst != "qwen3.6-flash":
         report.error(f"rerank_model_selection 质量最低应为 qwen3.6-flash，实际 {worst}")
 
-    # 成本单调性（元/次）：max 档 > ds > plus > 现役 flash > 3.8 flash > 3.7 flash
+    # 成本单调性（占基线百分比）：max 档 > ds > plus > 现役 flash > 3.8 flash > 3.7 flash
     order = ["qwen3.7-max", "qwen3.8-max-0902", "deepseek-v4.1-flash", "qwen3.7-plus",
              "qwen3.6-flash", "qwen3.8-flash", "qwen3.7-flash"]
-    costs = [by_id[k].get("costPerSearchCny", -1) for k in order]
-    if any(c is None or c <= 0 for c in costs):
-        report.error("rerank_model_selection 成本缺失或非正")
-    elif costs != sorted(costs, reverse=True):
-        report.error(f"rerank_model_selection 成本排序不符: {list(zip(order, costs))}")
+    shares = [by_id[k].get("costShareOfBaselinePct", -1) for k in order]
+    if any(c is None or c <= 0 for c in shares):
+        report.error("rerank_model_selection 成本占比缺失或非正")
+    elif shares != sorted(shares, reverse=True):
+        report.error(f"rerank_model_selection 成本占比排序不符: {list(zip(order, shares))}")
+    if by_id["qwen3.7-max"].get("costShareOfBaselinePct") != 100.0:
+        report.error("rerank_model_selection 基线成本占比应为 100")
 
-    # 兼容性：只有现役能在生产形态原样跑；3.7/3.8 系 400（uniqueItems）；deepseek 不支持 json_schema
+    # 批量耗时范围必须与逐模型值一致
+    rng = payload.get("batchWallRangeS") or {}
+    walls = [m.get("batchWallP50S") for m in models]
+    if rng.get("min") != min(walls) or rng.get("max") != max(walls):
+        report.error(f"rerank_model_selection batchWallRangeS 与逐模型值不一致: {rng} vs {min(walls)}-{max(walls)}")
+
+    # 兼容性：只有现役能在生产形态原样跑；其余 400；deepseek 连结构化输出变体也不支持
     for mid, m in by_id.items():
         compat = m.get("compatibility") or {}
         want = 200 if mid == "qwen3.6-flash" else 400
         if compat.get("productionShape") != want:
             report.error(f"rerank_model_selection 生产形态兼容性不符: {mid} {compat.get('productionShape')}")
-    if (by_id["deepseek-v4.1-flash"].get("compatibility") or {}).get("schemaNoUniqueItems") != 400:
-        report.error("rerank_model_selection deepseek 去掉 uniqueItems 后仍应不可用")
+    if (by_id["deepseek-v4.1-flash"].get("compatibility") or {}).get("structuredOutputVariant") != 400:
+        report.error("rerank_model_selection deepseek 结构化输出变体仍应不可用")
 
-    # 校准：现役与 3.7 Flash 中位数虚高；其余 ≤ 0.2；阈值不可平移必须显式声明
+    # 校准：现役与 3.7 Flash 中位数虚高；其余 ≤ 0.2；合格线不可平移必须显式声明
     cal = payload.get("calibration") or {}
     med = cal.get("medianScoreByModel") or {}
     if med.get("qwen3.6-flash") != 0.5 or med.get("qwen3.7-flash") != 0.5:
@@ -570,8 +578,8 @@ def check_rerank_model_selection(report: Report, payload: dict) -> None:
     others = [v for k, v in med.items() if k not in ("qwen3.6-flash", "qwen3.7-flash")]
     if any(v is None or v > 0.2 for v in others):
         report.error(f"rerank_model_selection 新一代模型弱池中位数应 ≤0.2: {med}")
-    if cal.get("minConfidenceNotPortable") is not True:
-        report.error("rerank_model_selection 必须声明 0.75 合格线不可平移")
+    if cal.get("scaleNotPortable") is not True:
+        report.error("rerank_model_selection 必须声明现役合格线不可平移")
 
     # 路由：结论的事实必须是「干净子集上没有任何低成本策略追平 max」
     router = payload.get("router") or {}
@@ -614,7 +622,7 @@ def check_rerank_model_selection(report: Report, payload: dict) -> None:
 
     # 必须声明的三类风险
     limits = " ".join(payload.get("limitations") or [])
-    for need in ("post-hoc", "holdout", "翻转"):
+    for need in ("post-hoc", "留出集", "翻转"):
         if need not in limits:
             report.error(f"rerank_model_selection limitations 缺风险声明: {need}")
     if "judgeNoiseNote" not in router or "postHocNote" not in router:
@@ -629,6 +637,14 @@ def check_rerank_model_selection(report: Report, payload: dict) -> None:
     leaked = _walk_keys(payload) & RERANK_FORBIDDEN_KEYS
     if leaked:
         report.error(f"rerank_model_selection 含逐题字段: {sorted(leaked)}")
+    # 脱敏：不得出现内部项目名 / 路径 / 系统参数
+    blob = json.dumps(payload, ensure_ascii=False)
+    # 通用模式：内部服务名（*-service）、内部路径、内部步骤/参数名——不在此处写出任何真实内部标识
+    internal_leaks = [t for t in ("-service", "/tmp/", "/dat/", "hard-fail", "hard_fail",
+                                  "uniqueItems", "min_confidence", "minConfidence", "审计库", "0.75")
+                      if t in blob]
+    if internal_leaks:
+        report.error(f"rerank_model_selection 含内部信息: {internal_leaks}")
 
 
 def main() -> int:
