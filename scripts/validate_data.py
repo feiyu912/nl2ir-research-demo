@@ -97,7 +97,8 @@ def check_public_sanitization(report: Report) -> None:
         if os.environ.get("NL2IR_REQUIRE_DENYLIST") == "1":
             report.error(msg)
         else:
-            report.warn(msg)
+            # 只做信息输出：CI 是干净 clone（黑名单被 gitignore），不能因此把它判红。
+            print(f"  [INFO] {msg}")
     for path in _published_text_files():
         rel = path.relative_to(ROOT).as_posix()
         for lineno, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
