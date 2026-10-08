@@ -1,0 +1,337 @@
+{
+  "schema": "rerank-model-selection/v1",
+  "experimentDate": "2026-10-08",
+  "scope": "生产检索链路的 LLM 精排（rerank）模型选型与路由回测；离线冻结召回池；与 NL2IR 解析评测无关，两者不得混入同一组图。",
+  "primaryMetric": "judgeScore10",
+  "track": {
+    "frozenRecallPools": true,
+    "judge": "独立评审模型盲评（匿名乱序，2 轮/会话，排序合理性 + 理由质量，0–10）",
+    "shardSize": 8,
+    "poolSize": 200,
+    "judgeRounds": 2,
+    "costCaliber": "实测 token × 公开价目（元/百万 tokens）；不含缓存命中折扣",
+    "noPerItemData": "不发布 query、候选人、逐题输出或任何可还原评测集的标识"
+  },
+  "priceList": {
+    "date": "2026-10-08",
+    "source": "百炼模型广场价格页（公开价目；限时折扣按当日显示）",
+    "unit": "元/百万 tokens",
+    "entries": {
+      "qwen3.7-flash": {
+        "input": 0.2,
+        "output": 0.8
+      },
+      "qwen3.8-flash": {
+        "input": 0.8,
+        "output": 2.7
+      },
+      "qwen3.6-flash": {
+        "input": 1.2,
+        "output": 7.2
+      },
+      "qwen3.7-plus": {
+        "input": 1.6,
+        "output": 6.4
+      },
+      "deepseek-v4.1-flash": {
+        "input": 2.0,
+        "output": 8.0
+      },
+      "qwen3.7-max": {
+        "input": 12.0,
+        "output": 36.0
+      },
+      "qwen3.8-max-0902": {
+        "input": 12.0,
+        "output": 36.0
+      }
+    }
+  },
+  "models": [
+    {
+      "modelId": "qwen3.7-max",
+      "alias": "Qwen 3.7 Max",
+      "tone": "baseline",
+      "role": "质量基线",
+      "judgeScore10": 7.92,
+      "judgeSessions": 3,
+      "costPerSearchCny": 3.8891,
+      "wallP50S": 11.5,
+      "wallMaxS": 12.4,
+      "shardCallP50S": 9.4,
+      "priceCnyPerMTok": {
+        "input": 12.0,
+        "output": 36.0
+      },
+      "compatibility": {
+        "productionShape": 400,
+        "schemaNoUniqueItems": 200,
+        "jsonObject": 200
+      },
+      "conclusion": "质量最稳（无低于 7 的轮次），但单次成本约为 Qwen 3.7 Flash 的 57 倍。"
+    },
+    {
+      "modelId": "qwen3.7-plus",
+      "alias": "Qwen 3.7 Plus",
+      "tone": "candidate",
+      "role": "中间档候选",
+      "judgeScore10": 7.0,
+      "judgeSessions": 3,
+      "costPerSearchCny": 0.5395,
+      "wallP50S": 12.3,
+      "wallMaxS": 12.6,
+      "shardCallP50S": 10.5,
+      "priceCnyPerMTok": {
+        "input": 1.6,
+        "output": 6.4
+      },
+      "compatibility": {
+        "productionShape": 400,
+        "schemaNoUniqueItems": 200,
+        "jsonObject": 200
+      },
+      "conclusion": "全场景中庸、无重大缺陷；适合作为中间档观察。"
+    },
+    {
+      "modelId": "qwen3.8-flash",
+      "alias": "Qwen 3.8 Flash",
+      "tone": "candidate",
+      "role": "弱池行为修正候选",
+      "judgeScore10": 6.67,
+      "judgeSessions": 3,
+      "costPerSearchCny": 0.2638,
+      "wallP50S": 13.6,
+      "wallMaxS": 14.1,
+      "shardCallP50S": 9.3,
+      "priceCnyPerMTok": {
+        "input": 0.8,
+        "output": 2.7
+      },
+      "compatibility": {
+        "productionShape": 400,
+        "schemaNoUniqueItems": 200,
+        "jsonObject": 200
+      },
+      "conclusion": "弱池排序最正确，但结构化条件场景会误标院校；成本约为 3.7 Flash 的 3.9 倍。"
+    },
+    {
+      "modelId": "qwen3.7-flash",
+      "alias": "Qwen 3.7 Flash",
+      "tone": "value",
+      "role": "最低成本候选",
+      "judgeScore10": 6.42,
+      "judgeSessions": 3,
+      "costPerSearchCny": 0.0678,
+      "wallP50S": 11.3,
+      "wallMaxS": 12.5,
+      "shardCallP50S": 8.3,
+      "priceCnyPerMTok": {
+        "input": 0.2,
+        "output": 0.8
+      },
+      "compatibility": {
+        "productionShape": 400,
+        "schemaNoUniqueItems": 200,
+        "jsonObject": 200
+      },
+      "conclusion": "单次成本最低（约为基线的 1/57）；结构化条件场景最强，但弱池上复现现役的评分虚高与模板化理由。"
+    },
+    {
+      "modelId": "deepseek-v4.1-flash",
+      "alias": "DeepSeek V4.1 Flash",
+      "tone": "hold",
+      "role": "不建议（幻觉 + 偶发 400）",
+      "judgeScore10": 6.33,
+      "judgeSessions": 3,
+      "costPerSearchCny": 0.645,
+      "wallP50S": 8.5,
+      "wallMaxS": 9.6,
+      "shardCallP50S": 6.6,
+      "priceCnyPerMTok": {
+        "input": 2.0,
+        "output": 8.0
+      },
+      "compatibility": {
+        "productionShape": 400,
+        "schemaNoUniqueItems": 400,
+        "jsonObject": 200
+      },
+      "conclusion": "理由幻觉与偶发 400（两轮 124 shard 挂 8）；不建议替换现役。"
+    },
+    {
+      "modelId": "qwen3.8-max-0902",
+      "alias": "Qwen 3.8 Max 0902",
+      "tone": "hold",
+      "role": "同价位不划算",
+      "judgeScore10": 6.08,
+      "judgeSessions": 3,
+      "costPerSearchCny": 3.7805,
+      "wallP50S": 12.0,
+      "wallMaxS": 12.2,
+      "shardCallP50S": 9.8,
+      "priceCnyPerMTok": {
+        "input": 12.0,
+        "output": 36.0
+      },
+      "compatibility": {
+        "productionShape": 400,
+        "schemaNoUniqueItems": 200,
+        "jsonObject": 200
+      },
+      "conclusion": "与 3.7 Max 同价位但结构化场景表现明显更差。"
+    },
+    {
+      "modelId": "qwen3.6-flash",
+      "alias": "Qwen 3.6 Flash（现役）",
+      "tone": "incumbent",
+      "role": "现役对照",
+      "judgeScore10": 5.33,
+      "judgeSessions": 3,
+      "costPerSearchCny": 0.4388,
+      "wallP50S": 6.9,
+      "wallMaxS": 8.1,
+      "shardCallP50S": 4.5,
+      "priceCnyPerMTok": {
+        "input": 1.2,
+        "output": 7.2
+      },
+      "compatibility": {
+        "productionShape": 200,
+        "schemaNoUniqueItems": 200,
+        "jsonObject": 200
+      },
+      "conclusion": "现役对照：弱池评分失真最严重（理由自述不相关却给 0.95），延迟最低。"
+    }
+  ],
+  "wallRangeS": {
+    "min": 6.9,
+    "max": 13.6
+  },
+  "calibration": {
+    "weakPool": {
+      "poolSize": 200,
+      "note": "池内几乎无查询所要求的实质条件（技能条件全池零命中）"
+    },
+    "medianScoreByModel": {
+      "qwen3.8-flash": 0.1,
+      "qwen3.8-max-0902": 0.1,
+      "deepseek-v4.1-flash": 0.16,
+      "qwen3.7-plus": 0.1,
+      "qwen3.6-flash": 0.5,
+      "qwen3.7-flash": 0.5,
+      "qwen3.7-max": 0.1
+    },
+    "minConfidenceNotPortable": true,
+    "note": "现役 0.75 合格线是按 Qwen 3.6 Flash 的虚高刻度校准的；同池中位数：3.6 Flash 与 3.7 Flash 为 0.50（虚高），其余模型仅 0.10–0.16。strict 模式下直接换模型会让弱池查询返回空结果页，换模型前必须重校准阈值。"
+  },
+  "router": {
+    "caliber": "20 条真实审计会话（脱敏），冻结召回池，逐 shard 精排；判定 = 独立模型盲评（0–10，2 轮/会话）",
+    "baseline": {
+      "modelId": "qwen3.7-max",
+      "alias": "Qwen 3.7 Max",
+      "judgeAll20": 7.31,
+      "judgeAll20Min": 3.75,
+      "judgeClean16": 7.34,
+      "judgeClean16Min": 3.75,
+      "costCny": 2.758,
+      "wallP50S": 13.8
+    },
+    "strategies": [
+      {
+        "policy": "纯便宜：全部走 Qwen 3.7 Flash",
+        "key": "cheapOnly",
+        "judgeAll20": 6.28,
+        "judgeAll20Min": 2.5,
+        "judgeClean16": 6.0,
+        "judgeClean16Min": 2.5,
+        "costCny": 0.048,
+        "wallP50S": 10.2,
+        "usesMax": false
+      },
+      {
+        "policy": "全部走 Qwen 3.8 Flash",
+        "key": "flash38Only",
+        "judgeAll20": 6.51,
+        "judgeAll20Min": 2.5,
+        "judgeClean16": 6.28,
+        "judgeClean16Min": 2.5,
+        "costCny": 0.187,
+        "wallP50S": 12.1,
+        "usesMax": false
+      },
+      {
+        "policy": "softN≥2 → 3.8 Flash，其余 → 3.7 Flash",
+        "key": "softN",
+        "judgeAll20": 7.15,
+        "judgeAll20Min": 4.0,
+        "judgeClean16": 6.75,
+        "judgeClean16Min": 4.0,
+        "costCny": 0.119,
+        "wallP50S": 11.4,
+        "usesMax": false
+      },
+      {
+        "policy": "softN≥2 → 3.8 Flash；hardN≥4 → 3.7 Max；其余 → 3.7 Flash",
+        "key": "softN_hardN",
+        "judgeAll20": 7.26,
+        "judgeAll20Min": 4.0,
+        "judgeClean16": 6.89,
+        "judgeClean16Min": 4.0,
+        "costCny": 0.149,
+        "wallP50S": 11.7,
+        "usesMax": true
+      },
+      {
+        "policy": "Borda 融合：3.7 Flash + 3.8 Flash 排名合并（并行）",
+        "key": "bordaMerge",
+        "usesMax": false,
+        "judgeAll20": 6.59,
+        "judgeAll20Min": 3.5,
+        "judgeClean16": 6.84,
+        "judgeClean16Min": 5.5,
+        "costCny": 0.236,
+        "wallP50S": 13.3
+      }
+    ],
+    "cleanSubsetN": 16,
+    "truncatedSessions": 4,
+    "truncatedRange": {
+      "min": 2,
+      "max": 22
+    },
+    "looMean": 7.15,
+    "bestNoMaxKey": "bordaMerge",
+    "nonInferiority": {
+      "margin": 0.5,
+      "gapClean16": 0.5,
+      "gapAll20": 0.72,
+      "passesClean16": true,
+      "passesAll20": false,
+      "note": "「接近 max」是否算成功取决于预先设定的非劣界限；本页不代替该业务判断，只给出两种口径下的差距。"
+    },
+    "verdict": "不用 max 的最优策略是「Borda 融合：3.7 Flash + 3.8 Flash 排名合并（并行）」：干净子集 6.84 对基线 7.34，差 0.50 分（全集口径差 0.72 分，成本仅为基线的 9%）。允许在 hardN≥4 时调用 max 的变体差 0.45 分。因此：以「打平 max」为目标不成立；以「接近 max（非劣界限 0.5 分）」为目标，干净子集未达标（0.50 > 0.5）、全集口径达标（0.72 ≤ 0.5）——两种口径结论不同，且规则为事后提出，需独立 holdout 才能定论。",
+    "judgeNoiseNote": "同一 prompt 重跑，单场 Qwen 3.7 Flash 的判定在 9/8 与 3/4 之间翻转；单轮 1 分级别的差异不可解读为模型优劣。",
+    "postHocNote": "softN 分流规则是在看过这批会话之后提出的，leave-one-out 不能消除规则族的选择偏差；落地前需要在预先冻结规则与预先设定非劣界限的前提下，用独立 holdout 会话复验。",
+    "oracleNote": "上限参考：逐会话取最优模型（oracle）显著高于任一固定策略，说明信息存在但当前可计算的特征尚不足以稳定地利用它。"
+  },
+  "limitations": [
+    "单库单时间段的小样本（路由回测 20 条会话；模型对比 3 条会话），来自同一公司同一审计库，不可外推为线上整体效果。",
+    "判定为单一评审模型（qwen3-max），未做第二评审交叉验证；同 prompt 重跑存在翻转，±1 分级差异不可解读。",
+    "路由规则为看数据后提出（post-hoc），leave-one-out 不能消除规则族选择偏差；需要预先冻结规则 + 独立 holdout 复验。",
+    "4 场会话的候选名单被生产校准（hard-fail）过滤截断，judge 只看到 2–22 人；全集数字因此偏高。",
+    "成本按公开价目当日折扣价计算，且未计入隐式缓存命中；实际账单会低于表中数字。",
+    "0.75 合格线不可平移（校准代际差），阈值迁移与排名分位方案尚未验证。",
+    "生产调用形态（strict JSON Schema 含 uniqueItems）下 3.7/3.8 全系 400，deepseek 不支持 json_schema；启用前必须改代码。"
+  ],
+  "provenance": {
+    "evaluatedBy": "内部离线评估（semantic-search-service 精排基准脚本；冻结池复现与审计记录逐条一致）",
+    "codexReview": {
+      "date": "2026-10-08",
+      "scope": "独立复核回测结论：复算全部数字一致；指出候选名单截断、冻结池未持久化、计数竞态与缺现役对照",
+      "effect": "结论由「router 与 max 持平」下调为「证据不足，需 holdout」"
+    },
+    "artifacts": [
+      "内部工件（未随站发布）：7 模型对比（3 会话）+ 20 会话路由回测的逐场分数与用量记录"
+    ]
+  }
+}

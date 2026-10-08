@@ -176,3 +176,12 @@ html,body{margin:0;padding:0}button:focus-visible,a:focus-visible,summary:focus-
 .api-stability-highlights strong{display:block;margin:8px 0 7px;color:#263f72;font-size:25px;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
 .api-stability-highlights p{color:#75859c;font-size:10.5px;line-height:1.8}
 @media(max-width:900px){.api-stability-highlights{grid-template-columns:1fr}}
+
+/* 精排结论页（独立实验）：决策总表排版与长结论换行 */
+.api-subhead{margin:26px 0 10px;font-size:12px;font-weight:650;letter-spacing:.04em;color:#42516b}
+.api-flag{margin-left:8px;padding:2px 7px;border-radius:999px;background:#e8f4f2;color:#0f7a6f;font-size:10px;font-weight:650;white-space:nowrap;vertical-align:middle}
+.api-callout-block{align-items:flex-start;flex-direction:column;gap:6px}
+.api-callout-block strong{white-space:normal}
+.api-callout-block span{white-space:normal;line-height:1.85}
+.api-subpanel{background:#fbfcfe;border-color:#eef1f7}
+@media(max-width:900px){.api-subhead{margin-top:20px}}

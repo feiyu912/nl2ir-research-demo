@@ -494,6 +494,143 @@ def check_human_validation(report: Report, hv: dict) -> None:
             report.error(f"human_validation: 公开发布数据含内部标识 {bad!r}")
 
 
+RERANK_FORBIDDEN_KEYS = {
+    "query", "queries", "docId", "doc_id", "resume", "candidateId",
+    "gold", "prediction", "predictions", "items", "responses",
+}
+
+
+def _walk_keys(node: object) -> set[str]:
+    keys: set[str] = set()
+    if isinstance(node, dict):
+        for k, v in node.items():
+            keys.add(str(k))
+            keys |= _walk_keys(v)
+    elif isinstance(node, list):
+        for v in node:
+            keys |= _walk_keys(v)
+    return keys
+
+
+def check_rerank_model_selection(report: Report, payload: dict) -> None:
+    """精排（rerank）模型选型与路由回测的公开聚合数据不变量。
+
+    独立实验：生产检索链路的精排选型，**不**与 NL2IR 解析评测混用。
+    """
+    if payload.get("schema") != "rerank-model-selection/v1":
+        report.error(f"rerank_model_selection schema 异常: {payload.get('schema')}")
+        return
+
+    models = payload.get("models") or []
+    by_id = {m.get("modelId"): m for m in models}
+    expected_ids = {"qwen3.7-max", "qwen3.7-plus", "qwen3.8-flash", "qwen3.7-flash",
+                    "deepseek-v4.1-flash", "qwen3.8-max-0902", "qwen3.6-flash"}
+    if set(by_id) != expected_ids:
+        report.error(f"rerank_model_selection 模型集合不符: {sorted(by_id)}")
+        return
+
+    if payload.get("primaryMetric") != "judgeScore10":
+        report.error(f"rerank_model_selection primary 指标不符: {payload.get('primaryMetric')}")
+
+    # 质量：3.7 Max 最高、3.6 Flash（现役）最低；分数落在 0–10
+    for m in models:
+        score = m.get("judgeScore10")
+        if not isinstance(score, (int, float)) or not 0 <= score <= 10:
+            report.error(f"rerank_model_selection judgeScore10 越界: {m.get('modelId')} {score}")
+    best = max(models, key=lambda m: m.get("judgeScore10", -1)).get("modelId")
+    worst = min(models, key=lambda m: m.get("judgeScore10", 99)).get("modelId")
+    if best != "qwen3.7-max":
+        report.error(f"rerank_model_selection 质量最高应为 qwen3.7-max，实际 {best}")
+    if worst != "qwen3.6-flash":
+        report.error(f"rerank_model_selection 质量最低应为 qwen3.6-flash，实际 {worst}")
+
+    # 成本单调性（元/次）：max 档 > ds > plus > 现役 flash > 3.8 flash > 3.7 flash
+    order = ["qwen3.7-max", "qwen3.8-max-0902", "deepseek-v4.1-flash", "qwen3.7-plus",
+             "qwen3.6-flash", "qwen3.8-flash", "qwen3.7-flash"]
+    costs = [by_id[k].get("costPerSearchCny", -1) for k in order]
+    if any(c is None or c <= 0 for c in costs):
+        report.error("rerank_model_selection 成本缺失或非正")
+    elif costs != sorted(costs, reverse=True):
+        report.error(f"rerank_model_selection 成本排序不符: {list(zip(order, costs))}")
+
+    # 兼容性：只有现役能在生产形态原样跑；3.7/3.8 系 400（uniqueItems）；deepseek 不支持 json_schema
+    for mid, m in by_id.items():
+        compat = m.get("compatibility") or {}
+        want = 200 if mid == "qwen3.6-flash" else 400
+        if compat.get("productionShape") != want:
+            report.error(f"rerank_model_selection 生产形态兼容性不符: {mid} {compat.get('productionShape')}")
+    if (by_id["deepseek-v4.1-flash"].get("compatibility") or {}).get("schemaNoUniqueItems") != 400:
+        report.error("rerank_model_selection deepseek 去掉 uniqueItems 后仍应不可用")
+
+    # 校准：现役与 3.7 Flash 中位数虚高；其余 ≤ 0.2；阈值不可平移必须显式声明
+    cal = payload.get("calibration") or {}
+    med = cal.get("medianScoreByModel") or {}
+    if med.get("qwen3.6-flash") != 0.5 or med.get("qwen3.7-flash") != 0.5:
+        report.error(f"rerank_model_selection 弱池中位数不符（现役/3.7 Flash 应为 0.50）: {med}")
+    others = [v for k, v in med.items() if k not in ("qwen3.6-flash", "qwen3.7-flash")]
+    if any(v is None or v > 0.2 for v in others):
+        report.error(f"rerank_model_selection 新一代模型弱池中位数应 ≤0.2: {med}")
+    if cal.get("minConfidenceNotPortable") is not True:
+        report.error("rerank_model_selection 必须声明 0.75 合格线不可平移")
+
+    # 路由：结论的事实必须是「干净子集上没有任何低成本策略追平 max」
+    router = payload.get("router") or {}
+    base = router.get("baseline") or {}
+    base_clean = base.get("judgeClean16")
+    if not isinstance(base_clean, (int, float)):
+        report.error("rerank_model_selection router.baseline 缺 clean16 基线")
+    else:
+        for s in router.get("strategies") or []:
+            clean = s.get("judgeClean16")
+            if clean is None:
+                report.error(f"rerank_model_selection 策略缺干净子集指标（不得跳过校验）: {s.get('key')}")
+                continue
+            if clean >= base_clean:
+                report.error(f"rerank_model_selection 结论与数据矛盾：策略追平/超过 max {s.get('key')} {clean} >= {base_clean}")
+
+    # 非劣口径：界限与两种口径的通过判定必须自洽，且 verdict 必须携带计算出的差距
+    ni = router.get("nonInferiority") or {}
+    margin = ni.get("margin")
+    if not isinstance(margin, (int, float)):
+        report.error("rerank_model_selection 缺非劣界限 margin")
+    else:
+        for key, pass_key in (("gapClean16", "passesClean16"), ("gapAll20", "passesAll20")):
+            gap = ni.get(key)
+            if not isinstance(gap, (int, float)):
+                report.error(f"rerank_model_selection 缺 {key}")
+                continue
+            if bool(ni.get(pass_key)) != (gap <= margin):
+                report.error(f"rerank_model_selection {pass_key} 与 {key}/{margin} 不自洽")
+    verdict = str(router.get("verdict") or "")
+    for key in ("gapClean16", "gapAll20"):
+        gap = ni.get(key)
+        if isinstance(gap, (int, float)) and f"{gap:.2f}" not in verdict:
+            report.error(f"rerank_model_selection verdict 未携带计算出的 {key}={gap:.2f}（结论必须由聚合值生成）")
+    if router.get("bestNoMaxKey") not in {s.get("key") for s in router.get("strategies") or []}:
+        report.error(f"rerank_model_selection bestNoMaxKey 不在策略集合中: {router.get('bestNoMaxKey')}")
+    if router.get("truncatedSessions") != 4 or router.get("cleanSubsetN") != 16:
+        report.error(f"rerank_model_selection 截断/干净子集数不符: "
+                     f"{router.get('truncatedSessions')}/{router.get('cleanSubsetN')}")
+
+    # 必须声明的三类风险
+    limits = " ".join(payload.get("limitations") or [])
+    for need in ("post-hoc", "holdout", "翻转"):
+        if need not in limits:
+            report.error(f"rerank_model_selection limitations 缺风险声明: {need}")
+    if "judgeNoiseNote" not in router or "postHocNote" not in router:
+        report.error("rerank_model_selection router 缺 judge 噪声 / post-hoc 说明")
+
+    # Codex 复核记录与结论下调必须写进 provenance
+    review = (payload.get("provenance") or {}).get("codexReview") or {}
+    if not review.get("date") or "下调" not in str(review.get("effect", "")):
+        report.error("rerank_model_selection provenance 缺独立复核记录（含结论下调说明）")
+
+    # 脱敏：不得出现逐题/候选人级字段
+    leaked = _walk_keys(payload) & RERANK_FORBIDDEN_KEYS
+    if leaked:
+        report.error(f"rerank_model_selection 含逐题字段: {sorted(leaked)}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", default="data/")
@@ -559,6 +696,13 @@ def main() -> int:
             check_api_stability(report, load_json(stability_path) or {})
         except Exception as e:
             report.error(f"api_stability.json: {e}")
+
+    rerank_path = data_dir / "rerank_model_selection.json"
+    if rerank_path.exists():
+        try:
+            check_rerank_model_selection(report, load_json(rerank_path) or {})
+        except Exception as e:
+            report.error(f"rerank_model_selection.json: {e}")
 
     # aux
     overlap_path = data_dir / "aux" / "overlap_report.json"
