@@ -364,6 +364,83 @@
         "recoverable_json": 1.0,
         "strict_json": 1.0
       }
+    },
+    {
+      "alias": "qwen38max0902",
+      "modelId": "qwen3.8-max-0902",
+      "role": "0902 快照 · 同协议补跑",
+      "conclusion": "同协议补跑：combined 91.39%，低于 Qwen 3.7 Max 2.87pp；stress96 73.96% 明显更弱，真删除 34 条。未取价目，不参与成本与配对统计。",
+      "tone": "snapshot",
+      "n": 906,
+      "combinedWhere": 91.39,
+      "combinedWhereCorrect": 828,
+      "slices": {
+        "old366": {
+          "n": 366,
+          "where": 92.9,
+          "whereCorrect": 340
+        },
+        "c300": {
+          "n": 300,
+          "where": 91.33,
+          "whereCorrect": 274
+        },
+        "blindV6": {
+          "n": 240,
+          "where": 89.17,
+          "whereCorrect": 214
+        },
+        "stress96": {
+          "n": 96,
+          "where": 73.96,
+          "whereCorrect": 71,
+          "note": "blind-v6 子集，不重复计入 combined"
+        }
+      },
+      "hardF1": 95.32,
+      "hardCondition": {
+        "goldTotal": 1927,
+        "tp": 1833,
+        "precision": 95.52,
+        "recall": 95.12
+      },
+      "redlines": {
+        "trueDroppedRequired": 34,
+        "allRequiredMissingItems": 0,
+        "allRequiredMissingIds": [],
+        "fieldSubstitution": 2,
+        "notFlippedPositive": 1,
+        "numericDirectionFlip": 8,
+        "hallucinatedConditions": 28,
+        "invalidWhereNodeItems": 35
+      },
+      "latency": {
+        "p50": 2.98,
+        "p95": 4.64,
+        "transportFailureRequests": 0
+      },
+      "cost": null,
+      "costUnavailableReason": "未取得 qwen3.8-max-0902 的网关价目；按「缺数据 ≠ 0」不填成本，不参与标准化/实测成本对比。",
+      "frozenFlags": {
+        "main_chain_ir": 0.4878587196467991,
+        "executable_main_chain": 0.5,
+        "compiler_hard_exact": 0.9260485651214128,
+        "schema": 0.9856512141280354,
+        "main_chain_where": 0.9139072847682119,
+        "strict_where": 0.8675496688741722,
+        "semantic_exact": 0.5331125827814569,
+        "recoverable_json": 1.0,
+        "strict_json": 1.0
+      },
+      "provenance": {
+        "runDate": "2026-10-08",
+        "batch": "追加批次（非 2026-09-17 冻结批次）",
+        "protocol": "Track A 同协议：冻结 v21 prompt (7ca4dea9…) + json_object + 冻结 scorer (3f4b75f9…) + temperature 0",
+        "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
+        "requests": 906,
+        "httpSuccess": 906,
+        "transportFailures": 0
+      }
     }
   ],
   "pairwise": [
@@ -453,7 +530,9 @@
     "qwen38StandardizedShareOfQwen37Pct": 6.25,
     "qwen38StandardizedReductionPct": 93.75,
     "qwen38CheaperThanDeepseekIdlePct": 23.2,
-    "cheapestStandardized": "qwen3.8-flash"
+    "cheapestStandardized": "qwen3.8-flash",
+    "snapshotVsQwen37Pp": -2.87,
+    "snapshotStress96Where": 73.96
   },
   "limitations": [
     "scorer 的指标定义偏差与实现/标注层面的系统误差不因 gold-as-prediction 对照而排除。",
@@ -465,11 +544,36 @@
     "semantic_exact 为精确字符串比较，受 gold 文案差异影响，会低估质量。",
     "结果只适用于当前 v21 prompt、当前数据与 2026-09-17 的 API 状态。",
     "未进行生产流量 A/B 或并发压力测试。API 直调端点的重复推理稳定性已在 2026-09-24 的偏难 50 题实验中测试；生产网关与本地小模型侧仍未覆盖。",
-    "岗位累计任职字段的匹配策略仍在验证（role_tenure）；该字段审计尚未冻结，本材料不对其匹配策略或最终实现作任何结论。"
+    "岗位累计任职字段的匹配策略仍在验证（role_tenure）；该字段审计尚未冻结，本材料不对其匹配策略或最终实现作任何结论。",
+    "qwen3.8-max-0902 为 2026-10-08 追加批次：同协议、同 scorer，但延迟为跨日观察值，不与 2026-09-17 批次严格可比；未取价目，不参与成本与配对统计。"
   ],
   "costNotes": [
     "两套口径必须并列：standardized_cost 是相同 token 工作量下的纯价格比较。",
     "observed_run_cost 是本次真实 token 账单，不是价格指数，会随缓存命中率与输出长度浮动。",
     "DeepSeek 本次账单低来自更高缓存命中与更短输出，不代表单位价格低。"
-  ]
+  ],
+  "snapshotRuns": {
+    "note": "2026-10-08 追加的同协议快照补跑（qwen3.8-max-0902）。协议与 2026-09-17 批次逐项一致；不取价目、不进入配对统计，延迟为跨日观察值。",
+    "runDate": "2026-10-08",
+    "modelId": "qwen3.8-max-0902",
+    "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
+    "sourceFiles": {
+      "responses_A_qwen38max0902.jsonl": {
+        "sha256": "40bc1cf837cc445e7e05c80bf849a7576cea52615400e7e3ae3e65bc19eff1e0",
+        "bytes": 2505820
+      },
+      "metrics_track_A_four_models.json": {
+        "sha256": "edcbd880920470b9546bcac2d5fcd7d3d29af02b9b388688be27c09427444fed",
+        "bytes": 199419
+      },
+      "four_model_table.json": {
+        "sha256": "bb3eeca221d015b2758917161e9e31decb8876942d6eda978e3a7cb02c89addd",
+        "bytes": 6436
+      },
+      "redlines_track_A_four_models.json": {
+        "sha256": "6d380ac80fef0f5a72ad05701ce5683f2b9c1306f43b8b156693a0c12a90c602",
+        "bytes": 1625
+      }
+    }
+  }
 }

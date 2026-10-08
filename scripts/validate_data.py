@@ -148,9 +148,15 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
     models = payload.get("models") or []
     by_id = {m.get("modelId"): m for m in models}
 
-    expected_ids = ["qwen3.7-max", "qwen3.8-flash", "deepseek-v4.1-flash"]
-    if sorted(by_id) != sorted(expected_ids):
-        report.error(f"hosted_api_baselines 模型 ID 不符: {sorted(by_id)}")
+    # 三个冻结模型必须存在；允许追加带 provenance 的快照模型（2026-10-08 起）。
+    frozen_ids = ["qwen3.7-max", "qwen3.8-flash", "deepseek-v4.1-flash"]
+    snapshot_ids = ["qwen3.8-max-0902"]
+    missing = [x for x in frozen_ids if x not in by_id]
+    if missing:
+        report.error(f"hosted_api_baselines 缺冻结模型: {missing}")
+    unknown = [x for x in by_id if x not in frozen_ids + snapshot_ids]
+    if unknown:
+        report.error(f"hosted_api_baselines 出现未登记的模型 ID: {sorted(unknown)}")
 
     if payload.get("primaryMetric") != "main_chain_where":
         report.error(f"hosted_api_baselines primary 指标不符: {payload.get('primaryMetric')}")
@@ -174,7 +180,7 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
     if (split.get("stress96") or 0) + (split.get("realistic144") or 0) != (ds.get("blindV6") or {}).get("n"):
         report.error("hosted_api_baselines stress96 + realistic144 != blind-v6")
 
-    expected_where = {"qwen3.7-max": 94.26, "qwen3.8-flash": 89.62, "deepseek-v4.1-flash": 86.20}
+    expected_where = {"qwen3.7-max": 94.26, "qwen3.8-flash": 89.62, "deepseek-v4.1-flash": 86.20, "qwen3.8-max-0902": 91.39}
     for mid, want in expected_where.items():
         m = by_id.get(mid)
         if not m:
@@ -250,6 +256,13 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
     # 两套口径必须同时存在且不同
     for m in models:
         cost = m.get("cost") or {}
+        if m.get("cost") is None:
+            # 快照模型允许未取价目，但必须显式声明原因（缺数据 ≠ 0）
+            if not (m.get("costUnavailableReason") or "").strip():
+                report.error(f"hosted_api_baselines 成本缺失但未声明原因: {m.get('modelId')}")
+            if not (m.get("provenance") or {}).get("runDate"):
+                report.error(f"hosted_api_baselines 快照模型缺 provenance.runDate: {m.get('modelId')}")
+            continue
         if not (cost.get("standardized") or {}).get("tiers"):
             report.error(f"hosted_api_baselines 缺 standardized 口径: {m.get('modelId')}")
         if not (cost.get("observedRun") or {}).get("tiers"):

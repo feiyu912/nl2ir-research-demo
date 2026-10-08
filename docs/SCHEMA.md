@@ -218,10 +218,11 @@ type HostedApiBaselines = {
 ### 硬性不变量（`scripts/validate_data.py` → `check_hosted_api_baselines`）
 
 - `n = 906` 且 `366 + 300 + 240`；`stress96 + realistic144 = 240`，**不重复计入 combined**；
-- 三个模型 ID 必须正好是 `qwen3.7-max` / `qwen3.8-flash` / `deepseek-v4.1-flash`；
+- 三个**冻结**模型 ID 必须存在：`qwen3.7-max` / `qwen3.8-flash` / `deepseek-v4.1-flash`；
+  允许追加**带 provenance 的快照模型**（当前仅 `qwen3.8-max-0902`，2026-10-08 同协议补跑），不得出现未登记 ID；
 - primary 必须是 `main_chain_where`；
 - `combinedWhere` = 94.26 / 89.62 / 86.20，且必须与三切片加权一致；
-- **两套成本口径必须同时存在**：`standardized` 与 `observedRun`；
+- **两套成本口径必须同时存在**：`standardized` 与 `observedRun`（仅对冻结三模型；快照模型允许 `cost: null`，但必须声明 `costUnavailableReason` 与 `provenance.runDate`）；
   - 标准化 ¥/万次：201.60 / 12.60 / 16.40（闲）· 32.80（忙）；
   - 实测 ¥/万次：242.83 / 16.51 / 9.67（闲）· 19.34（忙）；
   - qwen3.8 标准化成本必须**低于** DeepSeek 闲时；
