@@ -81,20 +81,23 @@ function HBars({ rows, max, caption, height = 250, unit = '' }: {
 /** 每个候选两根条：现役在前 / 候选在前。50% 为"没有差别"的基准线。 */
 function PreferenceChart() {
   const rows = data.pairwise.candidates.map((c) => ({
-    name: c.alias,
+    name: c.alias.split('（')[0],
     first: c.incumbentFirst.winRatePct,
     second: c.candidateFirst.winRatePct,
-    consistent: orderConsistent(c),
+    consistent: Math.abs(c.incumbentFirst.winRatePct - c.candidateFirst.winRatePct) <= TOL,
   }));
+  const asPct = (v: React.ReactNode) => `${Number(v).toFixed(0)}%`;
   return (
     <>
-      <div className="research-chart" style={{ height: 280 }}>
+      <div className="research-chart" style={{ height: 360 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={rows} layout="vertical" margin={{ top: 10, right: 60, bottom: 8, left: 0 }} barSize={13}>
+          <BarChart data={rows} layout="vertical" margin={{ top: 10, right: 62, bottom: 8, left: 0 }}
+                    barSize={11} barGap={5} barCategoryGap="32%">
             <CartesianGrid stroke="#edf0f6" horizontal={false} />
             <XAxis type="number" domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickFormatter={(v) => `${v}%`}
                    axisLine={false} tickLine={false} tick={{ fill: '#8792a8', fontSize: 11 }} />
-            <YAxis type="category" dataKey="name" width={150} axisLine={false} tickLine={false} tick={{ fill: '#42516b', fontSize: 12 }} />
+            <YAxis type="category" dataKey="name" width={124} axisLine={false} tickLine={false}
+                   tick={{ fill: '#42516b', fontSize: 12 }} />
             <ReferenceLine x={50} stroke="#c0392b" strokeDasharray="4 3" />
             <Tooltip cursor={{ fill: '#f5f7fc' }} content={({ active, payload }) => {
               if (!active || !payload?.length) return null;
@@ -107,14 +110,18 @@ function PreferenceChart() {
                 </div>
               );
             }} />
-            <Bar dataKey="first" fill="#335cff" radius={[0, 4, 4, 0]} isAnimationActive={false} />
-            <Bar dataKey="second" fill="#8b72dc" radius={[0, 4, 4, 0]} isAnimationActive={false} />
+            <Bar dataKey="first" fill="#335cff" radius={[0, 4, 4, 0]} isAnimationActive={false}>
+              <LabelList dataKey="first" position="right" formatter={asPct} fill="#335cff" fontSize={10} />
+            </Bar>
+            <Bar dataKey="second" fill="#8b72dc" radius={[0, 4, 4, 0]} isAnimationActive={false}>
+              <LabelList dataKey="second" position="right" formatter={asPct} fill="#8b72dc" fontSize={10} />
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
       <p className="chart-caption">
         候选方案在两个方向上的胜率（对现役）。红色虚线 = 50%。<strong>两根条都落在同一侧才算结论</strong>；
-        分居两侧说明结果由位置决定，不进入结论。
+        分居两侧说明结果由位置决定，不进入结论。Borda 融合 = 两个 Flash 的排名合并。
       </p>
       <div className="hv-legend">
         <span><i style={{ background: '#335cff' }} />现役写在前面</span>
