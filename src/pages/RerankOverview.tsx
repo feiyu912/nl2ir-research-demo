@@ -94,7 +94,7 @@ export default function RerankOverview() {
         <strong>口径边界</strong>
         <span>
           评测在固定规模的冻结候选池上复现生产精排路径（只替换模型）；不调线上流量、不发布查询、候选人、逐题输出或可还原评测集的标识。
-          判定为独立评审模型盲评（匿名乱序，2 轮/会话），成本口径为{data.track.costCaliber}。
+          判定为独立评审模型盲评（匿名乱序，{data.track.judgeRounds} 轮/会话），成本口径为{data.track.costCaliber}。
         </span>
       </div>
 
@@ -125,7 +125,7 @@ export default function RerankOverview() {
           <HBars
             rows={byQuality.map((m) => ({ name: m.alias, value: m.judgeScore10, color: tone(m.tone), label: f2(m.judgeScore10) }))}
             max={10}
-            caption="分 · 每场 2 轮盲评取均值（排序合理性 + 理由质量）"
+            caption={`分 · 每场 ${data.track.judgeRounds} 轮盲评取均值（排序合理性 + 理由质量）`}
           />
           <p className="chart-caption">
             {best.alias} 以 {f2(best.judgeScore10)} 分居首；现役对照 {incumbent.alias} 为 {f2(incumbent.judgeScore10)} 分，

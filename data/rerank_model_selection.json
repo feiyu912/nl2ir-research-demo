@@ -6,6 +6,7 @@
   "track": {
     "frozenPools": true,
     "judge": "独立评审模型盲评（匿名乱序，2 轮/会话，排序合理性 + 理由质量，0–10）",
+    "judgeRounds": 2,
     "costCaliber": "按公开价目折算的每次检索成本，以基线百分比表示；不公布绝对金额与 token 量级",
     "noPerItemData": "不发布查询、候选人、逐题输出或任何可还原评测集的标识"
   },
