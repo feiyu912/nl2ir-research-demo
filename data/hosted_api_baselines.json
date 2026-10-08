@@ -807,7 +807,7 @@
         0.0,
         0.0
       ],
-      "clusterCrossesZero": false
+      "clusterCrossesZero": true
     },
     {
       "modelId": "deepseek-v4.1-flash",
@@ -1159,6 +1159,535 @@
         "latencySequentialS": 13.12,
         "latencyParallelCheapS": 6.72
       }
-    ]
+    ],
+    "supersededNote": "原先此处的『blind 上仲裁 95.42% 打平 qwen3.7-max』结论已作废：max 因形态故障排除、判定集被查出覆盖缺口，改口径后见 holdoutEvaluation。"
+  },
+  "coverageAudit": {
+    "asOf": "2026-10-08",
+    "method": "把冻结 v21 prompt 里可检测的规则分支逐条列出，在 blind_v6(240) / holdout(600) / dev(666) 的**问句**上统计覆盖题数（正则启发式，偏保守）；gold 侧交叉核对。",
+    "blindZeroCoverageButHoldoutHas": [
+      {
+        "rule": "L1",
+        "desc": "裸地点+找/筛/招聘 → city",
+        "blind": 0,
+        "holdout": 37
+      },
+      {
+        "rule": "S1",
+        "desc": "薪资 K → ×1000",
+        "blind": 0,
+        "holdout": 4
+      },
+      {
+        "rule": "S2",
+        "desc": "精确薪资 → eq",
+        "blind": 0,
+        "holdout": 8
+      },
+      {
+        "rule": "E1",
+        "desc": "届别/应届/校招 → graduation_year",
+        "blind": 0,
+        "holdout": 3
+      },
+      {
+        "rule": "E3",
+        "desc": "学历上下限 → gte/lte",
+        "blind": 0,
+        "holdout": 6
+      },
+      {
+        "rule": "C2",
+        "desc": "职业证书别名",
+        "blind": 0,
+        "holdout": 24
+      },
+      {
+        "rule": "X1",
+        "desc": "具名公司+等/类似 → company any + expandScope",
+        "blind": 0,
+        "holdout": 12
+      }
+    ],
+    "neverTestedInEither": [
+      {
+        "rule": "B3",
+        "desc": "否定+严格比较 → 取补集"
+      },
+      {
+        "rule": "E2",
+        "desc": "学历枚举 → any"
+      },
+      {
+        "rule": "E4",
+        "desc": "80/90/00/10后 → birth_year 十年 range"
+      },
+      {
+        "rule": "F3",
+        "desc": "无法表达 → needClarification"
+      }
+    ],
+    "thinInHoldout": [
+      {
+        "rule": "L3",
+        "desc": "期望城市 → intention_city",
+        "holdout": 6
+      },
+      {
+        "rule": "S1",
+        "desc": "薪资 K → ×1000",
+        "holdout": 4
+      },
+      {
+        "rule": "S2",
+        "desc": "精确薪资 → eq",
+        "holdout": 8
+      },
+      {
+        "rule": "E1",
+        "desc": "届别/应届/校招 → graduation_year",
+        "holdout": 3
+      },
+      {
+        "rule": "E3",
+        "desc": "学历上下限 → gte/lte",
+        "holdout": 6
+      },
+      {
+        "rule": "G2",
+        "desc": "段间空档次数 → inter_segment_gap",
+        "holdout": 4
+      },
+      {
+        "rule": "C1",
+        "desc": "语言考试双路由",
+        "holdout": 9
+      }
+    ],
+    "supplement": {
+      "n": 150,
+      "groups": 15,
+      "humanReview": "proposedGold 是建议骨架，尚未人工定稿，不可直接当 gold 使用。",
+      "primaryMetric": "main_chain_where",
+      "metaGroupsNeedIr": "needClarification / expandScope 只在 main_chain_ir 里比对，F3 与 X1 用主指标会假通过。",
+      "byGroup": [
+        {
+          "group": "B3_negated_strict",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 50.0,
+          "q38": 50.0,
+          "plus": 50.0,
+          "0902": 50.0,
+          "q37f": 40.0
+        },
+        {
+          "group": "C1_language_exam",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 80.0,
+          "q38": 90.0,
+          "plus": 80.0,
+          "0902": 90.0,
+          "q37f": 70.0
+        },
+        {
+          "group": "C2_professional_cert",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 80.0,
+          "q38": 100.0,
+          "plus": 100.0,
+          "0902": 100.0,
+          "q37f": 0.0
+        },
+        {
+          "group": "E1_fresh_graduate",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 100.0,
+          "q38": 100.0,
+          "plus": 100.0,
+          "0902": 100.0,
+          "q37f": 0.0
+        },
+        {
+          "group": "E2_degree_enum",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 0.0,
+          "q38": 0.0,
+          "plus": 0.0,
+          "0902": 0.0,
+          "q37f": 0.0
+        },
+        {
+          "group": "E3_degree_bound",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 100.0,
+          "q38": 100.0,
+          "plus": 100.0,
+          "0902": 100.0,
+          "q37f": 100.0
+        },
+        {
+          "group": "E4_decade",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 100.0,
+          "q38": 80.0,
+          "plus": 80.0,
+          "0902": 100.0,
+          "q37f": 30.0
+        },
+        {
+          "group": "F3_clarification",
+          "metric": "main_chain_ir",
+          "n": 10,
+          "ds": 0.0,
+          "q38": 0.0,
+          "plus": 0.0,
+          "0902": 0.0,
+          "q37f": 0.0
+        },
+        {
+          "group": "G2_inter_segment_count",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 100.0,
+          "q38": 100.0,
+          "plus": 100.0,
+          "0902": 100.0,
+          "q37f": 100.0
+        },
+        {
+          "group": "G3_max_inter_gap",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 100.0,
+          "q38": 100.0,
+          "plus": 100.0,
+          "0902": 100.0,
+          "q37f": 100.0
+        },
+        {
+          "group": "L1_bare_location",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 0.0,
+          "q38": 60.0,
+          "plus": 60.0,
+          "0902": 40.0,
+          "q37f": 0.0
+        },
+        {
+          "group": "L3_intention_city",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 100.0,
+          "q38": 100.0,
+          "plus": 100.0,
+          "0902": 100.0,
+          "q37f": 100.0
+        },
+        {
+          "group": "S1_salary_k",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 100.0,
+          "q38": 40.0,
+          "plus": 0.0,
+          "0902": 0.0,
+          "q37f": 0.0
+        },
+        {
+          "group": "S2_salary_exact",
+          "metric": "main_chain_where",
+          "n": 10,
+          "ds": 0.0,
+          "q38": 0.0,
+          "plus": 0.0,
+          "0902": 0.0,
+          "q37f": 0.0
+        },
+        {
+          "group": "X1_company_peers",
+          "metric": "main_chain_ir",
+          "n": 10,
+          "ds": 0.0,
+          "q38": 0.0,
+          "plus": 0.0,
+          "0902": 0.0,
+          "q37f": 0.0
+        }
+      ],
+      "shapeNote": "本表为 thinking-off（冻结 Track A 口径）下的结果，且已排除 qwen3.7-max；同一批题在 thinking-on 下逐分支结果差异很大（例如 L1 裸地点的 q38 由 100% 降到 60%、S1 薪资 K 的 ds 由 40% 升到 100%）——分支层面的结论同样强依赖解码形态。",
+      "models": [
+        "deepseek-v4.1-flash",
+        "qwen3.8-flash",
+        "qwen3.7-plus",
+        "qwen3.8-max-0902",
+        "qwen3.7-flash"
+      ]
+    },
+    "conclusion": "blind_v6 有 7 条规则分支 0 覆盖、4 条两套都没测过；主指标不比对 meta。因此 blind 上的 92–95% 是窄切片成绩，高估了真实表现。"
+  },
+  "holdoutEvaluation": {
+    "asOf": "2026-10-08",
+    "shape": "thinking-off，全部模型统一（冻结 Track A 口径：response_format=json_object + 顶层 enable_thinking=false）",
+    "shapeNote": "曾用 thinking-on 复跑做对照：开关效果是模型特有的（qwen3.8-flash +18.3pp、qwen3.7-plus +9.5pp、qwen3.8-max-0902 −8.2pp、deepseek 无感），排名会随形态翻转；本页只报统一 off 口径。",
+    "sets": {
+      "holdout600": "从冻结训练包抽样的 600 条（包内权威 gold，与 906 评测集零重叠）",
+      "supplement150": "按覆盖缺口生成的 150 条补题（建议 gold 骨架，尚未人工定稿）",
+      "merged750": "两者合并；下表同时给「仅600」列，便于看出待定稿那 150 条带来的偏差"
+    },
+    "exclusion": {
+      "excluded": "qwen3.7-max",
+      "scope": "本文件所有单模型对比与 router 表；它不作为参考基准，也出现在任何 Δ/p/CI 里",
+      "observed": {
+        "shape": "response_format=json_object + 顶层 enable_thinking=false（冻结 Track A 口径）",
+        "n": 600,
+        "corruptItems": 294,
+        "corruptRatePct": 49.0,
+        "emptyValueLeaves": "660/919",
+        "unparseable": 27,
+        "spread": "坏率在批次四分段为 37%/61%/40%/58%，分布均匀 ⇒ 系统性，非瞬时抖动",
+        "cleanSubsetAccuracyPct": 79.4,
+        "cleanSubsetNote": "未被破坏的 306 条上正确 243 条；与 deepseek 的 78.7% 同档，说明 40.50% 反映的是损坏率而不是能力"
+      },
+      "control": {
+        "sameShapeSameBatchOtherModels": {
+          "deepseek-v4.1-flash": "1%（4/1284 空值叶子）",
+          "qwen3.8-flash": "0%（0/1261）",
+          "qwen3.8-max-0902": "0%（0/1273）",
+          "qwen3.7-plus": "0%（2/1236）",
+          "qwen3.7-flash": "2%（11/1448）"
+        },
+        "conclusion": "同一环境、同一形态下只有它坏 ⇒ 责任在 qwen3.7-max 这一侧（其服务/版本），不是形态本身、也不是网关普遍故障"
+      },
+      "whyExcluded": [
+        "49% 的坏输出会被直接判错，分数主要反映损坏率，不能当作能力度量",
+        "作为参考基准会把“参考自身损坏”传导进所有对比（Δ / McNemar p / cluster CI）",
+        "它自己的历史数字也不可复现：同形态同 40 题 2026-09-17 为 100%、2026-10-08 为 0%，而请求记录（request_params / model_requested / returned_model / system_prompt_sha256）逐字节相同 ⇒ 服务侧退化"
+      ],
+      "handling": "需要 max 参照时，只能另起一表并显式标注形态（enable_thinking=true，或 json_schema+硬开关思考），不得与本表并列比较"
+    },
+    "reference": {
+      "modelId": "qwen3.8-max-0902",
+      "acc750Pct": 80.0,
+      "acc600Pct": 83.0,
+      "why": "qwen3.7-max 已因形态故障排除（见 exclusion），改用带日期 pin 的 0902 作参考"
+    },
+    "singleModel": [
+      {
+        "modelId": "qwen3.8-max-0902",
+        "pin": "pin 快照（带日期，版本固定）",
+        "correct750": 600,
+        "acc750Pct": 80.0,
+        "acc600Pct": 83.0,
+        "acc150Pct": 68.0,
+        "deltaVsRefPp": 0.0,
+        "clusterCi95VsRefPp": [
+          0.0,
+          0.0
+        ],
+        "cnyPer10k": 180.0
+      },
+      {
+        "modelId": "qwen3.7-plus",
+        "pin": "活别名（无日期，版本可能漂移）",
+        "correct750": 578,
+        "acc750Pct": 77.07,
+        "acc600Pct": 80.17,
+        "acc150Pct": 64.67,
+        "deltaVsRefPp": -2.93,
+        "clusterCi95VsRefPp": [
+          -7.04,
+          1.66
+        ],
+        "cnyPer10k": 37.6
+      },
+      {
+        "modelId": "deepseek-v4.1-flash",
+        "pin": "活别名",
+        "correct750": 570,
+        "acc750Pct": 76.0,
+        "acc600Pct": 78.17,
+        "acc150Pct": 67.33,
+        "deltaVsRefPp": -4.0,
+        "clusterCi95VsRefPp": [
+          -12.07,
+          4.34
+        ],
+        "cnyPer10k": 16.4
+      },
+      {
+        "modelId": "qwen3.8-flash",
+        "pin": "活别名",
+        "correct750": 528,
+        "acc750Pct": 70.4,
+        "acc600Pct": 70.83,
+        "acc150Pct": 68.67,
+        "deltaVsRefPp": -9.6,
+        "clusterCi95VsRefPp": [
+          -14.69,
+          -5.12
+        ],
+        "cnyPer10k": 12.6
+      },
+      {
+        "modelId": "qwen3.7-flash",
+        "pin": "活别名",
+        "correct750": 412,
+        "acc750Pct": 54.93,
+        "acc600Pct": 58.33,
+        "acc150Pct": 41.33,
+        "deltaVsRefPp": -25.07,
+        "clusterCi95VsRefPp": [
+          -35.49,
+          -15.8
+        ],
+        "cnyPer10k": 3.76
+      }
+    ],
+    "oracleCheapOnly": {
+      "candidates": [
+        "qwen3.8-max-0902",
+        "qwen3.7-plus",
+        "deepseek-v4.1-flash",
+        "qwen3.8-flash",
+        "qwen3.7-flash"
+      ],
+      "merged750Pct": 90.13,
+      "holdout600Pct": 92.5,
+      "note": "逐条取优，需要 gold，不可部署——只作为上界参考"
+    },
+    "deployableRules": [
+      {
+        "rule": "★ R6s 证据仲裁 ds⊕q38（基准）",
+        "acc750Pct": 80.27,
+        "acc600Pct": 82.0,
+        "deltaVsR6sPp": 0.0,
+        "oracleHeadroomClosedPct": 30.2,
+        "cnyPer10k": 29.0,
+        "adopted": {
+          "ds": 687,
+          "q38": 63
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      },
+      {
+        "rule": "恒选 ds",
+        "acc750Pct": 76.0,
+        "acc600Pct": 78.17,
+        "deltaVsR6sPp": -4.27,
+        "oracleHeadroomClosedPct": 0.0,
+        "cnyPer10k": 16.4,
+        "adopted": {
+          "ds": 750
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      },
+      {
+        "rule": "3 模型多数票 回退=plus",
+        "acc750Pct": 78.53,
+        "acc600Pct": 81.5,
+        "deltaVsR6sPp": -1.73,
+        "oracleHeadroomClosedPct": 17.9,
+        "cnyPer10k": 32.76,
+        "adopted": {
+          "ds": 347,
+          "plus": 372,
+          "q38": 31
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      },
+      {
+        "rule": "3 模型多数票 回退=ds",
+        "acc750Pct": 79.2,
+        "acc600Pct": 83.67,
+        "deltaVsR6sPp": -1.07,
+        "oracleHeadroomClosedPct": 22.6,
+        "cnyPer10k": 53.96,
+        "adopted": {
+          "ds": 399,
+          "plus": 308,
+          "q38": 43
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      },
+      {
+        "rule": "3 模型多数票 回退=q38",
+        "acc750Pct": 74.27,
+        "acc600Pct": 76.5,
+        "deltaVsR6sPp": -6.0,
+        "oracleHeadroomClosedPct": -12.3,
+        "cnyPer10k": 57.76,
+        "adopted": {
+          "q38": 360,
+          "plus": 343,
+          "ds": 47
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      },
+      {
+        "rule": "4 模型多数票 回退=plus",
+        "acc750Pct": 77.47,
+        "acc600Pct": 80.83,
+        "deltaVsR6sPp": -2.8,
+        "oracleHeadroomClosedPct": 10.4,
+        "cnyPer10k": 70.36,
+        "adopted": {
+          "ds": 113,
+          "plus": 626,
+          "q38": 11
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      },
+      {
+        "rule": "4 模型多数票 回退=ds",
+        "acc750Pct": 78.93,
+        "acc600Pct": 83.5,
+        "deltaVsR6sPp": -1.33,
+        "oracleHeadroomClosedPct": 20.8,
+        "cnyPer10k": 70.36,
+        "adopted": {
+          "ds": 357,
+          "plus": 382,
+          "q38": 11
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      },
+      {
+        "rule": "恒选 plus",
+        "acc750Pct": 77.07,
+        "acc600Pct": 80.17,
+        "deltaVsR6sPp": -3.2,
+        "oracleHeadroomClosedPct": 7.5,
+        "cnyPer10k": 37.6,
+        "adopted": {
+          "plus": 750
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      },
+      {
+        "rule": "多数票 → 无票时 R6s",
+        "acc750Pct": 81.33,
+        "acc600Pct": 85.17,
+        "deltaVsR6sPp": 1.07,
+        "oracleHeadroomClosedPct": 37.7,
+        "cnyPer10k": 70.36,
+        "adopted": {
+          "ds": 318,
+          "plus": 382,
+          "q38": 50
+        },
+        "pinRisk": "全部为活别名，版本可漂移"
+      }
+    ],
+    "r6sMechanism": "R6s：两模型答案不一致时，只在分歧条件上比——谁「漏掉问句里明说的条件」+「写了问句里没有的条件」更少就选谁，平手取 ds。不用 gold、不训练。",
+    "r6sWeakness": "① 62% 的题上两模型条件集合完全相同 → 无从判断只能默认 ds；② 在「只有 qwen3.8-flash 对」的题上只选出它 44%；③ 是看过数据后定的规则，尚未独立留出验证。",
+    "conclusion": "工程选型 = ds⊕q38 证据仲裁：¥29.00/万次（0902 的 16%），750 上 80.27% 打平 0902 的 80.00%；但只看 600 条权威 gold 时是 82.00% vs 83.00%（−1.00pp）——「打平」不稳。级联不值（+0.5~1.9pp 换 1.4~1.9 倍成本）。更优的可部署规则「多数票→无票时 R6s」81.33%（+1.07pp）但贵 2.4 倍。便宜档上界 90.13% 需 gold，不可部署。"
   }
 }

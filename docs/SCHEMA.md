@@ -225,6 +225,26 @@ type HostedApiBaselines = {
 - `routers[]`：一致性级联策略（相邻两层归一化 IR 一致即采纳，否则升级）。**级联的每一层在每个请求上都要执行**，
   故 `cnyPer10kStandardized = Σ各层单价 + 升级目标单价 × escalationRate`；`shareOfMaxCost` 必须与该式自洽。
   另报 `acceptancePrecision`（采纳答案的正确率）与 `latencySequentialS` / `latencyParallelCheapS`。
+- `routersNoMax`：完全不用 max 的策略。`strategies[]` 为级联；`arbiter` 为**证据仲裁**——两个便宜模型都跑，
+  只比较两者不一致的条件（谁「漏掉有文本依据的条件 + 加入无依据条件」更少就采纳谁，平手取 ds），无升级层，
+  故 `escalationTarget = null`、`escalationRate = 0`。`evaluations.{blind,holdout}` 各含
+  `n / arbiter / ds / q38 / max / oracle / deltaVsDsPp / mcnemarVsDsP / clusterCi95VsDsPp /
+  clusterCrossesZero / oracleGapClosedPct / disagreements / disagreementsDecidedRight`。
+  **`holdout.oracleGapClosedPct` 必须小于 `blind.oracleGapClosedPct`**（留出集上效应更小，结论不得只报盲集）；
+  `blind.arbiter` 与 `blind.max` 相等时才允许写「打平 max」；`holdout` 有 `max` 时必须同时给
+  `deltaVsMaxPp` 且与分数自洽，且当 `holdout.arbiter < holdout.max` 时 `limits[]` 必须明说「没有追平 / 低于 max」；
+  `limits[]` 必须含 max 在 Track A 形态下不可复现的边界声明。
+
+### 新口径评测（`holdoutEvaluation`，2026-10-08 起）
+
+盲集口径已被取代。`holdoutEvaluation` 承载当前选型口径，硬约束如下（`check_hosted_api_baselines` 强制）：
+
+- `shape` 必须声明为**统一 thinking-off**（冻结 Track A 形态），并附 `shapeNote` 说明该开关效果**模型特有**、排名会随形态翻转；
+- `exclusion` 必须排除 `qwen3.7-max`，且给出①现象（`observed.corruptRatePct ≥ 10`、空值叶子、不可解析条数、批次分布）②**同形态同批次的其他模型对照（≥4 个）**③≥3 条排除理由与处理方式；
+- `reference.modelId` 必须是 `qwen3.8-max-0902`（带日期 pin 快照），且参考行 `deltaVsRefPp = 0`；单模型表不得包含已排除的模型；
+- `oracleCheapOnly.merged750Pct` **不得低于任何单模型**（上界不变量）；任何 `deployableRules` 的分数不得高于该 oracle，`oracleHeadroomClosedPct` 不得 >100%；
+- `deployableRules` 必须含 `★ R6s` 基准行（`deltaVsR6sPp = 0`）；必须给出 `r6sMechanism`（规则机制）与 `r6sWeakness`（已知局限，如「多数题上无信号只能默认取 ds」）；
+- `routersNoMax.supersededNote` 必须存在——旧仲裁结论（「blind 打平 max」）已作废，需显式指向新块。
 
 ### 硬性不变量（`scripts/validate_data.py` → `check_hosted_api_baselines`）
 

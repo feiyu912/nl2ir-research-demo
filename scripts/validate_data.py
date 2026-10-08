@@ -35,10 +35,17 @@ LOCAL_ONLY_PARTS = (
 )
 
 SANITIZE_PATTERNS = (
-    ("本地绝对路径", re.compile(r"(?:^|[\s\"'=:\[(,])/(?:Users|home|mnt|workspace|Volumes|dat)/")),
+    # 前边界用"非字母数字"而不是空白/标点白名单：Markdown 反引号包裹的路径
+    # （`/dat/...`）曾经正是漏检的那一处。
+    ("本地绝对路径", re.compile(r"(?<![A-Za-z0-9])/(?:Users|home|mnt|workspace|Volumes|dat)/")),
     ("Windows 绝对路径", re.compile(r"[A-Za-z]:\\")),
     ("家目录相对路径", re.compile(r"~/[^\s]")),
-    ("私有网段 IP", re.compile(r"(?<![\d.])(?:10|192\.168|172\.(?:1[6-9]|2\d|3[01]))\.\d{1,3}\.\d{1,3}(?:\.\d{1,3})?(?![\d.])")),
+    # 私有网段要求完整四段 IPv4，且两侧不得贴字母数字：否则 v10.1.2 这类版本号会误报。
+    # 192.168 与 172.x 分支自带两段，只需再补两段；裸 10 分支自带一段，需再补三段。
+    ("私有网段 IP", re.compile(
+        r"(?<![0-9A-Za-z.])(?:192\.168(?:\.\d{1,3}){2}"
+        r"|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2}"
+        r"|10(?:\.\d{1,3}){3})(?![0-9A-Za-z.])")),
     ("邮箱地址", re.compile(r"\b[\w.+-]+@[\w-]+\.[A-Za-z]{2,}\b")),
     ("内部主机名", re.compile(r"\b[\w-]+\.(?:internal|corp|lan)\b")),
 )
@@ -82,6 +89,15 @@ def _published_text_files() -> list[Path]:
 def check_public_sanitization(report: Report) -> None:
     """公开发布物不得出现本地路径、内网地址或内部主机名。"""
     denylist = _local_denylist()
+    if not denylist:
+        # 形状正则抓不到内部仓库名/公司域名这类"名字"。没有私有黑名单时必须明说
+        # 覆盖不到，不能让"全局脱敏"在没有配置的 CI / 新 clone 里静默通过。
+        msg = ("sanitization: 未加载私有黑名单（scripts/denylist.local 或 "
+               "NL2IR_PUBLIC_DENYLIST）——本次只覆盖路径/网段/邮箱/主机名等形状，内部名称类标识未检查")
+        if os.environ.get("NL2IR_REQUIRE_DENYLIST") == "1":
+            report.error(msg)
+        else:
+            report.warn(msg)
     for path in _published_text_files():
         rel = path.relative_to(ROOT).as_posix()
         for lineno, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
@@ -357,7 +373,7 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
     # 配对统计：聚类区间跨 0 的方向不得宣称显著
     for pw in payload.get("pairwise") or []:
         lo, hi = (pw.get("ciCluster") or [0, 0])[:2]
-        if (lo < 0 < hi) != bool(pw.get("clusterCrossesZero")):
+        if (lo <= 0 <= hi) != bool(pw.get("clusterCrossesZero")):
             report.error(f"hosted_api_baselines clusterCrossesZero 与区间不一致: {pw.get('key')}")
 
     # 来源与哈希必须齐全
@@ -383,7 +399,7 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         if abs(round(b.get("blindWhereCorrect", 0) / max(1, b.get("n", 1)) * 100, 2) - b.get("blindWhere", -1)) > 0.005:
             report.error(f"hosted_api_baselines blind 百分比与正确数不符: {mid}")
         ci = b.get("clusterCi95Pp") or [0, 0]
-        if (ci[0] < 0 < ci[1]) != bool(b.get("clusterCrossesZero")):
+        if (ci[0] <= 0 <= ci[1]) != bool(b.get("clusterCrossesZero")):
             report.error(f"hosted_api_baselines blind clusterCrossesZero 与区间不一致: {mid}")
         if mid != "qwen3.7-max" and b.get("mcnemarP", 1) >= 0.05 and not b.get("clusterCrossesZero"):
             report.error(f"hosted_api_baselines blind 显著性标注自相矛盾: {mid}")
@@ -413,11 +429,73 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         if max_cost and abs(r.get("cnyPer10kStandardized", 0) / max_cost - r.get("shareOfMaxCost", -1)) > 0.01:
             report.error(f"hosted_api_baselines 无 max 策略成本占比不自洽: {r.get('policy')}")
         ci = r.get("clusterCi95Pp") or [0, 0]
-        if (ci[0] < 0 < ci[1]) != bool(r.get("clusterCrossesZero")):
+        if (ci[0] <= 0 <= ci[1]) != bool(r.get("clusterCrossesZero")):
             report.error(f"hosted_api_baselines 无 max 策略 clusterCrossesZero 不一致: {r.get('policy')}")
     best = max((r.get("blindWhere", 0) for r in strats), default=0)
     if nomax.get("oracleNonMax", 0) < best:
         report.error("hosted_api_baselines 无 max oracle 低于最佳可部署策略（不可能是上界）")
+
+    # ---- 新口径评测块：统一 thinking-off、排除 qwen3.7-max、参考改为 0902 ----
+    he = payload.get("holdoutEvaluation") or {}
+    if not he:
+        report.error("hosted_api_baselines 缺 holdoutEvaluation")
+    else:
+        if "thinking-off" not in str(he.get("shape", "")):
+            report.error("holdoutEvaluation.shape 必须声明为统一 thinking-off 口径")
+        if not he.get("shapeNote"):
+            report.error("holdoutEvaluation 缺形态对照说明（该开关效果模型特有，排名会翻转）")
+        ex = he.get("exclusion") or {}
+        if ex.get("excluded") != "qwen3.7-max":
+            report.error(f"holdoutEvaluation.exclusion 应排除 qwen3.7-max: {ex.get('excluded')}")
+        obs = ex.get("observed") or {}
+        rate = obs.get("corruptRatePct")
+        if not isinstance(rate, (int, float)) or rate < 10:
+            report.error(f"holdoutEvaluation 排除理由缺损坏率证据: {rate}")
+        if len(ex.get("whyExcluded") or []) < 3 or not ex.get("handling"):
+            report.error("holdoutEvaluation 排除说明不完整（需 ≥3 条理由 + 处理方式）")
+        ctrl = (ex.get("control") or {}).get("sameShapeSameBatchOtherModels") or {}
+        if len(ctrl) < 4:
+            report.error("holdoutEvaluation 排除说明缺「同形态其他模型对照」")
+        ref = he.get("reference") or {}
+        if ref.get("modelId") != "qwen3.8-max-0902":
+            report.error(f"holdoutEvaluation 参考应为 qwen3.8-max-0902: {ref.get('modelId')}")
+        rows_ = he.get("singleModel") or []
+        if len(rows_) < 4:
+            report.error(f"holdoutEvaluation 单模型行过少: {len(rows_)}")
+        if any(r.get("modelId") == "qwen3.7-max" for r in rows_):
+            report.error("holdoutEvaluation 不得包含已排除的 qwen3.7-max")
+        refrow = next((r for r in rows_ if r.get("modelId") == ref.get("modelId")), None)
+        if refrow is None:
+            report.error("holdoutEvaluation 参考模型不在单模型表中")
+        elif refrow.get("deltaVsRefPp") != 0:
+            report.error("holdoutEvaluation 参考行 deltaVsRefPp 应为 0")
+        for r in rows_:
+            a = r.get("acc750Pct")
+            if not isinstance(a, (int, float)) or not 0 < a <= 100:
+                report.error(f"holdoutEvaluation acc750 越界: {r.get('modelId')} {a}")
+        oc = he.get("oracleCheapOnly") or {}
+        best_single = max((r.get("acc750Pct", 0) for r in rows_), default=0)
+        if not isinstance(oc.get("merged750Pct"), (int, float)) or oc["merged750Pct"] + 1e-9 < best_single:
+            report.error(f"oracle 低于最佳单模型（不可能是上界）: {oc.get('merged750Pct')} < {best_single}")
+        rules_ = he.get("deployableRules") or []
+        base_rule = next((r for r in rules_ if str(r.get("rule", "")).startswith("★ R6s")), None)
+        if base_rule is None:
+            report.error("holdoutEvaluation 缺 R6s 基准行")
+        elif base_rule.get("deltaVsR6sPp") != 0:
+            report.error("holdoutEvaluation R6s 基准行 deltaVsR6sPp 应为 0")
+        for r in rules_:
+            a = r.get("acc750Pct")
+            if isinstance(a, (int, float)) and a > oc.get("merged750Pct", 100) + 1e-9:
+                report.error(f"holdoutEvaluation 规则超过 oracle（不可能）: {r.get('rule')}")
+            pct = r.get("oracleHeadroomClosedPct")
+            if isinstance(pct, (int, float)) and pct > 100:
+                report.error(f"holdoutEvaluation 空间占比 >100%: {r.get('rule')} {pct}")
+        if not he.get("r6sMechanism") or not he.get("r6sWeakness"):
+            report.error("holdoutEvaluation 缺 R6s 机制说明或局限说明")
+        if not str(he.get("conclusion", "")).strip():
+            report.error("holdoutEvaluation 缺结论")
+        if not str((payload.get("routersNoMax") or {}).get("supersededNote", "")).strip():
+            report.error("hosted_api_baselines.routersNoMax 缺「旧仲裁结论已作废」的指向说明")
 
     # role_tenure 审计未冻结：不得写入实现结论
     for m in models:

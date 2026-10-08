@@ -229,8 +229,8 @@ function BlindJudgment(){
   const rows:any[]=api.blindModels??[];const models:any[]=api.models??[];
   const toneOf=(id:string)=>(models.find(m=>m.modelId===id)||{}).tone??'baseline';
   const stressOf=(id:string)=>((models.find(m=>m.modelId===id)||{}).slices||{}).stress96?.where;
-  return <section className="panel api-section"><Title tag={`判定标准 · ${std.name??'sealed blind v6'}`}
-    title="选型以盲集为准，开发集只作参考"
+  return <section className="panel api-section"><Title tag={`旧口径（已被取代） · ${std.name??'sealed blind v6'}`}
+    title="盲集口径的历史批次（下方「新口径复测」为准）"
     text={`${std.n??240} 条 sealed blind · 指标 ${std.metric??'main_chain_where'} · 冻结 scorer。${std.note??''}`}/>
     <div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>blind where</th><th>stress96</th><th>真删除</th><th>幻觉</th><th>¥/万次</th><th>P50</th><th>vs max</th></tr></thead>
     <tbody>{rows.map(b=><tr key={b.modelId}><th scope="row"><i className={`api-dot api-dot-${toneOf(b.modelId)}`}/>{b.modelId}</th>
@@ -238,7 +238,7 @@ function BlindJudgment(){
       <td className={b.trueDroppedBlind>15?'api-bad':''}>{b.trueDroppedBlind}</td><td>{b.hallucinatedBlind}</td>
       <td>¥{b.cnyPer10kStandardized.toFixed(2)}</td><td>{b.latencyP50S.toFixed(2)}s</td>
       <td>{b.modelId===base.modelId?'基线':`${b.deltaVsMaxPp>=0?'+':''}${b.deltaVsMaxPp.toFixed(2)}pp · p=${b.mcnemarP<0.001?'<0.001':b.mcnemarP.toFixed(3)}${b.clusterCrossesZero?'（跨0）':''}`}</td></tr>)}</tbody></table></div>
-    <p className="chart-caption">真删除 = gold 必填条件消失且无替代过滤（越低越安全）。"跨0" 指 family-aware cluster bootstrap 95% 区间跨 0 → 与 max 的差异不稳健。dev 集（old366/c300）曾是 v21 prompt 的迭代集，其数字对"贴合该风格"的模型有利，故不作选型依据。</p></section>;}
+    <p className="chart-caption"><strong>此表为 2026-09-17 / 10-08 的旧口径，选型请以下方「新口径复测」为准。</strong>原因两条：① <strong>qwen3.7-max 一行不可复现</strong>——它今天在同一请求形态下 49% 输出损坏（其余 5 个模型 0–2%），故已从新口径中排除；② <strong>blind_v6 被查出覆盖缺口</strong>：7 条规则分支 0 覆盖、4 条两套都没测过，其 92–95% 是窄切片成绩。</p><p className="chart-caption">真删除 = gold 必填条件消失且无替代过滤（越低越安全）。"跨0" 指 family-aware cluster bootstrap 95% 区间跨 0 → 与 max 的差异不稳健。dev 集（old366/c300）曾是 v21 prompt 的迭代集，其数字对"贴合该风格"的模型有利，故不作选型依据。</p></section>;}
 
 function RouterComparison(){
   const api:any=hostedApi;const base=api.maxBaseline??{};const rows:any[]=api.routers??[];
@@ -256,9 +256,42 @@ function RouterComparison(){
       <td>¥{r.cnyPer10kStandardized.toFixed(2)}</td><td>{(r.shareOfMaxCost*100).toFixed(0)}%</td>
       <td>{(r.escalationRate*100).toFixed(1)}%</td><td>{(r.acceptancePrecision*100).toFixed(1)}%</td>
       <td>{r.latencySequentialS.toFixed(2)}/{r.latencyParallelCheapS.toFixed(2)}s</td></tr>)}</tbody></table></div>
-    <p className="chart-caption"><strong>结论：完全不用 max 达不到 max。</strong>最好可部署配置 {((api.routersNoMax?.strategies??[]).at(-1)?.policy)??''} 为 {(api.routersNoMax?.strategies??[]).at(-1)?.blindWhere?.toFixed(2)??'—'}%，但成本 {(100*((api.routersNoMax?.strategies??[]).at(-1)?.shareOfMaxCost??0)).toFixed(0)}% of max —— 比直接用 max 更贵（因为逼近 max 必须引入 0902，其单价≈max 的 89%）。非 max oracle 上界 {api.routersNoMax?.oracleNonMax??'—'}%（不可部署）。<strong>真正的降本来自直接换模型</strong>：ds 直连 92.08% @ 8% 成本、q38→plus→ds 93.33% @ 30%，两者与 max 的差异在盲集上均不显著。</p></section>;}
+    {(()=>{const he:any=api.holdoutEvaluation;if(!he)return null;const ex=he.exclusion??{};const ref=he.reference??{};const oc=he.oracleCheapOnly??{};
+      return <><h3 style={{margin:'24px 0 6px'}}>新口径复测：留出集 600 + 补题 150（排除 qwen3.7-max，参考 = qwen3.8-max-0902）</h3>
+        <p className="chart-caption">{he.shape}。{he.shapeNote}</p>
+        <p className="chart-caption">{he.sets?.holdout600}；{he.sets?.supplement150}；{he.sets?.merged750}</p>
+        <div className="api-callout"><strong>排除 qwen3.7-max</strong>：{ex.observed?.corruptItems}/{ex.observed?.n}（{ex.observed?.corruptRatePct}%）响应被破坏（{ex.observed?.emptyValueLeaves} 个叶子为空值，{ex.observed?.unparseable} 条不可解析），{ex.observed?.spread}；同形态同批次其余 5 个模型坏题率 0–2%（{Object.keys(ex.control?.sameShapeSameBatchOtherModels??{}).length} 个模型对照）。结论：{ex.control?.conclusion}</div>
+        <ul className="small" style={{paddingLeft:20}}>{(ex.whyExcluded??[]).map((x:string,i:number)=><li key={i}>{x}</li>)}<li><strong>处理</strong>：{ex.handling}</li></ul>
+        <div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>750</th><th>仅600</th><th>仅150</th><th>vs 参考(750)</th><th>聚类CI95</th><th>¥/万次</th><th>版本</th></tr></thead>
+        <tbody>{(he.singleModel??[]).map((r:any)=><tr key={r.modelId}><th scope="row">{r.modelId}{r.modelId===ref.modelId?'（参考）':''}</th>
+          <td className="api-strong">{r.acc750Pct.toFixed(2)}%</td><td>{r.acc600Pct.toFixed(2)}%</td><td>{r.acc150Pct.toFixed(2)}%</td>
+          <td>{r.deltaVsRefPp>=0?'+':''}{r.deltaVsRefPp.toFixed(2)}pp</td><td>{(r.clusterCi95VsRefPp??[]).join(' ~ ')}</td>
+          <td>¥{r.cnyPer10k.toFixed(2)}</td><td>{r.pin}</td></tr>)}</tbody></table></div>
+        <h4 style={{margin:'18px 0 4px'}}>可部署规则（全部不用 gold）</h4>
+        <p className="chart-caption">{he.r6sMechanism}</p>
+        <div className="api-table-scroll"><table className="api-table"><thead><tr><th>规则</th><th>750</th><th>仅600</th><th>vs ds⊕q38</th><th>占便宜档空间</th><th>¥/10k</th><th>采纳分布</th></tr></thead>
+        <tbody>{(he.deployableRules??[]).map((r:any,i:number)=><tr key={i}><th scope="row">{r.rule}</th>
+          <td className="api-strong">{r.acc750Pct.toFixed(2)}%</td><td>{r.acc600Pct.toFixed(2)}%</td>
+          <td>{r.deltaVsR6sPp==null?'—':`${r.deltaVsR6sPp>=0?'+':''}${r.deltaVsR6sPp.toFixed(2)}pp`}</td>
+          <td>{r.oracleHeadroomClosedPct}%</td><td>¥{r.cnyPer10k.toFixed(2)}</td>
+          <td>{Object.keys(r.adopted??{}).map((k:string)=>k+'='+r.adopted[k]).join('  ')}</td></tr>)}</tbody></table></div>
+        <ul className="small" style={{paddingLeft:20,marginTop:6}}>
+          <li>便宜档上界（逐条取优，<strong>需 gold、不可部署</strong>）：750 = {oc.merged750Pct}% / 600 = {oc.holdout600Pct}% —— 最好的可部署规则只吃到其中一部分。</li>
+          <li>{he.r6sWeakness}</li>
+          <li><strong>结论</strong>：{he.conclusion}</li></ul></>;})()}
+    {(()=>{const ca:any=api.coverageAudit;if(!ca)return null;return <><h3 style={{margin:'24px 0 6px'}}>评测集覆盖审计：blind 漏掉了哪些规则分支</h3>
+      <p className="chart-caption">{ca.method}</p>
+      <div className="api-table-scroll"><table className="api-table"><thead><tr><th>规则分支（blind 0 覆盖）</th><th>blind</th><th>holdout</th><th>该分支在留出集上的表现</th></tr></thead>
+      <tbody>{(ca.blindZeroCoverageButHoldoutHas??[]).map((r:any)=>{const g=(ca.supplement?.byGroup??[]).find((x:any)=>(x.group??'').startsWith(r.rule+'_'));
+        return <tr key={r.rule}><th scope="row">{r.rule} · {r.desc}</th><td>0</td><td>{r.holdout}</td>
+          <td>{g?`ds ${g.ds}% / q38 ${g.q38}% / plus ${g.plus}% / 0902 ${g['0902']}%（n=${g.n}）`:'—'}</td></tr>;})}</tbody></table></div>
+      <p className="chart-caption"><strong>两套都没测过</strong>：{(ca.neverTestedInEither??[]).map((r:any)=>`${r.rule} ${r.desc}`).join('；')}。补题 150 条（15 组）已生成并跑完三个模型，判据与尚未人工定稿的说明见下。</p>
+      <ul className="small" style={{paddingLeft:20,marginTop:6}}>
+        <li>{ca.supplement?.metaGroupsNeedIr}</li><li>{ca.supplement?.humanReview}</li><li>{ca.supplement?.shapeNote}</li><li>{ca.conclusion}</li></ul></>;})()}
+    <p className="chart-caption"><strong>选型结论已改口径。</strong>原先基于 sealed blind 240 条的「证据仲裁打平 qwen3.7-max、成本 14%」<strong>已作废</strong>：qwen3.7-max 因请求形态故障被排除（同形态同批次下 49% 输出损坏，其余 5 个模型 0–2%），且该判定集被查出 7 条规则分支 0 覆盖、4 条两套都没测过。新口径（统一 thinking-off、参考改为带日期 pin 的 qwen3.8-max-0902、留出集 600 + 补题 150）见下方。</p></section>;}
 
 function ModelComparison(){const api=hostedApi;const nf=(v:number)=>(v>0?`+${v}`:`${v}`);return <><Heading tag="当前模型 / API 基线验证" title="API 模型横向对比（6 个候选）" text={`判定标准 = sealed blind v6（240 条，未参与 prompt 迭代）；old366/c300 为开发集，其 combined 数字仅作参考。共 ${api.n} 条；3 个冻结候选来自 2026-09-17 批次，另 3 个（0902 / 3.7-plus / 3.7-flash）为 2026-10-08 同协议补跑。本页不是 Arm A 训练消融。`}/>
+<div className="api-callout"><strong>判定口径已于 2026-10-08 变更。</strong>新口径 = 统一 thinking-off（冻结 Track A 形态）+ 排除 qwen3.7-max（形态故障：同形态下 49% 输出损坏）+ 参考改为带日期 pin 的 qwen3.8-max-0902 + 判定集换成留出集 600 与补题 150。完整表见下方「新口径复测」；本页上方两张表是旧口径，仅作历史记录。</div>
 <BlindJudgment/>
 <RouterComparison/>
 <p className="chart-caption"><a className="api-link" href="#api-stability">新增：4 个模型 × 50 条偏难查询 × 3 次重复的 API 稳定性结果 ↓</a></p>
