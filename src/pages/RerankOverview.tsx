@@ -107,7 +107,7 @@ export default function RerankOverview() {
         </article>
         <article className="api-insight api-insight-value">
           <span>成本最低</span>
-          <strong>{share(cheapest.costShareOfBaselinePct)}<small> 基线</small></strong>
+          <strong>{share(cheapest.costShareOfIncumbentPct)}<small> 占现役</small></strong>
           <h3>{cheapest.alias}</h3>
           <p>{cheapest.conclusion}</p>
         </article>
@@ -140,10 +140,11 @@ export default function RerankOverview() {
               name: m.alias, value: m.costShareOfBaselinePct, color: tone(m.tone), label: share(m.costShareOfBaselinePct),
             }))}
             max={100}
-            caption="占基线成本的百分比 · 未计入缓存命中，实际支出更低"
+            caption="占 max 基线成本的百分比 · 未计入缓存命中，实际支出更低"
           />
           <p className="chart-caption">
             成本跨两个数量级：最高与最低相差约 {Math.round(100 / cheapest.costShareOfBaselinePct)} 倍；成本只反映单价，不等于质量。
+            但 max 并不是我们在付的钱——以<strong>现役</strong>为基准，中间档与 DeepSeek 反而更贵（见下表「占现役」列）。
           </p>
         </section>
       </div>
@@ -166,7 +167,7 @@ export default function RerankOverview() {
         <Title
           tag="决策总表"
           title="单模型与路由放在一起看：质量、价格、延迟"
-          text={`基线 = ${base.alias} 直连：干净子集 ${f2(base.judgeClean16)} 分、全集 ${f2(base.judgeAll20)} 分`}
+          text={`质量基线 = ${base.alias} 直连（干净子集 ${f2(base.judgeClean16)} 分 / 全集 ${f2(base.judgeAll20)} 分）；成本两列分别以该基线与现役模型为分母。`}
         />
         <h3 className="api-subhead">A · 单模型（含公开价目）</h3>
         <div className="api-table-scroll">
@@ -174,7 +175,7 @@ export default function RerankOverview() {
             <thead>
               <tr>
                 <th>模型</th><th>盲评 0–10</th><th>公开价目 ¥/百万 tok（入 / 出）</th>
-                <th>成本占基线</th><th>批量 P50</th><th>生产形态</th><th>角色</th>
+                <th>占 max 基线</th><th>占现役</th><th>批量 P50</th><th>生产形态</th><th>角色</th>
               </tr>
             </thead>
             <tbody>
@@ -184,6 +185,7 @@ export default function RerankOverview() {
                   <td className="api-strong">{f2(m.judgeScore10)}</td>
                   <td>{m.priceCnyPerMTok.input} / {m.priceCnyPerMTok.output}</td>
                   <td>{share(m.costShareOfBaselinePct)}</td>
+                  <td className={m.costShareOfIncumbentPct > 100 ? 'api-bad' : ''}>{share(m.costShareOfIncumbentPct)}</td>
                   <td>{m.batchWallP50S}s</td>
                   <td className={m.compatibility.productionShape === 400 ? 'api-bad' : ''}>
                     {m.compatibility.productionShape === 200 ? '可直接跑' : '请求被拒'}
@@ -195,6 +197,7 @@ export default function RerankOverview() {
           </table>
         </div>
         <p className="chart-caption">
+          「占现役」= 相对现役模型的每次检索成本（同批冻结池实测用量 × 公开价目），<strong>现役 = 100%，超过即比现役更贵</strong>。
           价目为公开信息（{data.priceList.date}，{data.priceList.unit}）。现有结构化输出请求格式不被部分候选支持——
           <strong>任何候选上线前都要先改代码</strong>。
         </p>
@@ -205,7 +208,7 @@ export default function RerankOverview() {
             <thead>
               <tr>
                 <th>策略</th><th>是否用 max</th><th>干净子集 {router.cleanSubsetN} 场</th>
-                <th>全集 {router.cleanSubsetN + router.truncatedSessions} 场</th><th>成本占基线</th><th>批量 P50</th>
+                <th>全集 {router.cleanSubsetN + router.truncatedSessions} 场</th><th>占 max 基线</th><th>批量 P50</th>
               </tr>
             </thead>
             <tbody>
@@ -233,6 +236,10 @@ export default function RerankOverview() {
             </tbody>
           </table>
         </div>
+        <p className="chart-caption">
+          本表成本以质量基线（max）为分母。路由回测未跑现役模型，因此<strong>无法给出「占现役」列</strong>——
+          这批会话上现役的成本与质量都缺测，是后续要补的缺口。
+        </p>
 
         <div className="api-callout api-callout-block">
           <strong>结论</strong>

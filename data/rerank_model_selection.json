@@ -55,6 +55,7 @@
       "judgeScore10": 7.92,
       "judgeSessions": 3,
       "costShareOfBaselinePct": 100.0,
+      "costShareOfIncumbentPct": 888.6,
       "batchWallP50S": 12.4,
       "priceCnyPerMTok": {
         "input": 12.0,
@@ -75,6 +76,7 @@
       "judgeScore10": 7.0,
       "judgeSessions": 3,
       "costShareOfBaselinePct": 13.9,
+      "costShareOfIncumbentPct": 123.2,
       "batchWallP50S": 12.1,
       "priceCnyPerMTok": {
         "input": 1.6,
@@ -95,6 +97,7 @@
       "judgeScore10": 6.67,
       "judgeSessions": 3,
       "costShareOfBaselinePct": 6.8,
+      "costShareOfIncumbentPct": 60.1,
       "batchWallP50S": 13.1,
       "priceCnyPerMTok": {
         "input": 0.8,
@@ -115,6 +118,7 @@
       "judgeScore10": 6.42,
       "judgeSessions": 3,
       "costShareOfBaselinePct": 1.7,
+      "costShareOfIncumbentPct": 15.5,
       "batchWallP50S": 10.1,
       "priceCnyPerMTok": {
         "input": 0.2,
@@ -135,6 +139,7 @@
       "judgeScore10": 6.33,
       "judgeSessions": 3,
       "costShareOfBaselinePct": 15.9,
+      "costShareOfIncumbentPct": 141.3,
       "batchWallP50S": 7.5,
       "priceCnyPerMTok": {
         "input": 2.0,
@@ -155,6 +160,7 @@
       "judgeScore10": 6.08,
       "judgeSessions": 3,
       "costShareOfBaselinePct": 97.1,
+      "costShareOfIncumbentPct": 862.6,
       "batchWallP50S": 11.8,
       "priceCnyPerMTok": {
         "input": 12.0,
@@ -175,6 +181,7 @@
       "judgeScore10": 5.33,
       "judgeSessions": 3,
       "costShareOfBaselinePct": 11.3,
+      "costShareOfIncumbentPct": 100.0,
       "batchWallP50S": 5.7,
       "priceCnyPerMTok": {
         "input": 1.2,
