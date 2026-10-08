@@ -150,7 +150,7 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
 
     # 三个冻结模型必须存在；允许追加带 provenance 的快照模型（2026-10-08 起）。
     frozen_ids = ["qwen3.7-max", "qwen3.8-flash", "deepseek-v4.1-flash"]
-    snapshot_ids = ["qwen3.8-max-0902"]
+    snapshot_ids = ["qwen3.8-max-0902", "qwen3.7-plus", "qwen3.7-flash"]
     missing = [x for x in frozen_ids if x not in by_id]
     if missing:
         report.error(f"hosted_api_baselines 缺冻结模型: {missing}")
@@ -180,7 +180,8 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
     if (split.get("stress96") or 0) + (split.get("realistic144") or 0) != (ds.get("blindV6") or {}).get("n"):
         report.error("hosted_api_baselines stress96 + realistic144 != blind-v6")
 
-    expected_where = {"qwen3.7-max": 94.26, "qwen3.8-flash": 89.62, "deepseek-v4.1-flash": 86.20, "qwen3.8-max-0902": 91.39}
+    expected_where = {"qwen3.7-max": 94.26, "qwen3.8-flash": 89.62, "deepseek-v4.1-flash": 86.20,
+                     "qwen3.8-max-0902": 91.39, "qwen3.7-plus": 85.54, "qwen3.7-flash": 68.32}
     for mid, want in expected_where.items():
         m = by_id.get(mid)
         if not m:
@@ -293,6 +294,39 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         rec = (payload.get("sourceFiles") or {}).get(f) or {}
         if len(rec.get("sha256") or "") != 64:
             report.error(f"hosted_api_baselines 来源文件缺 SHA256: {f}")
+
+    # ---- 判定标准（sealed blind v6）与 router 块 ----
+    std = payload.get("judgmentStandard") or {}
+    if std.get("name") != "sealed blind v6" or std.get("n") != 240 or std.get("metric") != "main_chain_where":
+        report.error(f"hosted_api_baselines 判定标准不符: {std}")
+    blind = payload.get("blindModels") or []
+    if len(blind) != len(models):
+        report.error(f"hosted_api_baselines blindModels 与 models 数量不一致: {len(blind)} vs {len(models)}")
+    if {b.get("modelId") for b in blind} != set(by_id):
+        report.error("hosted_api_baselines blindModels 模型集合与 models 不一致")
+    for b in blind:
+        mid = b.get("modelId")
+        if not (0 <= b.get("blindWhereCorrect", -1) <= b.get("n", 0)):
+            report.error(f"hosted_api_baselines blind 正确数非法: {mid}")
+        if abs(round(b.get("blindWhereCorrect", 0) / max(1, b.get("n", 1)) * 100, 2) - b.get("blindWhere", -1)) > 0.005:
+            report.error(f"hosted_api_baselines blind 百分比与正确数不符: {mid}")
+        ci = b.get("clusterCi95Pp") or [0, 0]
+        if (ci[0] < 0 < ci[1]) != bool(b.get("clusterCrossesZero")):
+            report.error(f"hosted_api_baselines blind clusterCrossesZero 与区间不一致: {mid}")
+        if mid != "qwen3.7-max" and b.get("mcnemarP", 1) >= 0.05 and not b.get("clusterCrossesZero"):
+            report.error(f"hosted_api_baselines blind 显著性标注自相矛盾: {mid}")
+    routers = payload.get("routers") or []
+    if not routers:
+        report.error("hosted_api_baselines 缺 routers 块")
+    max_cost = (payload.get("maxBaseline") or {}).get("cnyPer10kStandardized")
+    for r in routers:
+        tiers = r.get("tiers") or []
+        if not tiers or any(t not in {"max", "q38", "ds", "0902", "plus", "q37f"} for t in tiers):
+            report.error(f"hosted_api_baselines router 层级非法: {r.get('policy')}")
+        if max_cost and abs(r.get("cnyPer10kStandardized", 0) / max_cost - r.get("shareOfMaxCost", -1)) > 0.01:
+            report.error(f"hosted_api_baselines router 成本占比不自洽: {r.get('policy')}")
+        if not 0 <= r.get("acceptancePrecision", -1) <= 1 or not 0 <= r.get("escalationRate", -1) <= 1:
+            report.error(f"hosted_api_baselines router 比率越界: {r.get('policy')}")
 
     # role_tenure 审计未冻结：不得写入实现结论
     for m in models:

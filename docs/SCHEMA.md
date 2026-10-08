@@ -215,11 +215,22 @@ type HostedApiBaselines = {
 };
 ```
 
+### 判定标准（2026-10-08 起）
+
+**选型判定以 `judgmentStandard`（sealed blind v6，240 条）为准**；`combinedWhere`（906 条，含 old366/c300 开发集）
+**仅作参考**——v21 prompt 是在开发集上迭代的，其数字对"贴合该风格"的模型系统性有利。
+
+- `blindModels[]`：每模型的 blind 精度、stress96、真删除/幻觉（blind 口径）、标准化成本、P50、
+  与 max 的 Δpp / McNemar p / family-aware cluster 95% 区间（`clusterCrossesZero` 必须与区间自洽）。
+- `routers[]`：一致性级联策略（相邻两层归一化 IR 一致即采纳，否则升级）。**级联的每一层在每个请求上都要执行**，
+  故 `cnyPer10kStandardized = Σ各层单价 + 升级目标单价 × escalationRate`；`shareOfMaxCost` 必须与该式自洽。
+  另报 `acceptancePrecision`（采纳答案的正确率）与 `latencySequentialS` / `latencyParallelCheapS`。
+
 ### 硬性不变量（`scripts/validate_data.py` → `check_hosted_api_baselines`）
 
 - `n = 906` 且 `366 + 300 + 240`；`stress96 + realistic144 = 240`，**不重复计入 combined**；
 - 三个**冻结**模型 ID 必须存在：`qwen3.7-max` / `qwen3.8-flash` / `deepseek-v4.1-flash`；
-  允许追加**带 provenance 的快照模型**（当前仅 `qwen3.8-max-0902`，2026-10-08 同协议补跑），不得出现未登记 ID；
+  允许追加**带 provenance 的补跑模型**（当前：`qwen3.8-max-0902` / `qwen3.7-plus` / `qwen3.7-flash`，2026-10-08 同协议），不得出现未登记 ID；
 - primary 必须是 `main_chain_where`；
 - `combinedWhere` = 94.26 / 89.62 / 86.20，且必须与三切片加权一致；
 - **两套成本口径必须同时存在**：`standardized` 与 `observedRun`（仅对冻结三模型；快照模型允许 `cost: null`，但必须声明 `costUnavailableReason` 与 `provenance.runDate`）；

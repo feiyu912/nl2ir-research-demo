@@ -369,8 +369,8 @@
       "alias": "qwen38max0902",
       "modelId": "qwen3.8-max-0902",
       "role": "0902 快照 · 同协议补跑",
-      "conclusion": "同协议补跑：combined 91.39%，低于 Qwen 3.7 Max 2.87pp；stress96 73.96% 明显更弱，真删除 34 条。未取价目，不参与成本与配对统计。",
       "tone": "snapshot",
+      "conclusion": "同协议补跑：blind 89.17%，dev-combined 91.39%（仅参考）；真删除 34 条。",
       "n": 906,
       "combinedWhere": 91.39,
       "combinedWhereCorrect": 828,
@@ -419,8 +419,29 @@
         "p95": 4.64,
         "transportFailureRequests": 0
       },
-      "cost": null,
-      "costUnavailableReason": "未取得 qwen3.8-max-0902 的网关价目；按「缺数据 ≠ 0」不填成本，不参与标准化/实测成本对比。",
+      "cost": {
+        "standardized": {
+          "caliber": "identical token workload (3000 in / 2400 cached / 200 out) at real list price",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 180.0
+            }
+          ]
+        },
+        "observedRun": {
+          "caliber": "this run's real prompt/cached/completion totals at real list price (NOT a price index)",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 176.61,
+              "cacheHitRate": 72.5,
+              "completionTokensPerRequest": 125.4
+            }
+          ]
+        }
+      },
+      "costPriceSource": "qwen3-8-max（快照按同系列价目，待确认）",
       "frozenFlags": {
         "main_chain_ir": 0.4878587196467991,
         "executable_main_chain": 0.5,
@@ -435,7 +456,210 @@
       "provenance": {
         "runDate": "2026-10-08",
         "batch": "追加批次（非 2026-09-17 冻结批次）",
-        "protocol": "Track A 同协议：冻结 v21 prompt (7ca4dea9…) + json_object + 冻结 scorer (3f4b75f9…) + temperature 0",
+        "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
+        "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
+        "requests": 906,
+        "httpSuccess": 906,
+        "transportFailures": 0
+      }
+    },
+    {
+      "alias": "qwen37plus",
+      "modelId": "qwen3.7-plus",
+      "role": "3.7 增强档 · 同协议补跑",
+      "tone": "plus",
+      "conclusion": "同协议补跑：blind 77.08%，dev-combined 85.54%（仅参考）；真删除 85 条。",
+      "n": 906,
+      "combinedWhere": 85.54,
+      "combinedWhereCorrect": 775,
+      "slices": {
+        "old366": {
+          "n": 366,
+          "where": 89.62,
+          "whereCorrect": 328
+        },
+        "c300": {
+          "n": 300,
+          "where": 87.33,
+          "whereCorrect": 262
+        },
+        "blindV6": {
+          "n": 240,
+          "where": 77.08,
+          "whereCorrect": 185
+        },
+        "stress96": {
+          "n": 96,
+          "where": 65.62,
+          "whereCorrect": 63,
+          "note": "blind-v6 子集，不重复计入 combined"
+        }
+      },
+      "hardF1": 93.78,
+      "hardCondition": {
+        "goldTotal": 1927,
+        "tp": 1780,
+        "precision": 95.24,
+        "recall": 92.37
+      },
+      "redlines": {
+        "trueDroppedRequired": 85,
+        "allRequiredMissingItems": 4,
+        "allRequiredMissingIds": [
+          "old366-0291",
+          "B6-0050",
+          "B6-0051",
+          "B6-0056"
+        ],
+        "fieldSubstitution": 3,
+        "notFlippedPositive": 3,
+        "numericDirectionFlip": 16,
+        "hallucinatedConditions": 30,
+        "invalidWhereNodeItems": 35
+      },
+      "latency": {
+        "p50": 5.92,
+        "p95": 8.8,
+        "transportFailureRequests": 0
+      },
+      "cost": {
+        "standardized": {
+          "caliber": "identical token workload (3000 in / 2400 cached / 200 out) at real list price",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 37.6
+            }
+          ]
+        },
+        "observedRun": {
+          "caliber": "this run's real prompt/cached/completion totals at real list price (NOT a price index)",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 37.48,
+              "cacheHitRate": 93.8,
+              "completionTokensPerRequest": 281.2
+            }
+          ]
+        }
+      },
+      "costPriceSource": "qwen3-7-plus",
+      "frozenFlags": {
+        "main_chain_ir": 0.39624724061810157,
+        "executable_main_chain": 0.3973509933774834,
+        "compiler_hard_exact": 0.8609271523178808,
+        "schema": 0.9845474613686535,
+        "main_chain_where": 0.8554083885209713,
+        "strict_where": 0.8178807947019867,
+        "semantic_exact": 0.44150110375275936,
+        "recoverable_json": 1.0,
+        "strict_json": 1.0
+      },
+      "provenance": {
+        "runDate": "2026-10-08",
+        "batch": "追加批次（非 2026-09-17 冻结批次）",
+        "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
+        "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
+        "requests": 906,
+        "httpSuccess": 906,
+        "transportFailures": 0
+      }
+    },
+    {
+      "alias": "qwen37flash",
+      "modelId": "qwen3.7-flash",
+      "role": "3.7 低档 · 同协议补跑",
+      "tone": "flash",
+      "conclusion": "同协议补跑：blind 70.00%，dev-combined 68.32%（仅参考）；真删除 51 条。",
+      "n": 906,
+      "combinedWhere": 68.32,
+      "combinedWhereCorrect": 619,
+      "slices": {
+        "old366": {
+          "n": 366,
+          "where": 62.84,
+          "whereCorrect": 230
+        },
+        "c300": {
+          "n": 300,
+          "where": 73.67,
+          "whereCorrect": 221
+        },
+        "blindV6": {
+          "n": 240,
+          "where": 70.0,
+          "whereCorrect": 168
+        },
+        "stress96": {
+          "n": 96,
+          "where": 63.54,
+          "whereCorrect": 61,
+          "note": "blind-v6 子集，不重复计入 combined"
+        }
+      },
+      "hardF1": 83.76,
+      "hardCondition": {
+        "goldTotal": 1927,
+        "tp": 1686,
+        "precision": 80.32,
+        "recall": 87.49
+      },
+      "redlines": {
+        "trueDroppedRequired": 51,
+        "allRequiredMissingItems": 1,
+        "allRequiredMissingIds": [
+          "old366-0251"
+        ],
+        "fieldSubstitution": 20,
+        "notFlippedPositive": 17,
+        "numericDirectionFlip": 19,
+        "hallucinatedConditions": 243,
+        "invalidWhereNodeItems": 21
+      },
+      "latency": {
+        "p50": 3.2,
+        "p95": 4.81,
+        "transportFailureRequests": 0
+      },
+      "cost": {
+        "standardized": {
+          "caliber": "identical token workload (3000 in / 2400 cached / 200 out) at real list price",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 3.76
+            }
+          ]
+        },
+        "observedRun": {
+          "caliber": "this run's real prompt/cached/completion totals at real list price (NOT a price index)",
+          "tiers": [
+            {
+              "tier": "standard",
+              "cnyPer10k": 3.84,
+              "cacheHitRate": 93.2,
+              "completionTokensPerRequest": 289.6
+            }
+          ]
+        }
+      },
+      "costPriceSource": "qwen3-7-flash",
+      "frozenFlags": {
+        "main_chain_ir": 0.3686534216335541,
+        "executable_main_chain": 0.38852097130242824,
+        "compiler_hard_exact": 0.7119205298013245,
+        "schema": 0.9668874172185431,
+        "main_chain_where": 0.6832229580573952,
+        "strict_where": 0.5728476821192053,
+        "semantic_exact": 0.4977924944812362,
+        "recoverable_json": 1.0,
+        "strict_json": 1.0
+      },
+      "provenance": {
+        "runDate": "2026-10-08",
+        "batch": "追加批次（非 2026-09-17 冻结批次）",
+        "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
         "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
         "requests": 906,
         "httpSuccess": 906,
@@ -545,34 +769,257 @@
     "结果只适用于当前 v21 prompt、当前数据与 2026-09-17 的 API 状态。",
     "未进行生产流量 A/B 或并发压力测试。API 直调端点的重复推理稳定性已在 2026-09-24 的偏难 50 题实验中测试；生产网关与本地小模型侧仍未覆盖。",
     "岗位累计任职字段的匹配策略仍在验证（role_tenure）；该字段审计尚未冻结，本材料不对其匹配策略或最终实现作任何结论。",
-    "qwen3.8-max-0902 为 2026-10-08 追加批次：同协议、同 scorer，但延迟为跨日观察值，不与 2026-09-17 批次严格可比；未取价目，不参与成本与配对统计。"
+    "判定标准：sealed blind v6（240 条）为主；old366/c300 为开发集（v21 prompt 在其上迭代），其 combined 数字仅作参考、不得作为选型依据。2026-10-08 追加批次的延迟为跨日观察值；qwen3.8-max-0902 成本按同系列价目计算。"
   ],
   "costNotes": [
     "两套口径必须并列：standardized_cost 是相同 token 工作量下的纯价格比较。",
     "observed_run_cost 是本次真实 token 账单，不是价格指数，会随缓存命中率与输出长度浮动。",
     "DeepSeek 本次账单低来自更高缓存命中与更短输出，不代表单位价格低。"
   ],
-  "snapshotRuns": {
-    "note": "2026-10-08 追加的同协议快照补跑（qwen3.8-max-0902）。协议与 2026-09-17 批次逐项一致；不取价目、不进入配对统计，延迟为跨日观察值。",
+  "judgmentStandard": {
+    "name": "sealed blind v6",
+    "n": 240,
+    "metric": "main_chain_where",
+    "scorer": "frozen score_paper_ir_v1_blind.py",
+    "note": "dev 集（old366/c300）仅作参考：v21 prompt 在其上迭代，对贴合该风格的模型有利。"
+  },
+  "maxBaseline": {
+    "modelId": "qwen3.7-max",
+    "blindWhere": 95.42,
+    "cnyPer10kStandardized": 201.6,
+    "latencyP50S": 5.11
+  },
+  "blindModels": [
+    {
+      "modelId": "qwen3.7-max",
+      "short": "max",
+      "blindWhere": 95.42,
+      "blindWhereCorrect": 229,
+      "n": 240,
+      "trueDroppedBlind": 5,
+      "hallucinatedBlind": 2,
+      "cnyPer10kStandardized": 201.6,
+      "latencyP50S": 5.11,
+      "latencyP95S": 8.34,
+      "deltaVsMaxPp": 0.0,
+      "mcnemarP": 1.0,
+      "clusterCi95Pp": [
+        0.0,
+        0.0
+      ],
+      "clusterCrossesZero": false
+    },
+    {
+      "modelId": "deepseek-v4.1-flash",
+      "short": "ds",
+      "blindWhere": 92.08,
+      "blindWhereCorrect": 221,
+      "n": 240,
+      "trueDroppedBlind": 9,
+      "hallucinatedBlind": 0,
+      "cnyPer10kStandardized": 16.4,
+      "latencyP50S": 1.93,
+      "latencyP95S": 3.54,
+      "deltaVsMaxPp": -3.33,
+      "mcnemarP": 0.09625244140625,
+      "clusterCi95Pp": [
+        -9.17,
+        2.08
+      ],
+      "clusterCrossesZero": true
+    },
+    {
+      "modelId": "qwen3.8-max-0902",
+      "short": "0902",
+      "blindWhere": 89.17,
+      "blindWhereCorrect": 214,
+      "n": 240,
+      "trueDroppedBlind": 20,
+      "hallucinatedBlind": 4,
+      "cnyPer10kStandardized": 180.0,
+      "latencyP50S": 2.97,
+      "latencyP95S": 4.77,
+      "deltaVsMaxPp": -6.25,
+      "mcnemarP": 6.103515625e-05,
+      "clusterCi95Pp": [
+        -13.33,
+        -0.83
+      ],
+      "clusterCrossesZero": false
+    },
+    {
+      "modelId": "qwen3.8-flash",
+      "short": "q38",
+      "blindWhere": 88.33,
+      "blindWhereCorrect": 212,
+      "n": 240,
+      "trueDroppedBlind": 9,
+      "hallucinatedBlind": 5,
+      "cnyPer10kStandardized": 12.6,
+      "latencyP50S": 3.43,
+      "latencyP95S": 7.62,
+      "deltaVsMaxPp": -7.08,
+      "mcnemarP": 0.004551384132355452,
+      "clusterCi95Pp": [
+        -17.08,
+        2.5
+      ],
+      "clusterCrossesZero": true
+    },
+    {
+      "modelId": "qwen3.7-plus",
+      "short": "plus",
+      "blindWhere": 77.08,
+      "blindWhereCorrect": 185,
+      "n": 240,
+      "trueDroppedBlind": 41,
+      "hallucinatedBlind": 10,
+      "cnyPer10kStandardized": 37.6,
+      "latencyP50S": 5.92,
+      "latencyP95S": 9.0,
+      "deltaVsMaxPp": -18.33,
+      "mcnemarP": 8.363087999896379e-12,
+      "clusterCi95Pp": [
+        -30.83,
+        -7.5
+      ],
+      "clusterCrossesZero": false
+    },
+    {
+      "modelId": "qwen3.7-flash",
+      "short": "q37f",
+      "blindWhere": 70.0,
+      "blindWhereCorrect": 168,
+      "n": 240,
+      "trueDroppedBlind": 12,
+      "hallucinatedBlind": 42,
+      "cnyPer10kStandardized": 3.76,
+      "latencyP50S": 3.2,
+      "latencyP95S": 4.75,
+      "deltaVsMaxPp": -25.42,
+      "mcnemarP": 1.3877787807814457e-17,
+      "clusterCi95Pp": [
+        -38.33,
+        -14.17
+      ],
+      "clusterCrossesZero": false
+    }
+  ],
+  "routers": [
+    {
+      "policy": "ds→q38→max",
+      "tiers": [
+        "ds",
+        "q38"
+      ],
+      "blindWhere": 95.42,
+      "deltaVsMaxPp": 0.0,
+      "mcnemarP": 1.0,
+      "cnyPer10kStandardized": 132.32,
+      "shareOfMaxCost": 0.656,
+      "escalationRate": 0.5125,
+      "acceptancePrecision": 0.9744,
+      "latencySequentialS": 7.98,
+      "latencyParallelCheapS": 6.05,
+      "acceptedByTier": {
+        "ds": 0,
+        "q38": 117
+      }
+    },
+    {
+      "policy": "q38→ds→max",
+      "tiers": [
+        "q38",
+        "ds"
+      ],
+      "blindWhere": 95.42,
+      "deltaVsMaxPp": 0.0,
+      "mcnemarP": 1.0,
+      "cnyPer10kStandardized": 132.32,
+      "shareOfMaxCost": 0.656,
+      "escalationRate": 0.5125,
+      "acceptancePrecision": 0.9744,
+      "latencySequentialS": 7.98,
+      "latencyParallelCheapS": 6.05,
+      "acceptedByTier": {
+        "q38": 0,
+        "ds": 117
+      }
+    },
+    {
+      "policy": "ds→q38→q37f→max",
+      "tiers": [
+        "ds",
+        "q38",
+        "q37f"
+      ],
+      "blindWhere": 95.0,
+      "deltaVsMaxPp": -0.42,
+      "mcnemarP": 1.0,
+      "cnyPer10kStandardized": 131.04,
+      "shareOfMaxCost": 0.65,
+      "escalationRate": 0.4875,
+      "acceptancePrecision": 0.9675,
+      "latencySequentialS": 11.05,
+      "latencyParallelCheapS": 5.92,
+      "acceptedByTier": {
+        "ds": 0,
+        "q38": 117,
+        "q37f": 6
+      }
+    },
+    {
+      "policy": "q37f→q38→ds→max",
+      "tiers": [
+        "q37f",
+        "q38",
+        "ds"
+      ],
+      "blindWhere": 95.0,
+      "deltaVsMaxPp": -0.42,
+      "mcnemarP": 1.0,
+      "cnyPer10kStandardized": 131.04,
+      "shareOfMaxCost": 0.65,
+      "escalationRate": 0.4875,
+      "acceptancePrecision": 0.9675,
+      "latencySequentialS": 11.05,
+      "latencyParallelCheapS": 5.92,
+      "acceptedByTier": {
+        "q37f": 0,
+        "q38": 74,
+        "ds": 49
+      }
+    }
+  ],
+  "additionalRuns": {
+    "note": "2026-10-08 追加的同协议补跑（三个模型）。判定标准统一为 sealed blind v6；dev 集仅作参考。",
     "runDate": "2026-10-08",
-    "modelId": "qwen3.8-max-0902",
+    "modelIds": [
+      "qwen3.8-max-0902",
+      "qwen3.7-plus",
+      "qwen3.7-flash"
+    ],
     "sourceLabel": "nl2ir-research/from-service/docs/modeltest/nl2ir_api_qwen38max_0902_2026-10-08",
     "sourceFiles": {
-      "responses_A_qwen38max0902.jsonl": {
-        "sha256": "40bc1cf837cc445e7e05c80bf849a7576cea52615400e7e3ae3e65bc19eff1e0",
-        "bytes": 2505820
+      "metrics_track_A_all_models.json": {
+        "sha256": "a0c31f3e7e15ebe540471daeb428abc7a8b9500cb9bc41194da6b53a26880e02",
+        "bytes": 299851
       },
-      "metrics_track_A_four_models.json": {
-        "sha256": "edcbd880920470b9546bcac2d5fcd7d3d29af02b9b388688be27c09427444fed",
-        "bytes": 199419
+      "costs_all_models.json": {
+        "sha256": "bd96c8cec315cb7b38754de2532493f4af62acc01c2721bb77b21600ebd05bcd",
+        "bytes": 2035
       },
-      "four_model_table.json": {
-        "sha256": "bb3eeca221d015b2758917161e9e31decb8876942d6eda978e3a7cb02c89addd",
-        "bytes": 6436
+      "redlines_track_A_all_models.json": {
+        "sha256": "d850d591225fb6d0077aa35061474ba5c8c2f6153184069b8f17bda5fab561bf",
+        "bytes": 2508
       },
-      "redlines_track_A_four_models.json": {
-        "sha256": "6d380ac80fef0f5a72ad05701ce5683f2b9c1306f43b8b156693a0c12a90c602",
-        "bytes": 1625
+      "pairwise_all_models.json": {
+        "sha256": "bfcca648e3673b145de48f73f9e48f58bb843f36299a419aa8c9b3866dc2f0ea",
+        "bytes": 6076
+      },
+      "blind_judgment_unified.json": {
+        "sha256": "76aee8ee50ef8b1725bbf526fd707e01c7cdcdbbda5a75c40fe15bef16007941",
+        "bytes": 5117
       }
     }
   }

@@ -223,9 +223,38 @@ function ApiStabilitySection() {
   </section>;
 }
 
-function ModelComparison(){const api=hostedApi;const nf=(v:number)=>(v>0?`+${v}`:`${v}`);return <><Heading tag="当前模型 / API 基线验证" title="API 模型横向对比（3 冻结 + 1 快照）" text={`同一冻结 v21 契约、同一解码与 scorer，回答一个直接问题：质量、速度和价格之间，哪一个模型最值得继续投入。共 ${api.n} 条；3 个冻结候选来自 2026-09-17 批次，qwen3.8-max-0902 为 2026-10-08 同协议补跑（未取价目）。本页不是 Arm A 训练消融。`}/>
+function BlindJudgment(){
+  const api:any=hostedApi;const std=api.judgmentStandard??{};const base=api.maxBaseline??{};
+  const rows:any[]=api.blindModels??[];const models:any[]=api.models??[];
+  const toneOf=(id:string)=>(models.find(m=>m.modelId===id)||{}).tone??'baseline';
+  const stressOf=(id:string)=>((models.find(m=>m.modelId===id)||{}).slices||{}).stress96?.where;
+  return <section className="panel api-section"><Title tag={`判定标准 · ${std.name??'sealed blind v6'}`}
+    title="选型以盲集为准，开发集只作参考"
+    text={`${std.n??240} 条 sealed blind · 指标 ${std.metric??'main_chain_where'} · 冻结 scorer。${std.note??''}`}/>
+    <div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>blind where</th><th>stress96</th><th>真删除</th><th>幻觉</th><th>¥/万次</th><th>P50</th><th>vs max</th></tr></thead>
+    <tbody>{rows.map(b=><tr key={b.modelId}><th scope="row"><i className={`api-dot api-dot-${toneOf(b.modelId)}`}/>{b.modelId}</th>
+      <td className="api-strong">{b.blindWhere.toFixed(2)}%</td><td>{stressOf(b.modelId)!=null?`${stressOf(b.modelId).toFixed(2)}%`:'—'}</td>
+      <td className={b.trueDroppedBlind>15?'api-bad':''}>{b.trueDroppedBlind}</td><td>{b.hallucinatedBlind}</td>
+      <td>¥{b.cnyPer10kStandardized.toFixed(2)}</td><td>{b.latencyP50S.toFixed(2)}s</td>
+      <td>{b.modelId===base.modelId?'基线':`${b.deltaVsMaxPp>=0?'+':''}${b.deltaVsMaxPp.toFixed(2)}pp · p=${b.mcnemarP<0.001?'<0.001':b.mcnemarP.toFixed(3)}${b.clusterCrossesZero?'（跨0）':''}`}</td></tr>)}</tbody></table></div>
+    <p className="chart-caption">真删除 = gold 必填条件消失且无替代过滤（越低越安全）。"跨0" 指 family-aware cluster bootstrap 95% 区间跨 0 → 与 max 的差异不稳健。dev 集（old366/c300）曾是 v21 prompt 的迭代集，其数字对"贴合该风格"的模型有利，故不作选型依据。</p></section>;}
+
+function RouterComparison(){
+  const api:any=hostedApi;const base=api.maxBaseline??{};const rows:any[]=api.routers??[];
+  return <section className="panel api-section"><Title tag="Router · 成本前沿" title="不直连 max，也能拿到 max 的盲集水平"
+    text={`一致性级联：相邻两层归一化 IR 完全一致即采纳，否则升级到 max。基线 = max 直连 ${base.blindWhere}% / ¥${base.cnyPer10kStandardized}/万次。`}/>
+    <div className="api-table-scroll"><table className="api-table"><thead><tr><th>策略</th><th>blind where</th><th>vs max</th><th>¥/万次</th><th>占 max</th><th>升级率</th><th>采纳精度</th><th>延迟 串/并</th></tr></thead>
+    <tbody>{rows.map(r=><tr key={r.policy}><th scope="row">{r.policy}</th><td className="api-strong">{r.blindWhere.toFixed(2)}%</td>
+      <td>{r.deltaVsMaxPp>=0?'+':''}{r.deltaVsMaxPp.toFixed(2)}pp</td><td>¥{r.cnyPer10kStandardized.toFixed(2)}</td>
+      <td>{(r.shareOfMaxCost*100).toFixed(0)}%</td><td>{(r.escalationRate*100).toFixed(1)}%</td>
+      <td>{(r.acceptancePrecision*100).toFixed(2)}%</td><td>{r.latencySequentialS.toFixed(2)}/{r.latencyParallelCheapS.toFixed(2)}s</td></tr>)}</tbody></table></div>
+    <p className="chart-caption">级联的每一层在<strong>每个请求</strong>上都必须执行（否则无法比较一致性），故成本 = 各层单价之和 + 升级率 × max 单价。延迟为合成值；"并"= 廉价层并发执行。采纳精度 = 采纳（未升级）答案中正确的比例。</p></section>;}
+
+function ModelComparison(){const api=hostedApi;const nf=(v:number)=>(v>0?`+${v}`:`${v}`);return <><Heading tag="当前模型 / API 基线验证" title="API 模型横向对比（6 个候选）" text={`判定标准 = sealed blind v6（240 条，未参与 prompt 迭代）；old366/c300 为开发集，其 combined 数字仅作参考。共 ${api.n} 条；3 个冻结候选来自 2026-09-17 批次，另 3 个（0902 / 3.7-plus / 3.7-flash）为 2026-10-08 同协议补跑。本页不是 Arm A 训练消融。`}/>
+<BlindJudgment/>
+<RouterComparison/>
 <p className="chart-caption"><a className="api-link" href="#api-stability">新增：4 个模型 × 50 条偏难查询 × 3 次重复的 API 稳定性结果 ↓</a></p>
-<div className="api-insight-grid"><article className="api-insight api-insight-primary"><span>质量最高</span><strong>94.26<small>%</small></strong><h3>Qwen 3.7 Max</h3><p>仍是生产质量基线</p></article><article className="api-insight api-insight-value"><span>标准化成本最低</span><strong>¥12.60<small>/万次</small></strong><h3>Qwen 3.8 Flash</h3><p>成本降低 93.75%，质量下降 4.64pp</p></article><article className="api-insight api-insight-fast"><span>本次响应最快</span><strong>1.93<small>s P50</small></strong><h3>DeepSeek V4.1 Flash</h3><p>但必填条件真删除达到 66 条</p></article></div>
+<div className="api-insight-grid"><article className="api-insight api-insight-primary"><span>质量最高（blind）</span><strong>95.42<small>%</small></strong><h3>Qwen 3.7 Max</h3><p>仍是生产质量基线（dev-combined 94.26%）</p></article><article className="api-insight api-insight-value"><span>标准化成本最低</span><strong>¥3.76<small>/万次</small></strong><h3>Qwen 3.7 Flash</h3><p>成本降 98.1%，但 blind 仅 70.00%、幻觉 42 条 —— 不建议单独使用</p></article><article className="api-insight api-insight-fast"><span>本次响应最快</span><strong>1.93<small>s P50</small></strong><h3>DeepSeek V4.1 Flash</h3><p>blind 92.08%（与 max 差异不显著）、真删除 9 条 —— 性价比候选</p></article></div>
 <div className="two-column api-chart-grid"><section className="panel"><Title tag="决策图 01 · 质量" title="同一 906 条的 Where 正确率" text="0–100% 统一尺度，避免夸大差距"/><Chart rows={api.models.map(m=>({name:shortModel(m.modelId),correct:m.combinedWhereCorrect,color:apiColor(m.tone)}))} total={api.n} height={245}/><p className="chart-caption">Qwen 3.7 Max 领先 Qwen 3.8 Flash 4.64pp，领先 DeepSeek 8.06pp；两项差异在普通配对与 family-aware cluster bootstrap 下均显著。0902 快照为后期同协议补跑：combined 91.39%，低于 Qwen 3.7 Max 2.87pp，未取价目、不进入成本与配对统计口径。</p></section><section className="panel"><Title tag="决策图 02 · 价格" title="相同 token 工作量的标准化成本" text="输入 3000 / 缓存 2400 / 输出 200"/><ApiCostChart/><p className="chart-caption">Qwen 3.8 Flash 的单位价格最低。DeepSeek 图中采用闲时价格 ¥16.40；忙时为 ¥32.80。标准化价格与本次实测账单必须分开解释。qwen3.8-max-0902 未取得价目，不进入本图。</p></section></div>
 <section className="panel api-section"><Title tag="泛化切片" title="差距出现在哪些题上" text="纵轴从 75% 起，仅用于辨认分片差异；具体数值保留在下方证据表"/><ApiSliceChart/><div className="api-callout"><strong>stress96 是共同弱点</strong><span>所有模型都在高难组合题上下降；Qwen 3.8 Flash 为 79.17%，0902 快照更低（73.96%），是下一轮优化的主要切片。</span></div><details className="api-detail"><summary>查看全部指标与精确数值 <span>＋</span></summary><div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>old366</th><th>c300</th><th>blind-v6</th><th>stress96</th><th>combined</th><th>hard-F1</th><th>dropped</th><th>hallucinated</th><th>P50</th><th>P95</th></tr></thead><tbody>{api.models.map(m=><tr key={m.modelId}><th scope="row"><i className={`api-dot api-dot-${m.tone}`}/>{m.modelId}</th><td>{f2(m.slices.old366.where)}%</td><td>{f2(m.slices.c300.where)}%</td><td>{f2(m.slices.blindV6.where)}%</td><td>{f2(m.slices.stress96.where)}%</td><td className="api-strong">{f2(m.combinedWhere)}%</td><td>{f2(m.hardF1)}%</td><td className={m.tone==='hold'?'api-bad':''}>{m.redlines.trueDroppedRequired}</td><td>{m.redlines.hallucinatedConditions}</td><td>{f2(m.latency.p50)}s</td><td>{f2(m.latency.p95)}s</td></tr>)}</tbody></table></div><p className="chart-caption">stress96 是 blind-v6 子集，不重复计入 combined。dropped 指 gold 必填条件消失且无替代过滤。</p></details></section>
 <div className="two-column api-chart-grid"><section className="panel"><Title tag="风险图" title="平均分接近，安全错误并不接近" text="条件级计数，越低越好"/><ApiRiskChart/><p className="chart-caption">DeepSeek 的 hard-F1 仍有 94.29%，但真删除 66 条，是 Qwen 3.7 Max 的 3.5 倍。平均 F1 会掩盖这类高风险错误。</p></section><section className="panel"><Title tag="延迟图" title="本次观测的 P50 / P95" text="运行时段不同，仅作工程参考，不是生产 SLA"/><ApiLatencyChart/><p className="chart-caption">DeepSeek 本次最快；Qwen 3.7 Max 期间发生主机休眠和 endpoint 抖动，因此延迟只展示、不用于严格显著性结论。</p></section></div>
