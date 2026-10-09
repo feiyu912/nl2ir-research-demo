@@ -240,17 +240,25 @@ function RouterComparison(){
       <td>¥{r.cnyPer10kStandardized.toFixed(2)}</td><td>{(r.shareOfMaxCost*100).toFixed(0)}%</td>
       <td>{(r.escalationRate*100).toFixed(1)}%</td><td>{(r.acceptancePrecision*100).toFixed(1)}%</td>
       <td>{r.latencySequentialS.toFixed(2)}/{r.latencyParallelCheapS.toFixed(2)}s</td></tr>)}</tbody></table></div>
-    {(()=>{const he:any=api.holdoutEvaluation;if(!he)return null;const ex=he.exclusion??{};const ref=he.reference??{};const oc=he.oracleCheapOnly??{};
-      return <><h3 style={{margin:'24px 0 6px'}}>新口径复测：留出集 600 + 补题 150（排除 qwen3.7-max，参考 = qwen3.8-max-0902）</h3>
+    {(()=>{const he:any=api.holdoutEvaluation;if(!he)return null;const inc=he.incidentNote??{};const ref=he.reference??{};const oc=he.oracleCheapOnly??{};const rt=he.runToRun??{};
+      return <><h3 style={{margin:'24px 0 6px'}}>新口径复测：留出集 600 + 补题 150（参考 = qwen3.8-max-0902；qwen3.7-max 为 10-09 对照行）</h3>
         <p className="chart-caption">{he.shape}。{he.shapeNote}</p>
         <p className="chart-caption">{he.sets?.holdout600}；{he.sets?.supplement150}；{he.sets?.merged750}</p>
-        <div className="api-callout"><strong>排除 qwen3.7-max</strong>：{ex.observed?.corruptItems}/{ex.observed?.n}（{ex.observed?.corruptRatePct}%）响应被破坏（{ex.observed?.emptyValueLeaves} 个叶子为空值，{ex.observed?.unparseable} 条不可解析），{ex.observed?.spread}；同形态同批次其余 5 个模型坏题率 0–2%（{Object.keys(ex.control?.sameShapeSameBatchOtherModels??{}).length} 个模型对照）。结论：{ex.control?.conclusion}<br/><strong>复检（{ex.recheck?.date}）</strong>：{ex.recheck?.controlANote}；{ex.recheck?.rateNote} ⇒ {ex.recheck?.verdict}</div>
-        <ul className="small" style={{paddingLeft:20}}>{(ex.whyExcluded??[]).map((x:string,i:number)=><li key={i}>{x}</li>)}<li><strong>处理</strong>：{ex.handling}</li></ul>
-        <div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>750</th><th>仅600</th><th>仅150</th><th>vs 参考(750)</th><th>聚类CI95</th><th>¥/万次</th><th>版本</th></tr></thead>
+        <div className="api-callout"><strong>{inc.model} 的 2026-10-08 事故（已恢复，非退化）</strong>：{inc.what}——{inc.observed?.corruptItems}/{inc.observed?.n}（{inc.observed?.corruptRatePct}%）响应被破坏（{inc.observed?.emptyValueLeaves} 个叶子为空值、{inc.observed?.unparseable} 条不可解析），{inc.observed?.spread}；同形态同批次其余 5 个模型坏题率 0–2%（{Object.keys(inc.control?.sameShapeSameBatchOtherModels??{}).length} 个模型对照）。<br/><strong>恢复复检（{inc.recheck?.date}）</strong>：{inc.recheck?.controlANote}；{inc.recheck?.rateNote} ⇒ {inc.recheck?.verdict}</div>
+        <ul className="small" style={{paddingLeft:20}}>{(inc.whyNotReference??[]).map((x:string,i:number)=><li key={i}>{x}</li>)}<li><strong>处理</strong>：{inc.handling}</li></ul>
+        <div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>750</th><th>仅600</th><th>仅150</th><th>vs 参考(750)</th><th>聚类CI95</th><th>¥/万次</th><th>版本 / 测量日</th></tr></thead>
         <tbody>{(he.singleModel??[]).map((r:any)=><tr key={r.modelId}><th scope="row">{r.modelId}{r.modelId===ref.modelId?'（参考）':''}</th>
           <td className="api-strong">{r.acc750Pct.toFixed(2)}%</td><td>{r.acc600Pct.toFixed(2)}%</td><td>{r.acc150Pct.toFixed(2)}%</td>
           <td>{r.deltaVsRefPp>=0?'+':''}{r.deltaVsRefPp.toFixed(2)}pp</td><td>{(r.clusterCi95VsRefPp??[]).join(' ~ ')}</td>
-          <td>¥{r.cnyPer10k.toFixed(2)}</td><td>{r.pin}</td></tr>)}</tbody></table></div>
+          <td>¥{r.cnyPer10k.toFixed(2)}</td><td>{r.pin}{r.measuredAt?` · 测于 ${r.measuredAt}`:''}</td></tr>)}</tbody></table></div>
+        <h4 style={{margin:'18px 0 4px'}}>隔日重跑：其他模型在 10-08 是否也被压低（{rt.asOf}）</h4>
+        <p className="chart-caption">{rt.method}。{rt.note}</p>
+        <div className="api-table-scroll"><table className="api-table"><thead><tr><th>模型</th><th>10-09</th><th>10-08</th><th>Δ</th><th>逐条一致</th><th>修/损</th><th>McNemar p</th></tr></thead>
+        <tbody>{(rt.byModel??[]).map((r:any)=><tr key={r.modelId}><th scope="row">{r.modelId}</th>
+          <td className="api-strong">{r.acc1009Pct.toFixed(2)}%</td><td>{r.acc1008Pct.toFixed(2)}%</td>
+          <td>{r.deltaPp>=0?'+':''}{r.deltaPp.toFixed(2)}pp</td>
+          <td className={r.agreementPct<85?'api-bad':''}>{r.agreementPct.toFixed(1)}%</td>
+          <td>{r.fixed}/{r.broken}</td><td>{r.mcnemarP.toFixed(4)}</td></tr>)}</tbody></table></div>
         <h4 style={{margin:'18px 0 4px'}}>可部署规则（全部不用 gold）</h4>
         <p className="chart-caption">{he.r6sMechanism}</p>
         <div className="api-table-scroll"><table className="api-table"><thead><tr><th>规则</th><th>750</th><th>仅600</th><th>vs ds⊕q38</th><th>占便宜档空间</th><th>¥/10k</th><th>采纳分布</th></tr></thead>
@@ -260,8 +268,9 @@ function RouterComparison(){
           <td>{r.oracleHeadroomClosedPct}%</td><td>¥{r.cnyPer10k.toFixed(2)}</td>
           <td>{Object.keys(r.adopted??{}).map((k:string)=>k+'='+r.adopted[k]).join('  ')}</td></tr>)}</tbody></table></div>
         <ul className="small" style={{paddingLeft:20,marginTop:6}}>
-          <li>便宜档上界（逐条取优，<strong>需 gold、不可部署</strong>）：750 = {oc.merged750Pct}% / 600 = {oc.holdout600Pct}% —— 最好的可部署规则只吃到其中一部分。</li>
+          <li>便宜档上界（逐条取优，<strong>需 gold、不可部署</strong>）：750 = {oc.merged750Pct}% / 600 = {oc.holdout600Pct}%——比 max 的 10-09 实测还高，说明融合仍有空间，但现有规则没吃到。</li>
           <li>{he.r6sWeakness}</li>
+          <li>{he.q38StabilityNote}</li>
           <li><strong>结论</strong>：{he.conclusion}</li></ul></>;})()}
     {(()=>{const ca:any=api.coverageAudit;if(!ca)return null;return <><h3 style={{margin:'24px 0 6px'}}>评测集覆盖审计：blind 漏掉了哪些规则分支</h3>
       <p className="chart-caption">{ca.method}</p>
@@ -272,10 +281,10 @@ function RouterComparison(){
       <p className="chart-caption"><strong>两套都没测过</strong>：{(ca.neverTestedInEither??[]).map((r:any)=>`${r.rule} ${r.desc}`).join('；')}。补题 150 条（15 组）已生成并跑完三个模型，判据与尚未人工定稿的说明见下。</p>
       <ul className="small" style={{paddingLeft:20,marginTop:6}}>
         <li>{ca.supplement?.metaGroupsNeedIr}</li><li>{ca.supplement?.humanReview}</li><li>{ca.supplement?.shapeNote}</li><li>{ca.conclusion}</li><li><strong>prompt 已核对</strong>：{ca.promptCheck}</li></ul></>;})()}
-    <p className="chart-caption"><strong>选型结论已改口径。</strong>原先基于 sealed blind 240 条的「证据仲裁打平 qwen3.7-max、成本 14%」<strong>已作废</strong>：qwen3.7-max 因 2026-10-08 当天网关事故被排除（同形态下 49% 输出损坏，其余 5 个模型 0–2%；10-09 复检已自行恢复），且该判定集被查出 7 条规则分支 0 覆盖、4 条两套都没测过。新口径（统一 thinking-off、参考改为 pin 快照 qwen3.8-max-0902、留出集 600 + 补题 150）见下方。</p></section>;}
+    <p className="chart-caption"><strong>选型结论已改口径。</strong>原先基于 sealed blind 240 条的「证据仲裁打平 qwen3.7-max、成本 14%」<strong>已作废</strong>：qwen3.7-max 在 2026-10-08 当天的数字因网关事故不可用（同形态下 49% 输出损坏，其余 5 个模型 0–2%；10-09 复检已自行恢复，现已作为对照行列回表内），且该判定集被查出 7 条规则分支 0 覆盖、4 条两套都没测过。新口径（统一 thinking-off、参考改为 pin 快照 qwen3.8-max-0902、留出集 600 + 补题 150）见下方。</p></section>;}
 
 function ModelComparison(){const api=hostedApi;const nf=(v:number)=>(v>0?`+${v}`:`${v}`);const he:any=(hostedApi as any).holdoutEvaluation;const ref=he.reference;const refRow=(he.singleModel||[]).find((r:any)=>r.modelId===ref.modelId)??he.singleModel[0];const refCost=refRow.cnyPer10k;const sm=(id:string)=>(he.singleModel||[]).find((r:any)=>r.modelId===id)??{};const plus=sm('qwen3.7-plus'),q37f=sm('qwen3.7-flash'),r6s=he.deployableRules[0];const share=(v:number)=>Math.round(v/refCost*100);return <><Heading tag="模型对比（旧口径 + 新口径复测）" title="旧口径历史 + 新口径选型" text={`本页上方为旧口径（sealed blind v6 判定、906 条合并集），仅作历史记录：其中 qwen3.7-max 已因形态故障排除，且 blind_v6 被查出覆盖缺口。当前选型口径见下方「新口径复测」（统一 thinking-off、参考 = qwen3.8-max-0902、留出集 600 + 补题 150）。本页不是 Arm A 训练消融。`}/>
-<div className="api-callout"><strong>判定口径已变更。</strong>新口径 = 统一 thinking-off（冻结 Track A 形态）+ 排除 qwen3.7-max（2026-10-08 当天网关事故：同形态下 49% 输出损坏，10-09 已自行恢复；活别名风险）+ 参考改为 pin 快照 qwen3.8-max-0902 + 判定集换成留出集 600 与补题 150。完整表见下方「新口径复测」；本页上方两张表是旧口径，仅作历史记录。</div>
+<div className="api-callout"><strong>判定口径已变更。</strong>新口径 = 统一 thinking-off（冻结 Track A 形态）+ qwen3.7-max 的 10-08 数字因当天网关事故不可用（10-09 已恢复，作为 measuredAt 对照行保留；活别名风险）+ 参考改为 pin 快照 qwen3.8-max-0902 + 判定集换成留出集 600 与补题 150。完整表见下方「新口径复测」；本页上方两张表是旧口径，仅作历史记录。</div>
 <BlindJudgment/>
 <RouterComparison/>
 <p className="chart-caption"><a className="api-link" href="#api-stability">新增：4 个模型 × 50 条偏难查询 × 3 次重复的 API 稳定性结果 ↓</a></p>
@@ -290,7 +299,7 @@ function ModelComparison(){const api=hostedApi;const nf=(v:number)=>(v>0?`+${v}`
 
 function Conclusion(){
   const he:any=(hostedApi as any).holdoutEvaluation;
-  const ref=he.reference, oc=he.oracleCheapOnly, ex=he.exclusion;
+  const ref=he.reference, oc=he.oracleCheapOnly, ex=he.incidentNote;
   const rules:any[]=he.deployableRules;
   const students=data.runs.filter(r=>r.dataset==='blind-v6'&&(r.model==='4B'||r.model==='9B'));
   return <>
@@ -331,7 +340,7 @@ function Conclusion(){
 
     <div className="two-column">
       <section className="panel">
-        <Title tag="被排除的参考" title={`${ex.excluded}：不是能力问题（当天事故）`} text={ex.observed?.spread}/>
+        <Title tag="当天的异常参考" title={`${ex.model}：10-08 是事故，10-09 已恢复（不是能力问题）`} text={ex.observed?.spread}/>
         <div className="diagnostic-stats">
           <div><strong>{ex.observed?.corruptRatePct}%</strong><span>输出损坏率（n={ex.observed?.n}）</span></div>
           <div><strong>{ex.observed?.cleanSubsetAccuracyPct}%</strong><span>未损坏子集正确率</span></div>

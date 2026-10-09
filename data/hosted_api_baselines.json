@@ -92,8 +92,8 @@
     {
       "alias": "qwen",
       "modelId": "qwen3.7-max",
-      "role": "已排除 · 当天网关事故",
-      "conclusion": "2026-10-08 当天发生一次网关侧事故：同一请求形态（json_object + 顶层关思考）下 294/600（49%）响应损坏——条件值被清空或截断（叶子级 660/919 空），其余 5 个模型仅 0–2%。2026-10-09 复检已自行恢复（同 40 题 40/40 正常，20 条 × 3 形态 0 损坏）。但事故当天的数字不可用作能力度量（干净子集 79.4%，与 deepseek 78.7% 同档），且它是活别名、能在 24 小时内坏掉又恢复，故不作质量基线、不作比较基准。",
+      "role": "对照行 · 10-08 事故已恢复",
+      "conclusion": "2026-10-08 当天发生网关事故（Track A 形态下 49% 输出损坏），10-09 已自行恢复。它是活别名（会漂），故不作参考基准，但仍是质量上界：10-09 实测 750 = 86.27%、仅600 = 89.17%。",
       "tone": "hold",
       "n": 906,
       "combinedWhere": 94.26,
@@ -1157,7 +1157,7 @@
         "latencyParallelCheapS": 6.72
       }
     ],
-    "supersededNote": "原先此处的『blind 上仲裁 95.42% 打平 qwen3.7-max』结论已作废：max 因 2026-10-08 当天网关事故排除、判定集被查出覆盖缺口，改口径后见 holdoutEvaluation。"
+    "supersededNote": "原先此处的『blind 上仲裁 95.42% 打平 qwen3.7-max』结论已作废：max 在 2026-10-08 当天因网关事故不可用（10-09 已恢复），判定集被查出覆盖缺口，改口径后见 holdoutEvaluation。"
   },
   "coverageAudit": {
     "method": "把冻结 v21 prompt 里可检测的规则分支逐条列出，在 blind_v6(240) / holdout(600) / dev(666) 的**问句**上统计覆盖题数（正则启发式，偏保守）；gold 侧交叉核对。",
@@ -1418,7 +1418,7 @@
           "q37f": 0.0
         }
       ],
-      "shapeNote": "本表为 thinking-off（冻结 Track A 口径）下的结果，且已排除 qwen3.7-max；同一批题在 thinking-on 下逐分支结果差异很大（例如 L1 裸地点的 q38 由 100% 降到 60%、S1 薪资 K 的 ds 由 40% 升到 100%）——分支层面的结论同样强依赖解码形态。",
+      "shapeNote": "本表为 thinking-off（冻结 Track A 口径）下的结果，且表中不含 qwen3.7-max（它当天是网关事故，10-09 才恢复）；同一批题在 thinking-on 下逐分支结果差异很大（例如 L1 裸地点的 q38 由 100% 降到 60%、S1 薪资 K 的 ds 由 40% 升到 100%）——分支层面的结论同样强依赖解码形态。",
       "models": [
         "deepseek-v4.1-flash",
         "qwen3.8-flash",
@@ -1439,51 +1439,29 @@
       "supplement150": "按覆盖缺口生成的 150 条补题（建议 gold 骨架，尚未人工定稿）",
       "merged750": "两者合并；下表同时给「仅600」列，便于看出待定稿那 150 条带来的偏差"
     },
-    "exclusion": {
-      "excluded": "qwen3.7-max",
-      "scope": "本文件所有单模型对比与 router 表；它不作为参考基准，也出现在任何 Δ/p/CI 里",
-      "observed": {
-        "shape": "response_format=json_object + 顶层 enable_thinking=false（冻结 Track A 口径）",
-        "n": 600,
-        "corruptItems": 294,
-        "corruptRatePct": 49.0,
-        "emptyValueLeaves": "660/919",
-        "unparseable": 27,
-        "spread": "坏率在批次四分段为 37%/61%/40%/58%，当天分布均匀 ⇒ 当天是系统性故障、不是逐条随机抖动；但 10-09 复检整体已恢复 ⇒ 一次持续约一天的网关事故",
-        "cleanSubsetAccuracyPct": 79.4,
-        "cleanSubsetNote": "未被破坏的 306 条上正确 243 条；与 deepseek 的 78.7% 同档，说明 40.50% 反映的是损坏率而不是能力"
-      },
-      "control": {
-        "sameShapeSameBatchOtherModels": {
-          "deepseek-v4.1-flash": "1%（4/1284 空值叶子）",
-          "qwen3.8-flash": "0%（0/1261）",
-          "qwen3.8-max-0902": "0%（0/1273）",
-          "qwen3.7-plus": "0%（2/1236）",
-          "qwen3.7-flash": "2%（11/1448）"
-        },
-        "conclusion": "同一环境、同一形态下只有它坏 ⇒ 责任在 qwen3.7-max 这一侧（其服务/版本），不是形态本身、也不是网关普遍故障"
-      },
-      "whyExcluded": [
-        "49% 的坏输出会被直接判错，分数主要反映损坏率，不能当作能力度量",
-        "作为参考基准会把“参考自身损坏”传导进所有对比（Δ / McNemar p / cluster CI）",
-        "2026-10-08 当天不可复现、2026-10-09 已自行恢复：同形态同 40 题 09-17 为 40/40、10-08 为 0/40、10-09 回到 40/40（请求记录逐字节相同）⇒ 一次性网关事故，不是永久退化",
-        "它是活别名：能在 24 小时内坏掉又恢复 ⇒ 不能作为长期参考基准（这正是改用 pin 快照作参考的理由）"
-      ],
-      "handling": "需要 max 参照时，只能另起一表并显式标注形态（enable_thinking=true，或 json_schema+硬开关思考），不得与本表并列比较",
-      "recheck": {
-        "date": "2026-10-09",
-        "controlANote": "同一 40 条 sealed-blind 题、同一 Track A 形态：2026-09-17 为 40/40、2026-10-08 为 0/40、2026-10-09 回到 40/40（请求记录逐字节相同）",
-        "rateNote": "20 条 holdout × 3 形态全部 0 损坏；其中 2 条 no_leaf 属纯语义题（gold 本无 where），按判据计为正确",
-        "verdict": "一次性网关事故，不是永久退化。但它是活别名——能在 24 小时内坏掉又自行恢复，因此仍不作参考基准。"
-      }
-    },
     "reference": {
       "modelId": "qwen3.8-max-0902",
       "acc750Pct": 80.0,
       "acc600Pct": 83.0,
-      "why": "qwen3.7-max 当天发生网关事故（10-09 已自行恢复）且为活别名，不适合当参考基准（见 exclusion），改用 pin 快照 0902 作参考"
+      "why": "max 是活别名：10-08 曾整天返回坏输出、10-09 又自行恢复 ⇒ 参考基准必须可复现，故仍用带日期 pin 的 0902；max 作为一次性对照行（measuredAt=2026-10-09）列在表首。"
     },
     "singleModel": [
+      {
+        "modelId": "qwen3.7-max",
+        "pin": "活别名（会漂）",
+        "measuredAt": "2026-10-09",
+        "correct750": 647,
+        "acc750Pct": 86.27,
+        "acc600Pct": 89.17,
+        "acc150Pct": 74.67,
+        "deltaVsRefPp": 6.27,
+        "clusterCi95VsRefPp": [
+          2.75,
+          10.69
+        ],
+        "cnyPer10k": 201.6,
+        "note": "10-08 当天同形态数字（40.50%）是网关事故，不可用；本行为 10-09 复测，见 incidentNote"
+      },
       {
         "modelId": "qwen3.8-max-0902",
         "pin": "pin 快照（版本固定）",
@@ -1692,6 +1670,102 @@
     ],
     "r6sMechanism": "R6s：两模型答案不一致时，只在分歧条件上比——谁「漏掉问句里明说的条件」+「写了问句里没有的条件」更少就选谁，平手取 ds。不用 gold、不训练。",
     "r6sWeakness": "① 62% 的题上两模型条件集合完全相同 → 无从判断只能默认 ds；② 在「只有 qwen3.8-flash 对」的题上只选出它 44%；③ 是看过数据后定的规则，尚未独立留出验证。",
-    "conclusion": "工程选型 = ds⊕q38 证据仲裁：¥29.00/万次（0902 的 16%），750 上 80.27% 打平 0902 的 80.00%；但只看 600 条权威 gold 时是 82.00% vs 83.00%（−1.00pp）——「打平」不稳。级联不值（+0.5~1.9pp 换 1.4~1.9 倍成本）。更优的可部署规则「多数票→无票时 R6s」81.33%（+1.07pp）但贵 2.4 倍。便宜档上界 90.13% 需 gold，不可部署。"
+    "conclusion": "质量上界仍是 qwen3.7-max：10-09 实测 750 = 86.27%（仅600 = 89.17%），显著高于参考 0902 的 80.00%（+6.27pp，聚类 CI[+2.75,+10.69]）。参考仍用 0902，因为它是 pin 快照、而 max 是活别名（10-08 坏了整天、10-09 恢复）。便宜路线的最优仍是 ds⊕q38 证据仲裁（80.27% @ ¥29.00 = 0902 的 16%）：它打平参考 0902，但比 max 低 6.00pp —— 「便宜模型打平参考」成立，「打平上界」不成立。便宜档上界 90.13% 高于 max 3.86pp，但需 gold、不可部署。",
+    "incidentNote": {
+      "model": "qwen3.7-max",
+      "what": "2026-10-08 当天发生一次性网关事故：冻结 Track A 形态下 49% 输出损坏（条件值被清空或截断）",
+      "observed": {
+        "shape": "response_format=json_object + 顶层 enable_thinking=false（冻结 Track A 口径）",
+        "n": 600,
+        "corruptItems": 294,
+        "corruptRatePct": 49.0,
+        "emptyValueLeaves": "660/919",
+        "unparseable": 27,
+        "spread": "坏率在批次四分段为 37%/61%/40%/58%，当天分布均匀 ⇒ 当天是系统性故障、不是逐条随机抖动；但 10-09 复检整体已恢复 ⇒ 一次持续约一天的网关事故",
+        "cleanSubsetAccuracyPct": 79.4,
+        "cleanSubsetNote": "未被破坏的 306 条上正确 243 条；与 deepseek 的 78.7% 同档，说明 40.50% 反映的是损坏率而不是能力"
+      },
+      "control": {
+        "sameShapeSameBatchOtherModels": {
+          "deepseek-v4.1-flash": "1%（4/1284 空值叶子）",
+          "qwen3.8-flash": "0%（0/1261）",
+          "qwen3.8-max-0902": "0%（0/1273）",
+          "qwen3.7-plus": "0%（2/1236）",
+          "qwen3.7-flash": "2%（11/1448）"
+        },
+        "conclusion": "同一环境、同一形态下只有它坏 ⇒ 责任在 qwen3.7-max 这一侧（其服务/版本），不是形态本身、也不是网关普遍故障"
+      },
+      "recovery": "2026-10-09 复检：同 40 条 sealed-blind 题 40/40 正常；20 条留出集 × 3 形态 0 损坏 ⇒ 已自行恢复，不是永久退化。",
+      "recheck": {
+        "date": "2026-10-09",
+        "controlANote": "同一 40 条 sealed-blind 题、同一 Track A 形态：2026-09-17 为 40/40、2026-10-08 为 0/40、2026-10-09 回到 40/40（请求记录逐字节相同）",
+        "rateNote": "20 条留出集 × 3 形态全部 0 损坏；其中 2 条 no_leaf 属纯语义题（gold 本无 where），按判据计为正确",
+        "verdict": "一次性网关事故，不是永久退化。但它是活别名——能在 24 小时内坏掉又自行恢复，因此仍不作参考基准。"
+      },
+      "whyNotReference": [
+        "事故当天的数字不可用作能力度量：干净子集上它 79.4%，与 deepseek 的 78.7% 同档，40.50% 反映的是损坏率",
+        "它是活别名——能在 24 小时内坏掉又恢复，所以参考基准必须可复现，改用 pin 快照 0902",
+        "本表仍给出它 2026-10-09 的实测行（measuredAt 标注）作一次性对照；引用时必须同时给 measuredAt，且不得与 10-08 当天的数字并列"
+      ],
+      "handling": "max 已回到单模型表（measuredAt=2026-10-09）；参考仍为 0902（pin 快照）。"
+    },
+    "runToRun": {
+      "asOf": "2026-10-09",
+      "method": "同 200 条留出集、同形态（Track A / thinking-off）隔日重跑，与 10-08 逐条比 main_chain_where",
+      "note": "全部 Δ 不显著（McNemar p 全 ≥ 0.19，合计 48 修 / 35 损 p=0.19）⇒ 没有证据表明其余模型在 10-08 被系统性压低，10-08 的表继续可用；n=200 对 ≤5pp 的效应功效有限，这是一条限制。但 qwen3.8-flash 的跨次一致率只有 76.0%，其余 94.5–97.0% ⇒ 它本身最不稳（与它对 thinking 开关极敏感一致）。",
+      "byModel": [
+        {
+          "modelId": "deepseek-v4.1-flash",
+          "acc1009Pct": 77.5,
+          "acc1008Pct": 79.0,
+          "deltaPp": -1.5,
+          "agreementPct": 94.5,
+          "fixed": 4,
+          "broken": 7,
+          "mcnemarP": 0.5488
+        },
+        {
+          "modelId": "qwen3.8-flash",
+          "acc1009Pct": 72.5,
+          "acc1008Pct": 67.5,
+          "deltaPp": 5.0,
+          "agreementPct": 76.0,
+          "fixed": 29,
+          "broken": 19,
+          "mcnemarP": 0.1934
+        },
+        {
+          "modelId": "qwen3.7-plus",
+          "acc1009Pct": 80.5,
+          "acc1008Pct": 78.5,
+          "deltaPp": 2.0,
+          "agreementPct": 97.0,
+          "fixed": 5,
+          "broken": 1,
+          "mcnemarP": 0.2188
+        },
+        {
+          "modelId": "qwen3.8-max-0902",
+          "acc1009Pct": 83.0,
+          "acc1008Pct": 83.5,
+          "deltaPp": -0.5,
+          "agreementPct": 95.5,
+          "fixed": 4,
+          "broken": 5,
+          "mcnemarP": 1.0
+        },
+        {
+          "modelId": "qwen3.7-flash",
+          "acc1009Pct": 58.5,
+          "acc1008Pct": 57.0,
+          "deltaPp": 1.5,
+          "agreementPct": 95.5,
+          "fixed": 6,
+          "broken": 3,
+          "mcnemarP": 0.5078
+        }
+      ]
+    },
+    "q38StabilityNote": "qwen3.8-flash 的隔日一致率仅 76.0%（29 修/19 损），其余四个 94.5–97.0% ⇒ 它是五个候选里最不稳的一个。"
   }
 }

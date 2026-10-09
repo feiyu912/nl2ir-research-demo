@@ -440,7 +440,7 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
     if nomax.get("oracleNonMax", 0) < best:
         report.error("hosted_api_baselines 无 max oracle 低于最佳可部署策略（不可能是上界）")
 
-    # ---- 新口径评测块：统一 thinking-off、排除 qwen3.7-max、参考改为 0902 ----
+    # ---- 新口径评测块：统一 thinking-off、max 事故与恢复、参考 = pin 快照 0902 ----
     he = payload.get("holdoutEvaluation") or {}
     if not he:
         report.error("hosted_api_baselines 缺 holdoutEvaluation")
@@ -449,35 +449,56 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
             report.error("holdoutEvaluation.shape 必须声明为统一 thinking-off 口径")
         if not he.get("shapeNote"):
             report.error("holdoutEvaluation 缺形态对照说明（该开关效果模型特有，排名会翻转）")
-        ex = he.get("exclusion") or {}
-        if ex.get("excluded") != "qwen3.7-max":
-            report.error(f"holdoutEvaluation.exclusion 应排除 qwen3.7-max: {ex.get('excluded')}")
-        obs = ex.get("observed") or {}
+        inc = he.get("incidentNote") or {}
+        if inc.get("model") != "qwen3.7-max":
+            report.error(f"holdoutEvaluation.incidentNote 应记录 qwen3.7-max: {inc.get('model')}")
+        obs = inc.get("observed") or {}
         rate = obs.get("corruptRatePct")
         if not isinstance(rate, (int, float)) or rate < 10:
-            report.error(f"holdoutEvaluation 排除理由缺损坏率证据: {rate}")
-        if len(ex.get("whyExcluded") or []) < 3 or not ex.get("handling"):
-            report.error("holdoutEvaluation 排除说明不完整（需 ≥3 条理由 + 处理方式）")
-        ctrl = (ex.get("control") or {}).get("sameShapeSameBatchOtherModels") or {}
-        if len(ctrl) < 4:
-            report.error("holdoutEvaluation 排除说明缺「同形态其他模型对照」")
+            report.error(f"holdoutEvaluation.incidentNote 缺损坏率证据: {rate}")
+        if len((inc.get("control") or {}).get("sameShapeSameBatchOtherModels") or {}) < 4:
+            report.error("holdoutEvaluation.incidentNote 缺「同形态其他模型对照」")
+        if "恢复" not in str(inc.get("recovery", "")):
+            report.error("holdoutEvaluation.incidentNote 必须写明已恢复（事故≠永久退化）")
+        if len(inc.get("whyNotReference") or []) < 2 or not inc.get("handling"):
+            report.error("holdoutEvaluation.incidentNote 需 ≥2 条「为何不当参考」+ 处理方式")
         ref = he.get("reference") or {}
         if ref.get("modelId") != "qwen3.8-max-0902":
             report.error(f"holdoutEvaluation 参考应为 qwen3.8-max-0902: {ref.get('modelId')}")
         rows_ = he.get("singleModel") or []
-        if len(rows_) < 4:
-            report.error(f"holdoutEvaluation 单模型行过少: {len(rows_)}")
-        if any(r.get("modelId") == "qwen3.7-max" for r in rows_):
-            report.error("holdoutEvaluation 不得包含已排除的 qwen3.7-max")
+        if len(rows_) < 5:
+            report.error(f"hosted_api_baselines holdoutEvaluation 单模型行过少: {len(rows_)}")
         refrow = next((r for r in rows_ if r.get("modelId") == ref.get("modelId")), None)
         if refrow is None:
-            report.error("holdoutEvaluation 参考模型不在单模型表中")
+            report.error("hostoutEvaluation 参考模型不在单模型表中")
         elif refrow.get("deltaVsRefPp") != 0:
-            report.error("holdoutEvaluation 参考行 deltaVsRefPp 应为 0")
+            report.error("hostoutEvaluation 参考行 deltaVsRefPp 应为 0")
         for r in rows_:
             a = r.get("acc750Pct")
             if not isinstance(a, (int, float)) or not 0 < a <= 100:
-                report.error(f"holdoutEvaluation acc750 越界: {r.get('modelId')} {a}")
+                report.error(f"hostoutEvaluation acc750 越界: {r.get('modelId')} {a}")
+        # max 必须在表内、且必须带 measuredAt 与事故说明（它已从「排除」改为「对照行」）
+        mx = next((r for r in rows_ if r.get("modelId") == "qwen3.7-max"), None)
+        if mx is None:
+            report.error("hostoutEvaluation 缺 qwen3.7-max 行（事故已恢复，须作为对照行保留）")
+        else:
+            if not str(mx.get("measuredAt", "")).strip():
+                report.error("hostoutEvaluation 的 qwen3.7-max 行必须带 measuredAt")
+            if "事故" not in str(mx.get("note", "")):
+                report.error("hostoutEvaluation 的 qwen3.7-max 行必须说明 10-08 事故")
+        # 隔日重跑：结论「无显著差异」必须与数据一致
+        rt = he.get("runToRun") or {}
+        by = rt.get("byModel") or []
+        if len(by) < 5:
+            report.error(f"hostoutEvaluation.runToRun 需 ≥5 个模型: {len(by)}")
+        for r in by:
+            p_ = r.get("mcnemarP")
+            if not isinstance(p_, (int, float)) or p_ < 0.05:
+                report.error(f"hostoutEvaluation.runToRun 出现显著差异（需重跑该模型）: {r.get('modelId')} p={p_}")
+        if "没有证据" not in str(rt.get("note", "")):
+            report.error("hostoutEvaluation.runToRun 必须写明「没有证据表明被系统性压低」")
+        if not he.get("q38StabilityNote"):
+            report.error("hostoutEvaluation 缺 qwen3.8-flash 稳定度说明")
         oc = he.get("oracleCheapOnly") or {}
         best_single = max((r.get("acc750Pct", 0) for r in rows_), default=0)
         if not isinstance(oc.get("merged750Pct"), (int, float)) or oc["merged750Pct"] + 1e-9 < best_single:
@@ -485,20 +506,24 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         rules_ = he.get("deployableRules") or []
         base_rule = next((r for r in rules_ if str(r.get("rule", "")).startswith("★ R6s")), None)
         if base_rule is None:
-            report.error("holdoutEvaluation 缺 R6s 基准行")
+            report.error("hostoutEvaluation 缺 R6s 基准行")
         elif base_rule.get("deltaVsR6sPp") != 0:
-            report.error("holdoutEvaluation R6s 基准行 deltaVsR6sPp 应为 0")
+            report.error("hostoutEvaluation R6s 基准行 deltaVsR6sPp 应为 0")
         for r in rules_:
             a = r.get("acc750Pct")
             if isinstance(a, (int, float)) and a > oc.get("merged750Pct", 100) + 1e-9:
-                report.error(f"holdoutEvaluation 规则超过 oracle（不可能）: {r.get('rule')}")
+                report.error(f"hostoutEvaluation 规则超过 oracle（不可能）: {r.get('rule')}")
             pct = r.get("oracleHeadroomClosedPct")
             if isinstance(pct, (int, float)) and pct > 100:
-                report.error(f"holdoutEvaluation 空间占比 >100%: {r.get('rule')} {pct}")
+                report.error(f"hostoutEvaluation 空间占比 >100%: {r.get('rule')} {pct}")
         if not he.get("r6sMechanism") or not he.get("r6sWeakness"):
-            report.error("holdoutEvaluation 缺 R6s 机制说明或局限说明")
-        if not str(he.get("conclusion", "")).strip():
-            report.error("holdoutEvaluation 缺结论")
+            report.error("hostoutEvaluation 缺 R6s 机制说明或局限说明")
+        concl = str(he.get("conclusion", ""))
+        if not concl.strip():
+            report.error("hostoutEvaluation 缺结论")
+        best_row = max(rows_, key=lambda r: r.get("acc750Pct", 0), default={})
+        if best_row.get("modelId") and best_row["modelId"] not in concl:
+            report.error(f"hostoutEvaluation 结论未提到实际最高模型 {best_row['modelId']}（叙述与数据脱节）")
         if not str((payload.get("routersNoMax") or {}).get("supersededNote", "")).strip():
             report.error("hosted_api_baselines.routersNoMax 缺「旧仲裁结论已作废」的指向说明")
 
