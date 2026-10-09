@@ -234,12 +234,10 @@ type HostedApiBaselines = {
 盲集口径已被取代。`holdoutEvaluation` 承载当前选型口径，硬约束如下（`check_hosted_api_baselines` 强制）：
 
 - `shape` 必须声明为**统一 thinking-off**（冻结 Track A 形态），并附 `shapeNote` 说明该开关效果**模型特有**、排名会随形态翻转；
-- `incidentNote` 必须记录 `qwen3.7-max` 的 2026-10-08 事故：`recovery` 必须写明已恢复（事故 ≠ 永久退化）；给出①现象（`observed.corruptRatePct ≥ 10`、空值叶子、不可解析条数、批次分布）②**同形态同批次的其他模型对照（≥4 个）**③≥2 条「为何不当参考」与处理方式；
-- `reference.modelId` 必须是 `qwen3.8-max-0902`（pin 快照），且参考行 `deltaVsRefPp = 0`；单模型表必须包含 `qwen3.7-max` 行（非空 `measuredAt`、note 含「事故」）；
-- `runToRun` 必须含 ≥5 个模型，每个 `mcnemarP ≥ 0.05`（出现显著差异须重跑该模型），`note` 须写明「没有证据表明被系统性压低」；`q38StabilityNote` 必须存在；
-- `oracleCheapOnly.merged750Pct` **不得低于任何单模型**（上界不变量）；任何 `deployableRules` 的分数不得高于该 oracle，`oracleHeadroomClosedPct` 不得 >100%；
-- `deployableRules` 必须含 `★ R6s` 基准行（`deltaVsR6sPp = 0`）；必须给出 `r6sMechanism`（规则机制）与 `r6sWeakness`（已知局限，如「多数题上无信号只能默认取 ds」）；
+- `reference.modelId` 必须是 `qwen3.8-max-0902`（pin 快照），且参考行 `deltaVsRefPp = 0`；单模型表必须包含 `qwen3.7-max` 行（非空 `measuredAt`，仅作对照行、不作参考）；
+- `conclusion` 必须提到表中实际最高分的模型（叙述不得与数据脱节）；
 - `routersNoMax.supersededNote` 必须存在——旧仲裁结论（「blind 打平 max」）已作废，需显式指向新块。
+- 事后再设计的规则（证据仲裁/多数票系列）与事故叙述**不作发布内容**：历史 `incidentNote` / `runToRun` / `deployableRules` / `oracleCheapOnly` / `q38StabilityNote` 字段已移除，不得回写（规则未独立留出验证前不展示）。
 
 ### 硬性不变量（`scripts/validate_data.py` → `check_hosted_api_baselines`）
 
