@@ -234,8 +234,9 @@ type HostedApiBaselines = {
 盲集口径已被取代。`holdoutEvaluation` 承载当前选型口径，硬约束如下（`check_hosted_api_baselines` 强制）：
 
 - `shape` 必须声明为**统一 thinking-off**（冻结 Track A 形态），并附 `shapeNote` 说明该开关效果**模型特有**、排名会随形态翻转；
-- `exclusion` 必须排除 `qwen3.7-max`，且给出①现象（`observed.corruptRatePct ≥ 10`、空值叶子、不可解析条数、批次分布）②**同形态同批次的其他模型对照（≥4 个）**③≥3 条排除理由与处理方式；
-- `reference.modelId` 必须是 `qwen3.8-max-0902`（pin 快照），且参考行 `deltaVsRefPp = 0`；单模型表不得包含已排除的模型；
+- `incidentNote` 必须记录 `qwen3.7-max` 的 2026-10-08 事故：`recovery` 必须写明已恢复（事故 ≠ 永久退化）；给出①现象（`observed.corruptRatePct ≥ 10`、空值叶子、不可解析条数、批次分布）②**同形态同批次的其他模型对照（≥4 个）**③≥2 条「为何不当参考」与处理方式；
+- `reference.modelId` 必须是 `qwen3.8-max-0902`（pin 快照），且参考行 `deltaVsRefPp = 0`；单模型表必须包含 `qwen3.7-max` 行（非空 `measuredAt`、note 含「事故」）；
+- `runToRun` 必须含 ≥5 个模型，每个 `mcnemarP ≥ 0.05`（出现显著差异须重跑该模型），`note` 须写明「没有证据表明被系统性压低」；`q38StabilityNote` 必须存在；
 - `oracleCheapOnly.merged750Pct` **不得低于任何单模型**（上界不变量）；任何 `deployableRules` 的分数不得高于该 oracle，`oracleHeadroomClosedPct` 不得 >100%；
 - `deployableRules` 必须含 `★ R6s` 基准行（`deltaVsR6sPp = 0`）；必须给出 `r6sMechanism`（规则机制）与 `r6sWeakness`（已知局限，如「多数题上无信号只能默认取 ds」）；
 - `routersNoMax.supersededNote` 必须存在——旧仲裁结论（「blind 打平 max」）已作废，需显式指向新块。
