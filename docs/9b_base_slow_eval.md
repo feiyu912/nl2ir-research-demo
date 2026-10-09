@@ -1,6 +1,6 @@
 # 9B 底座慢速评测核验与诊断
 
-核验日期：2026-09-16。该批实验未调用 adapter、repair、Schema 重试或 API，采用官方等价 hard-off 前缀、4-bit BNB、batch 20、max_new_tokens 1024、temperature 0.01、top_p 1、seed 42，并使用冻结 scorer 做 CPU 评分。
+该批实验未调用 adapter、repair、Schema 重试或 API，采用官方等价 hard-off 前缀、4-bit BNB、batch 20、max_new_tokens 1024、temperature 0.01、top_p 1、seed 42，并使用冻结 scorer 做 CPU 评分。
 
 ## 未微调底座结果
 

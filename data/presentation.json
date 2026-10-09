@@ -1081,7 +1081,7 @@
       "subtitle": "Jev 式校验离线实验 · 200 条自然查询 · 未调用 Jev API",
       "metric": "Where 与语义向量路由同时符合旧参考 IR（非完整 IR 准确率）",
       "total": 200,
-      "source": "[内部来源路径未公开]；DS atomic → Qwen 离线复查实验汇总（2026-09-24）",
+      "source": "[内部来源路径未公开]；DS atomic → Qwen 离线复查实验汇总",
       "rows": [
         {
           "name": "原始 Qwen IR",

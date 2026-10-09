@@ -57,7 +57,7 @@
           "dataset": "370 拆分三段",
           "metric": "Simple100: Where 4B 92/100 vs 9B 96/100；Complex100: 4B 73/100 vs 9B 72/100；Hidden170: 4B 129/170 vs 9B 134/170；FullIR: Simple100 4B 61 vs 9B 57, Complex100 4B 49 vs 9B 52, Hidden170 4B 66 vs 9B 69",
           "status": "事实",
-          "source": "nl2ir_4b_9b_analysis_2026-09-07 results/summary.json"
+          "source": "nl2ir_4b_9b_analysis results/summary.json"
         },
         {
           "label": "4B/9B runtime_after_repair 与 compact_protocol",
@@ -66,7 +66,7 @@
           "dataset": "370 拆分三段",
           "metric": "compact_protocol: Simple100 4B 100/100 vs 9B 100/100；runtime_after_repair: Simple100 4B 67 vs 9B 67, Complex100 4B 40 vs 9B 40, Hidden170 4B 123 vs 9B ?",
           "status": "事实",
-          "source": "nl2ir_4b_9b_analysis_2026-09-07 results/summary.json",
+          "source": "nl2ir_4b_9b_analysis results/summary.json",
           "note": "[内部来源路径未公开]"
         },
         {
@@ -309,7 +309,7 @@
           "dataset": "200 条自然查询；compact-v3 旧参考 IR",
           "metric": "Where 与语义向量路由同时符合旧参考：147/200 (73.5%) → 149/200 (74.5%)，净 +2/200 (+1.0 个百分点)；修好 3、误伤 1；50/200 触发复查",
           "status": "事实（离线诊断）",
-          "source": "本地离线诊断实验汇总（2026-09-24）",
+          "source": "本地离线诊断实验汇总",
           "note": "只测旧参考 IR 的 Where 与向量字段集合，不是完整 IR 或检索准确率；旧参考未见人工复核，且 6 条不符当前 schema。未做同预算 Qwen 自检对照，不能单独归因给 DS；实际 Jev API 未调用，未接入线上。"
         }
       ]

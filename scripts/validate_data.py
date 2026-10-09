@@ -234,6 +234,10 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
         report.error(f"hosted_api_baselines schema 异常: {payload.get('schema')}")
         return
 
+    # 冻结批次日期必须非空（不校验格式）：口径随日期/形态变化，缺失后读者无法判断数字归属。
+    if not str(payload.get("experimentDate") or "").strip():
+        report.error("hosted_api_baselines 缺 experimentDate（冻结批次日期不得为空）")
+
     models = payload.get("models") or []
     by_id = {m.get("modelId"): m for m in models}
 
@@ -350,8 +354,8 @@ def check_hosted_api_baselines(report: Report, payload: dict) -> None:
             # 快照模型允许未取价目，但必须显式声明原因（缺数据 ≠ 0）
             if not (m.get("costUnavailableReason") or "").strip():
                 report.error(f"hosted_api_baselines 成本缺失但未声明原因: {m.get('modelId')}")
-            if not (m.get("provenance") or {}).get("runDate"):
-                report.error(f"hosted_api_baselines 快照模型缺 provenance.runDate: {m.get('modelId')}")
+            if not str((m.get("provenance") or {}).get("batch") or "").strip():
+                report.error(f"hosted_api_baselines 快照模型缺 provenance.batch: {m.get('modelId')}")
             continue
         if not (cost.get("standardized") or {}).get("tiers"):
             report.error(f"hosted_api_baselines 缺 standardized 口径: {m.get('modelId')}")
@@ -829,7 +833,7 @@ def check_rerank_model_selection(report: Report, payload: dict) -> None:
         if need not in limits:
             report.error(f"rerank_model_selection limitations 缺风险声明: {need}")
     review = (payload.get("provenance") or {}).get("codexReview") or {}
-    if not review.get("date") or "截断" not in str(review.get("scope", "")):
+    if "截断" not in str(review.get("scope", "")):
         report.error("rerank_model_selection provenance 缺独立复核记录（含输入截断）")
 
     leaked = _walk_keys(payload) & RERANK_FORBIDDEN_KEYS

@@ -155,7 +155,7 @@ export default function RerankOverview() {
   return (
     <>
       <Heading
-        tag={`独立实验 · ${data.experimentDate} · 生产检索链路`}
+        tag="独立实验 · 生产检索链路"
         title="精排模型横向对比与路由回测"
         text={`离线冻结候选池上的精排（rerank）选型：成本与兼容性是客观测量；质量用「对现役的成对偏好」衡量——${pw.sessions} 场真实检索、每场两个方向各重复 3 次，只看两个方向一致的结论。与 NL2IR 解析评测无关。`}
       />
@@ -260,7 +260,7 @@ export default function RerankOverview() {
           </table>
         </div>
         <p className="chart-caption">
-          价目为公开信息（{data.priceList.date}，{data.priceList.unit}）。现有结构化输出请求格式不被部分候选支持——
+          价目为公开信息（{data.priceList.unit}）。现有结构化输出请求格式不被部分候选支持——
           <strong>任何候选上线前都要先改代码</strong>。红色 = 比现役更贵。
         </p>
 
@@ -428,13 +428,13 @@ export default function RerankOverview() {
         <div className="interpretation">
           <span>独立复核</span>
           <p>
-            {data.provenance.codexReview.date} 由独立代码评审代理复核：{data.provenance.codexReview.scope}；
+            由独立代码评审代理复核：{data.provenance.codexReview.scope}；
             复核结果：{data.provenance.codexReview.effect}。
           </p>
         </div>
         <p className="chart-caption">
           数据由内部提取脚本从离线评估工件生成（脚本与原始工件不发布），只保留脱敏聚合数字；{data.provenance.artifacts.join('')}。
-          价目来源：{data.priceList.source}（{data.priceList.date}）。
+          价目来源：{data.priceList.source}。
         </p>
       </section>
     </>

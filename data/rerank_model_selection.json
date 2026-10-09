@@ -1,6 +1,5 @@
 {
   "schema": "rerank-model-selection/v1",
-  "experimentDate": "2026-10-08",
   "scope": "生产检索链路的 LLM 精排（rerank）模型选型；离线冻结候选池；与 NL2IR 解析评测无关，两者不得混入同一组图。",
   "primaryMetric": "pairwisePreferenceVsIncumbent",
   "track": {
@@ -9,7 +8,6 @@
     "noPerItemData": "不发布查询、候选人、逐题输出或任何可还原评测集的标识"
   },
   "priceList": {
-    "date": "2026-10-08",
     "source": "百炼模型广场价格页（公开价目；限时折扣按当日显示）",
     "unit": "元/百万 tokens",
     "entries": {
@@ -407,7 +405,6 @@
   "provenance": {
     "evaluatedBy": "内部离线评估（脱敏聚合；原始工件与提取脚本不发布）",
     "codexReview": {
-      "date": "2026-10-08",
       "scope": "独立复核：指出候选名单截断、冻结池未持久化与缺现役对照；后续复核又定位到评审输入把工作经历截断，导致评审无法核验条件",
       "effect": "质量结论由「评分排名」下调为「成对偏好 + 定标对照」；不可复现的差异一律不写进结论"
     },

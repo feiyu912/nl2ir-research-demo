@@ -1,6 +1,5 @@
 {
   "schema": "api-stability-public/v1",
-  "experimentDate": "2026-09-24",
   "sampleItems": 50,
   "repeats": 3,
   "totalCalls": 600,
@@ -9,7 +8,7 @@
   "metric": "main_chain_where",
   "intervalMethod": "Wilson 95%; original report CP label fell back to Wilson without SciPy",
   "protocol": {
-    "cohort": "stratified hard sample from the 2026-09-17 three-model evaluation; 20 error families",
+    "cohort": "stratified hard sample from the frozen three-model evaluation; 20 error families",
     "fullyCorrectFamilyItems": 17,
     "endpoint": "direct DashScope API (production gateway not tested)",
     "temperature": 0,
@@ -96,7 +95,7 @@
     "leafLevelDifference": 24,
     "polarityEncodingDifference": 4
   },
-  "sourceLabel": "本地冻结 API 稳定性实验公开聚合结果（2026-09-24；逐题记录未发布）",
+  "sourceLabel": "本地冻结 API 稳定性实验公开聚合结果（逐题记录未发布）",
   "sourceSha256": {
     "report": "4ed5483261d6e20219029a8a96f188329e9ad521785e4a9ac660742f5cdec88b",
     "manifest": "cbf765551ad2e7b64fbafa3c6c8645e99b16622c6c65c02eb9febf2f9a8cf9c5"

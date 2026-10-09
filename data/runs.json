@@ -209,7 +209,7 @@
     "method": "paper_ir_v1",
     "methodVersion": "candidate-v4",
     "dataset": "blind-v6",
-    "datasetVersion": "sealed-2026-09-13",
+    "datasetVersion": "sealed-v6",
     "sampleSize": 240,
     "kind": "single-pass",
     "compatibility": [
@@ -256,7 +256,7 @@
     "method": "paper_ir_v1",
     "methodVersion": "candidate-v4",
     "dataset": "blind-v6",
-    "datasetVersion": "sealed-2026-09-13",
+    "datasetVersion": "sealed-v6",
     "sampleSize": 240,
     "kind": "post-assertion",
     "compatibility": [

@@ -92,9 +92,9 @@
     {
       "alias": "qwen",
       "modelId": "qwen3.7-max",
-      "role": "质量基线",
-      "conclusion": "当前保留为生产默认（质量基线）",
-      "tone": "baseline",
+      "role": "已排除 · 形态故障",
+      "conclusion": "同一请求形态（json_object + 顶层关思考）下 294/600（49%）响应损坏——条件值被清空或截断，其余 5 个模型仅 0–2%。同 40 题 09-17 为 100%、10-08 为 0%，而请求记录逐字节相同 ⇒ 服务侧退化，非我方变更。不作质量基线、不作比较基准。",
+      "tone": "hold",
       "n": 906,
       "combinedWhere": 94.26,
       "combinedWhereCorrect": 854,
@@ -179,9 +179,9 @@
     {
       "alias": "qwen38",
       "modelId": "qwen3.8-flash",
-      "role": "低成本候选",
-      "conclusion": "Tier B：低成本优化候选，尚未替换生产",
-      "tone": "candidate",
+      "role": "中档 · 仲裁另一半",
+      "conclusion": "750 = 70.40% / 仅 600 = 70.83%，显著低于参考（−9.60pp）。单独用已不划算，仅在仲裁中补 ds 的漏项时有价值。",
+      "tone": "hold",
       "n": 906,
       "combinedWhere": 89.62,
       "combinedWhereCorrect": 812,
@@ -268,9 +268,9 @@
     {
       "alias": "deepseek",
       "modelId": "deepseek-v4.1-flash",
-      "role": "当前不建议替换",
-      "conclusion": "Tier C：当前版本不替换",
-      "tone": "hold",
+      "role": "省钱路由主力",
+      "conclusion": "750 = 76.00% / 仅 600 = 78.17%，¥16.40。作为 ds⊕q38 证据仲裁的一半：仲裁 80.27%（750）@ ¥29.00 = 参考的 16%；但仅看 600 条权威 gold 时 82.00% 略低于参考 83.00%。",
+      "tone": "candidate",
       "n": 906,
       "combinedWhere": 86.2,
       "combinedWhereCorrect": 781,
@@ -368,9 +368,9 @@
     {
       "alias": "qwen38max0902",
       "modelId": "qwen3.8-max-0902",
-      "role": "0902 快照 · 同协议补跑",
+      "role": "新口径参考 · pin 快照",
       "tone": "snapshot",
-      "conclusion": "同协议补跑：blind 89.17%，dev-combined 91.39%（仅参考）；真删除 34 条。",
+      "conclusion": "留出集 750 = 80.00% / 仅 600 = 83.00%（参考）。唯一 pin 快照，版本固定可复现；但单价 ¥180 ≈ max 档，只作参考，不作降本候选。",
       "n": 906,
       "combinedWhere": 91.39,
       "combinedWhereCorrect": 828,
@@ -454,8 +454,7 @@
         "strict_json": 1.0
       },
       "provenance": {
-        "runDate": "2026-10-08",
-        "batch": "追加批次（非 2026-09-17 冻结批次）",
+        "batch": "追加批次（2026-10-08，非 2026-09-17 冻结批次）",
         "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
         "sourceLabel": "[内部来源路径未公开]",
         "requests": 906,
@@ -466,9 +465,9 @@
     {
       "alias": "qwen37plus",
       "modelId": "qwen3.7-plus",
-      "role": "3.7 增强档 · 同协议补跑",
-      "tone": "plus",
-      "conclusion": "同协议补跑：blind 77.08%，dev-combined 85.54%（仅参考）；真删除 85 条。",
+      "role": "性价比最优单模型",
+      "tone": "candidate",
+      "conclusion": "750 = 77.07% / 仅 600 = 80.17%，与参考差 −2.93pp（不显著），成本仅 ¥37.60 = 参考的 21%。不引入路由复杂度时的首选。",
       "n": 906,
       "combinedWhere": 85.54,
       "combinedWhereCorrect": 775,
@@ -557,8 +556,7 @@
         "strict_json": 1.0
       },
       "provenance": {
-        "runDate": "2026-10-08",
-        "batch": "追加批次（非 2026-09-17 冻结批次）",
+        "batch": "追加批次（2026-10-08，非 2026-09-17 冻结批次）",
         "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
         "sourceLabel": "[内部来源路径未公开]",
         "requests": 906,
@@ -569,9 +567,9 @@
     {
       "alias": "qwen37flash",
       "modelId": "qwen3.7-flash",
-      "role": "3.7 低档 · 同协议补跑",
+      "role": "低档",
       "tone": "flash",
-      "conclusion": "同协议补跑：blind 70.00%，dev-combined 68.32%（仅参考）；真删除 51 条。",
+      "conclusion": "750 = 54.93% / 仅 600 = 58.33%，显著最低。仅在级联里做前置过滤有参考价值，级联本身不划算。",
       "n": 906,
       "combinedWhere": 68.32,
       "combinedWhereCorrect": 619,
@@ -657,8 +655,7 @@
         "strict_json": 1.0
       },
       "provenance": {
-        "runDate": "2026-10-08",
-        "batch": "追加批次（非 2026-09-17 冻结批次）",
+        "batch": "追加批次（2026-10-08，非 2026-09-17 冻结批次）",
         "protocol": "Track A 同协议：冻结 v21 prompt + json_object + 冻结 scorer + temperature 0",
         "sourceLabel": "[内部来源路径未公开]",
         "requests": 906,
@@ -766,10 +763,10 @@
     "三模型缓存命中率显著不同，实测账单不可直接跨模型比较。",
     "DeepSeek 的短输出与较高漏条件率同时出现，二者不可分离解释。",
     "semantic_exact 为精确字符串比较，受 gold 文案差异影响，会低估质量。",
-    "结果只适用于当前 v21 prompt、当前数据与 2026-09-17 的 API 状态。",
-    "未进行生产流量 A/B 或并发压力测试。API 直调端点的重复推理稳定性已在 2026-09-24 的偏难 50 题实验中测试；生产网关与本地小模型侧仍未覆盖。",
+    "结果只适用于当前 v21 prompt、当前数据与当时的 API 状态。",
+    "未进行生产流量 A/B 或并发压力测试。API 直调端点的重复推理稳定性已在偏难 50 题实验中测试；生产网关与本地小模型侧仍未覆盖。",
     "岗位累计任职字段的匹配策略仍在验证（role_tenure）；该字段审计尚未冻结，本材料不对其匹配策略或最终实现作任何结论。",
-    "判定标准：sealed blind v6（240 条）为主；old366/c300 为开发集（v21 prompt 在其上迭代），其 combined 数字仅作参考、不得作为选型依据。2026-10-08 追加批次的延迟为跨日观察值；qwen3.8-max-0902 成本按同系列价目计算。"
+    "判定标准：sealed blind v6（240 条）为主；old366/c300 为开发集（v21 prompt 在其上迭代），其 combined 数字仅作参考、不得作为选型依据。追加批次的延迟为跨日观察值；qwen3.8-max-0902 成本按同系列价目计算。"
   ],
   "costNotes": [
     "两套口径必须并列：standardized_cost 是相同 token 工作量下的纯价格比较。",
@@ -1163,7 +1160,6 @@
     "supersededNote": "原先此处的『blind 上仲裁 95.42% 打平 qwen3.7-max』结论已作废：max 因形态故障排除、判定集被查出覆盖缺口，改口径后见 holdoutEvaluation。"
   },
   "coverageAudit": {
-    "asOf": "2026-10-08",
     "method": "把冻结 v21 prompt 里可检测的规则分支逐条列出，在 blind_v6(240) / holdout(600) / dev(666) 的**问句**上统计覆盖题数（正则启发式，偏保守）；gold 侧交叉核对。",
     "blindZeroCoverageButHoldoutHas": [
       {
@@ -1431,7 +1427,8 @@
         "qwen3.7-flash"
       ]
     },
-    "conclusion": "blind_v6 有 7 条规则分支 0 覆盖、4 条两套都没测过；主指标不比对 meta。因此 blind 上的 92–95% 是窄切片成绩，高估了真实表现。"
+    "conclusion": "blind_v6 有 7 条规则分支 0 覆盖、4 条两套都没测过；主指标不比对 meta。因此 blind 上的 92–95% 是窄切片成绩，高估了真实表现。",
+    "promptCheck": "prompt 侧已逐条核对：上述失败分支在冻结 v21 prompt 里均有明文规则（含字段与算子，部分带例子）→ 不是规则缺失；失败集中在长规则表下的遵循不稳。F3 与 X1 需在 main_chain_ir 上比对，且补题 gold 尚未人工定稿，这两组不作模型能力归因。"
   },
   "holdoutEvaluation": {
     "asOf": "2026-10-08",
@@ -1469,7 +1466,7 @@
       "whyExcluded": [
         "49% 的坏输出会被直接判错，分数主要反映损坏率，不能当作能力度量",
         "作为参考基准会把“参考自身损坏”传导进所有对比（Δ / McNemar p / cluster CI）",
-        "它自己的历史数字也不可复现：同形态同 40 题 2026-09-17 为 100%、2026-10-08 为 0%，而请求记录（request_params / model_requested / returned_model / system_prompt_sha256）逐字节相同 ⇒ 服务侧退化"
+        "它自己的历史数字也不可复现：同形态同 40 题，早前批次为 100%、复跑为 0%，而请求记录逐字节相同 ⇒ 服务侧退化"
       ],
       "handling": "需要 max 参照时，只能另起一表并显式标注形态（enable_thinking=true，或 json_schema+硬开关思考），不得与本表并列比较"
     },
@@ -1477,12 +1474,12 @@
       "modelId": "qwen3.8-max-0902",
       "acc750Pct": 80.0,
       "acc600Pct": 83.0,
-      "why": "qwen3.7-max 已因形态故障排除（见 exclusion），改用带日期 pin 的 0902 作参考"
+      "why": "qwen3.7-max 已因形态故障排除（见 exclusion），改用 pin 快照 0902 作参考"
     },
     "singleModel": [
       {
         "modelId": "qwen3.8-max-0902",
-        "pin": "pin 快照（带日期，版本固定）",
+        "pin": "pin 快照（版本固定）",
         "correct750": 600,
         "acc750Pct": 80.0,
         "acc600Pct": 83.0,
@@ -1496,7 +1493,7 @@
       },
       {
         "modelId": "qwen3.7-plus",
-        "pin": "活别名（无日期，版本可能漂移）",
+        "pin": "活别名（版本可能漂移）",
         "correct750": 578,
         "acc750Pct": 77.07,
         "acc600Pct": 80.17,
@@ -1510,7 +1507,7 @@
       },
       {
         "modelId": "deepseek-v4.1-flash",
-        "pin": "活别名",
+        "pin": "活别名（版本可能漂移）",
         "correct750": 570,
         "acc750Pct": 76.0,
         "acc600Pct": 78.17,
@@ -1524,7 +1521,7 @@
       },
       {
         "modelId": "qwen3.8-flash",
-        "pin": "活别名",
+        "pin": "活别名（版本可能漂移）",
         "correct750": 528,
         "acc750Pct": 70.4,
         "acc600Pct": 70.83,
@@ -1538,7 +1535,7 @@
       },
       {
         "modelId": "qwen3.7-flash",
-        "pin": "活别名",
+        "pin": "活别名（版本可能漂移）",
         "correct750": 412,
         "acc750Pct": 54.93,
         "acc600Pct": 58.33,

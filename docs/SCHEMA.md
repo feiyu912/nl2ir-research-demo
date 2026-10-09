@@ -145,7 +145,6 @@ type SourceRef = {
 ```ts
 type HostedApiBaselines = {
   schema: 'hosted-api-baselines/v1';
-  experimentDate: string;              // "2026-09-17"
   track: string;                       // Track A: frozen v21 prompt + json_object + frozen scorer
   primaryMetric: 'main_chain_where';
   n: 906;                              // old366 366 + c300 300 + blind-v6 240
@@ -215,7 +214,7 @@ type HostedApiBaselines = {
 };
 ```
 
-### 判定标准（2026-10-08 起）
+### 判定标准
 
 **选型判定以 `judgmentStandard`（sealed blind v6，240 条）为准**；`combinedWhere`（906 条，含 old366/c300 开发集）
 **仅作参考**——v21 prompt 是在开发集上迭代的，其数字对"贴合该风格"的模型系统性有利。
@@ -225,23 +224,18 @@ type HostedApiBaselines = {
 - `routers[]`：一致性级联策略（相邻两层归一化 IR 一致即采纳，否则升级）。**级联的每一层在每个请求上都要执行**，
   故 `cnyPer10kStandardized = Σ各层单价 + 升级目标单价 × escalationRate`；`shareOfMaxCost` 必须与该式自洽。
   另报 `acceptancePrecision`（采纳答案的正确率）与 `latencySequentialS` / `latencyParallelCheapS`。
-- `routersNoMax`：完全不用 max 的策略。`strategies[]` 为级联；`arbiter` 为**证据仲裁**——两个便宜模型都跑，
-  只比较两者不一致的条件（谁「漏掉有文本依据的条件 + 加入无依据条件」更少就采纳谁，平手取 ds），无升级层，
-  故 `escalationTarget = null`、`escalationRate = 0`。`evaluations.{blind,holdout}` 各含
-  `n / arbiter / ds / q38 / max / oracle / deltaVsDsPp / mcnemarVsDsP / clusterCi95VsDsPp /
-  clusterCrossesZero / oracleGapClosedPct / disagreements / disagreementsDecidedRight`。
-  **`holdout.oracleGapClosedPct` 必须小于 `blind.oracleGapClosedPct`**（留出集上效应更小，结论不得只报盲集）；
-  `blind.arbiter` 与 `blind.max` 相等时才允许写「打平 max」；`holdout` 有 `max` 时必须同时给
-  `deltaVsMaxPp` 且与分数自洽，且当 `holdout.arbiter < holdout.max` 时 `limits[]` 必须明说「没有追平 / 低于 max」；
-  `limits[]` 必须含 max 在 Track A 形态下不可复现的边界声明。
+- `routersNoMax`：完全不用 max 的级联策略。`strategies[]` 为级联（相邻两层归一化 IR 一致即采纳，
+  否则升级到 `escalationTarget`），`shareOfMaxCost` 必须与级联成本式自洽、`clusterCrossesZero` 必须与区间自洽；
+  `oracleNonMax` 为需 gold 的不可部署上界，不得低于任何可部署策略。
+  `supersededNote` 必须存在——旧的「证据仲裁」块已随口径变更作废，需显式指向 `holdoutEvaluation`。
 
-### 新口径评测（`holdoutEvaluation`，2026-10-08 起）
+### 新口径评测（`holdoutEvaluation`）
 
 盲集口径已被取代。`holdoutEvaluation` 承载当前选型口径，硬约束如下（`check_hosted_api_baselines` 强制）：
 
 - `shape` 必须声明为**统一 thinking-off**（冻结 Track A 形态），并附 `shapeNote` 说明该开关效果**模型特有**、排名会随形态翻转；
 - `exclusion` 必须排除 `qwen3.7-max`，且给出①现象（`observed.corruptRatePct ≥ 10`、空值叶子、不可解析条数、批次分布）②**同形态同批次的其他模型对照（≥4 个）**③≥3 条排除理由与处理方式；
-- `reference.modelId` 必须是 `qwen3.8-max-0902`（带日期 pin 快照），且参考行 `deltaVsRefPp = 0`；单模型表不得包含已排除的模型；
+- `reference.modelId` 必须是 `qwen3.8-max-0902`（pin 快照），且参考行 `deltaVsRefPp = 0`；单模型表不得包含已排除的模型；
 - `oracleCheapOnly.merged750Pct` **不得低于任何单模型**（上界不变量）；任何 `deployableRules` 的分数不得高于该 oracle，`oracleHeadroomClosedPct` 不得 >100%；
 - `deployableRules` 必须含 `★ R6s` 基准行（`deltaVsR6sPp = 0`）；必须给出 `r6sMechanism`（规则机制）与 `r6sWeakness`（已知局限，如「多数题上无信号只能默认取 ds」）；
 - `routersNoMax.supersededNote` 必须存在——旧仲裁结论（「blind 打平 max」）已作废，需显式指向新块。
@@ -250,10 +244,10 @@ type HostedApiBaselines = {
 
 - `n = 906` 且 `366 + 300 + 240`；`stress96 + realistic144 = 240`，**不重复计入 combined**；
 - 三个**冻结**模型 ID 必须存在：`qwen3.7-max` / `qwen3.8-flash` / `deepseek-v4.1-flash`；
-  允许追加**带 provenance 的补跑模型**（当前：`qwen3.8-max-0902` / `qwen3.7-plus` / `qwen3.7-flash`，2026-10-08 同协议），不得出现未登记 ID；
+  允许追加**带 provenance 的补跑模型**（当前：`qwen3.8-max-0902` / `qwen3.7-plus` / `qwen3.7-flash`，同协议），不得出现未登记 ID；
 - primary 必须是 `main_chain_where`；
 - `combinedWhere` = 94.26 / 89.62 / 86.20，且必须与三切片加权一致；
-- **两套成本口径必须同时存在**：`standardized` 与 `observedRun`（仅对冻结三模型；快照模型允许 `cost: null`，但必须声明 `costUnavailableReason` 与 `provenance.runDate`）；
+- **两套成本口径必须同时存在**：`standardized` 与 `observedRun`（仅对冻结三模型；快照模型允许 `cost: null`，但必须声明 `costUnavailableReason` 与 `provenance.batch`）；
   - 标准化 ¥/万次：201.60 / 12.60 / 16.40（闲）· 32.80（忙）；
   - 实测 ¥/万次：242.83 / 16.51 / 9.67（闲）· 19.34（忙）；
   - qwen3.8 标准化成本必须**低于** DeepSeek 闲时；

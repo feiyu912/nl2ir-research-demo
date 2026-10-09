@@ -42,7 +42,7 @@
   ],
   "points": [
     {
-      "runId": "4b-lora-2026-09-15",
+      "runId": "4b-lora",
       "epoch": 1,
       "loss": 0.05076,
       "source": {
@@ -54,7 +54,7 @@
       "note": "3 轮平均 loss；本机无原始逐 step loss"
     },
     {
-      "runId": "4b-lora-2026-09-15",
+      "runId": "4b-lora",
       "epoch": 2,
       "loss": 0.01895,
       "source": {
@@ -65,7 +65,7 @@
       "note": "3 轮平均 loss"
     },
     {
-      "runId": "4b-lora-2026-09-15",
+      "runId": "4b-lora",
       "epoch": 3,
       "loss": 0.01115,
       "source": {
@@ -76,7 +76,7 @@
       "note": "3 轮平均 loss"
     },
     {
-      "runId": "9b-lora-2026-09-15",
+      "runId": "9b-lora",
       "epoch": 1,
       "loss": 0.04889,
       "source": {
@@ -87,7 +87,7 @@
       "note": "3 轮平均 loss"
     },
     {
-      "runId": "9b-lora-2026-09-15",
+      "runId": "9b-lora",
       "epoch": 2,
       "loss": 0.01836,
       "source": {
@@ -98,7 +98,7 @@
       "note": "3 轮平均 loss"
     },
     {
-      "runId": "9b-lora-2026-09-15",
+      "runId": "9b-lora",
       "epoch": 3,
       "loss": 0.01098,
       "source": {

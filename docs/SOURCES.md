@@ -21,7 +21,7 @@
 
 | 阶段 | 关键结论 | 来源 |
 |------|----------|------|
-| 5-assertion-gate | 8/240 额外 API 调用，修复 5 条、破坏 0 条 | `nl2ir_strong_api_pipeline_candidate_v4_2026-09-14.json` → sealed_blind_v6_untouched |
+| 5-assertion-gate | 8/240 额外 API 调用，修复 5 条、破坏 0 条 | `nl2ir_strong_api_pipeline_candidate_v4.json` → sealed_blind_v6_untouched |
 | 5-assertion-gate | blind v5 是 post-hoc development，不是 untouched | 同上 → blind_v5_diagnostic.warning |
 | 6-strong-api | qwen3.7-max 管线 4 阶段 | 同上 → pipeline |
 | 6-strong-api | sealed blind v6 摘要（单次 229/240 等） | 同上 → sealed_blind_v6_untouched |
